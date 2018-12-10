@@ -1,0 +1,51 @@
+{
+  "name": "jugg",
+  "version": "0.0.0",
+  "main": "index.js",
+  "author": "daief <1437931235@qq.com>",
+  "license": "MIT",
+  "scripts": {
+    "cm": "git-cz"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^7.2.1",
+    "@commitlint/config-conventional": "^7.1.2",
+    "commitizen": "^3.0.5",
+    "cz-conventional-changelog": "^2.1.0",
+    "husky": "^1.2.0",
+    "lint-staged": "^8.1.0",
+    "prettier": "^1.15.3",
+    "rimraf": "^2.6.2",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.17.0",
+    "typescript": "^3.2.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "commitlint": {
+    "extends": ["@commitlint/config-conventional"]
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "lint-staged": {
+    "linters": {
+      "*.css": ["prettier --parser css --write", "git add"],
+      "*.less": ["prettier --parser less --write", "git add"],
+      "*.json": ["prettier --parser json --write", "git add"],
+      "*.ts": [
+        "tslint --fix",
+        "prettier --print-width 100 --tab-width 2 --single-quote true --trailing-comma es5 --arrow-parens avoid --write",
+        "git add"
+      ]
+    },
+    "ignore": []
+  },
+  "workspaces": ["packages/[!_]*"]
+}
