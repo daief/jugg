@@ -1,11 +1,15 @@
 {
   "name": "jugg",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "main": "index.js",
+  "private": true,
   "author": "daief <1437931235@qq.com>",
   "license": "MIT",
   "scripts": {
     "cm": "git-cz"
+  },
+  "dependencies": {
+    "tslib": "^1.9.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^7.2.1",
