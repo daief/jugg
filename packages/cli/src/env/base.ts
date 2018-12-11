@@ -2,6 +2,7 @@
 import Config from 'webpack-chain';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { getAbsolutePath } from '../utils';
+import setLoaders from './loaders';
 
 export default (): Config => {
   const config = new Config();
@@ -27,6 +28,9 @@ export default (): Config => {
       },
     ])
     .end();
+
+  // set loaders
+  setLoaders(config);
 
   return config;
 };
