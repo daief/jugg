@@ -1,7 +1,28 @@
 {
   "name": "@jugg/jugg",
   "version": "0.0.1",
-  "main": "index.js",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "main": "./lib/index.js",
+  "types": "./types",
+  "bin": {
+    "jugg": "lib/bin/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "dependencies": {
+    "@types/webpack": "^4.4.21",
+    "@types/webpack-chain": "^5.0.0",
+    "@types/webpack-dev-server": "^3.1.1",
+    "clean-webpack-plugin": "^1.0.0",
+    "commander": "^2.19.0",
+    "resolve-cwd": "^2.0.0",
+    "webpack": "^4.27.1",
+    "webpack-chain": "^5.0.1",
+    "webpack-dev-server": "^3.1.10"
+  },
+  "devDependencies": {},
+  "files": ["lib", "types"]
 }

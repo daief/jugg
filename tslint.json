@@ -10,7 +10,10 @@
     "semicolon": [true, "always"],
     "ordered-imports": false,
     "object-literal-sort-keys": false,
-    "member-access": false
+    "member-access": false,
+    "no-require-imports": false,
+    "no-var-requires": false,
+    "interface-name": false
   },
   "rulesDirectory": []
 }

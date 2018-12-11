@@ -4,6 +4,6 @@
     "declarationDir": "types",
     "outDir": "lib"
   },
-  "include": ["src/*", "src/**/*"],
+  "include": ["src/*", "src/**/*", "../../typings"],
   "exclude": ["node_modules"]
 }

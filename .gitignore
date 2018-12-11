@@ -70,7 +70,7 @@ node_modules/
 jspm_packages/
 
 # TypeScript v1 declaration files
-typings/
+# typings/
 
 # Optional npm cache directory
 .npm
@@ -131,3 +131,7 @@ tags
 [._]*.un~
 
 # End of https://www.gitignore.io/api/vim,node,macos
+
+dist
+lib
+types
