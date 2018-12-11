@@ -52,4 +52,54 @@ export default (config: Config) => {
         },
       });
   }
+
+  // --------------- set style
+  setStyleLoaders(config);
 };
+
+function setStyleLoaders(config: Config) {
+  // TODO refine here & else about
+  const isProd = process.env.NODE_ENV === 'production';
+
+  const cssModulesConfig = {
+    modules: true,
+    localIdentName: '[local]___[hash:base64:5]',
+  };
+
+  // --------------- support css & less
+  const cssRule = config.module.rule('css').test(/\.(le|c)ss$/i);
+  if (!isProd) {
+    cssRule.use('css-hot-loader').loader(require.resolve('css-hot-loader'));
+  }
+
+  // remember to add plugin
+  cssRule.use('extract-css-loader').loader(require('mini-css-extract-plugin').loader);
+
+  cssRule
+    .use('css-loader')
+    .loader(require.resolve('css-loader'))
+    .options({
+      ...cssModulesConfig,
+    });
+
+  cssRule
+    .use('postcss-loader')
+    .loader(require.resolve('postcss-loader'))
+    .options({
+      plugins: () => [
+        require('postcss-flexbugs-fixes'),
+        require('autoprefixer')({
+          browsers: ['>1%', 'last 4 versions', 'Firefox ESR', 'not ie < 9'],
+          flexbox: 'no-2009',
+        }),
+      ],
+    });
+
+  cssRule
+    .use('less-loader')
+    .loader(require.resolve('less-loader'))
+    .options({
+      javascriptEnabled: true,
+      ...cssModulesConfig,
+    });
+}
