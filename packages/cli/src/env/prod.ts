@@ -7,6 +7,8 @@ import { getAbsolutePath } from '../utils';
 export default (): Config => {
   const config = baseConfig();
 
+  config.output.path(getAbsolutePath('dist')).filename('[name].[chunkhash].js');
+
   config.plugin('clean-webpack-plugin').use(cleanWebPackPlugin, [
     [getAbsolutePath('dist')],
     {

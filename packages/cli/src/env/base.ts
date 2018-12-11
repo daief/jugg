@@ -12,8 +12,8 @@ export default (): Config => {
     .add(getAbsolutePath('src', 'index.js'))
     .end()
     .output.path(getAbsolutePath('dist'))
-    .filename('[name].[hash:8].js')
-    .chunkFilename('[name].[chunkhash:8].vendor.js')
+    .filename('[name].[hash].js')
+    .chunkFilename('[name].[chunkhash].js')
     .publicPath('/')
     .end();
 
