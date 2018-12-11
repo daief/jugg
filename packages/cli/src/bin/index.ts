@@ -24,11 +24,11 @@ commandList.forEach(schema => {
     }
   });
 
-  Object.keys(env || {}).forEach(key => {
-    process.env[key] = env[key];
-  });
-
   line.action(opt => {
+    Object.keys(env || {}).forEach(key => {
+      process.env[key] = env[key];
+    });
+
     new Jugg(command, opt);
   });
 });

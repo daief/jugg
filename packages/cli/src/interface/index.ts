@@ -23,18 +23,18 @@ export interface DevOpts {
   serverConfig?: DevConfiguration;
 }
 
-export type webpackChainFun = (
+export type WebpackChainFun = (
   param: {
     config: Config;
     webpack: Configuration;
   }
-) => Config;
+) => void;
 
-export type JuggWebpack = Configuration | webpackChainFun;
+export type JuggWebpack = Configuration | WebpackChainFun;
 
 export interface JuggConfig {
   plugins?: Array<string | [string, { [k: string]: any }]>;
   webpack?: JuggWebpack;
 }
 
-export type Plugin = (jugg: Jugg, opts: any) => JuggConfig;
+export type Plugin = (jugg: Jugg, opts: any) => WebpackChainFun | void;

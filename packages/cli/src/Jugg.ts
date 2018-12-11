@@ -1,4 +1,6 @@
-import { JuggConfig, Plugin } from './interface';
+import Config from 'webpack-chain';
+import merge from 'webpack-merge';
+import { JuggConfig, Plugin, WebpackChainFun } from './interface';
 import { mergeJuggWebpack, readConfig } from './utils';
 import { commandList } from './bin/commands';
 
@@ -17,7 +19,7 @@ export default class Jugg {
 
   loadPlugins() {
     const { plugins } = this.JConfig;
-    const cfgs: JuggConfig[] = (plugins || [])
+    const cfgs = (plugins || [])
       .map(p => {
         const [moduleId, plOpt] = Array.isArray(p) ? p : [p, {}];
         try {
@@ -30,7 +32,7 @@ export default class Jugg {
           return null;
         }
       })
-      .filter(c => !!c);
+      .filter(c => !!c) as WebpackChainFun[];
     this.mergeConfig(cfgs);
   }
 
@@ -41,13 +43,22 @@ export default class Jugg {
     }
   }
 
-  private mergeConfig(cfgs: JuggConfig[]) {
-    const defaultCfg = require(process.env.NODE_ENV === 'production'
+  private mergeConfig(cfgs: WebpackChainFun[]) {
+    // default < plugin < 用户
+    const defaultCfg: Config = require(process.env.NODE_ENV === 'production'
       ? './env/prod'
       : './env/dev').default();
-    this.juggConfig.webpack = mergeJuggWebpack(
-      defaultCfg,
-      [...cfgs, this.JConfig].map(cfg => cfg.webpack)
-    );
+
+    // plugin & default
+    mergeJuggWebpack(defaultCfg, [...cfgs]);
+
+    // merge user config
+    const { webpack } = this.juggConfig;
+    if (typeof webpack === 'function') {
+      webpack({ config: defaultCfg, webpack: defaultCfg.toConfig() });
+      this.juggConfig.webpack = defaultCfg.toConfig();
+    } else {
+      this.juggConfig.webpack = merge(defaultCfg.toConfig(), webpack || {});
+    }
   }
 }
