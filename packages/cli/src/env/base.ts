@@ -1,6 +1,7 @@
 // import webpack from 'webpack';
 import Config from 'webpack-chain';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import Webpackbar from 'webpackbar';
 import { getAbsolutePath } from '../utils';
 import setLoaders from './loaders';
 
@@ -27,7 +28,9 @@ export default (): Config => {
         inject: true,
       },
     ])
-    .end();
+    .end()
+    .plugin('webpackbar')
+    .use(Webpackbar);
 
   // set loaders
   setLoaders(config);
