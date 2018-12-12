@@ -6,8 +6,8 @@
   "main": "./lib/index.js",
   "types": "./types",
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w"
+    "build": "node ./script/build.js && tsc",
+    "watch": "npm run build && tsc -w"
   },
   "peerDependencies": {},
   "dependencies": {
