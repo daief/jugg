@@ -1,7 +1,8 @@
 import Config from 'webpack-chain';
 import merge from 'webpack-merge';
+import resolveCwd from 'resolve-cwd';
 import { JuggConfig, Plugin, WebpackChainFun } from './interface';
-import { mergeJuggWebpack, readConfig } from './utils';
+import { mergeJuggWebpack, readConfig, getAbsolutePath } from './utils';
 import { commandList } from './bin/commands';
 
 export default class Jugg {
@@ -21,6 +22,13 @@ export default class Jugg {
 
   get IsProd() {
     return this.isProd;
+  }
+
+  get Utils() {
+    return {
+      getAbsolutePath,
+      resolveCwd,
+    };
   }
 
   loadPlugins() {
