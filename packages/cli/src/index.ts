@@ -1,3 +1,3 @@
-export const x = async () => {
-  return 'x';
-};
+import Jugg from './Jugg';
+
+export { Jugg };

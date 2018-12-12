@@ -4,6 +4,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import Webpackbar from 'webpackbar';
 import { getAbsolutePath } from '../utils';
 import setLoaders from './loaders';
+import { FilterCSSConflictingWarning } from '../plugins';
 
 export default (): Config => {
   const config = new Config();
@@ -30,7 +31,11 @@ export default (): Config => {
     ])
     .end()
     .plugin('webpackbar')
-    .use(Webpackbar);
+    .use(Webpackbar)
+    .end()
+    .plugin('filter-css-conflict-warning')
+    .use(FilterCSSConflictingWarning)
+    .end();
 
   // set loaders
   setLoaders(config);
