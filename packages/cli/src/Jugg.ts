@@ -29,7 +29,7 @@ export default class Jugg {
       .map(p => {
         const [moduleId, plOpt] = Array.isArray(p) ? p : [p, {}];
         try {
-          const pluginFun: Plugin = require(moduleId);
+          const pluginFun: Plugin = require(moduleId).default;
           return pluginFun(this, plOpt);
         } catch (_) {
           // TODO warn
