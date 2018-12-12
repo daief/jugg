@@ -2,6 +2,7 @@
 import Config from 'webpack-chain';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import Webpackbar from 'webpackbar';
+import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
 import { getAbsolutePath } from '../utils';
 import setLoaders from './loaders';
 import { FilterCSSConflictingWarning } from '../plugins';
@@ -35,6 +36,9 @@ export default (): Config => {
     .end()
     .plugin('filter-css-conflict-warning')
     .use(FilterCSSConflictingWarning)
+    .end()
+    .plugin('friendly-errors-webpack-plugin')
+    .use(FriendlyErrorsWebpackPlugin)
     .end();
 
   // set loaders

@@ -8,3 +8,5 @@ declare module 'file-loader';
 declare module 'ts-loader';
 declare module 'mini-css-extract-plugin';
 declare module 'webpackbar';
+declare module 'uglifyjs-webpack-plugin';
+declare module 'optimize-css-assets-webpack-plugin';
