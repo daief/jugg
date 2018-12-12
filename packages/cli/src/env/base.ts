@@ -6,8 +6,9 @@ import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
 import { getAbsolutePath } from '../utils';
 import setLoaders from './loaders';
 import { FilterCSSConflictingWarning } from '../plugins';
+import { Jugg } from '..';
 
-export default (): Config => {
+export default (_: Jugg): Config => {
   const config = new Config();
   (config as any).mode(process.env.NODE_ENV);
 

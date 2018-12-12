@@ -7,9 +7,10 @@ import OptimizeCss from 'optimize-css-assets-webpack-plugin';
 import baseConfig from './base';
 import { getAbsolutePath } from '../utils';
 import uglifyjsOpt from './uglifyjsOpt';
+import { Jugg } from '..';
 
-export default (): Config => {
-  const config = baseConfig();
+export default (jugg: Jugg): Config => {
+  const config = baseConfig(jugg);
   const filename = '[name].[chunkhash]';
 
   config.output.path(getAbsolutePath('dist')).filename(`${filename}.js`);

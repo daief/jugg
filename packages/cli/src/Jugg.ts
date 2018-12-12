@@ -6,8 +6,10 @@ import { commandList } from './bin/commands';
 
 export default class Jugg {
   private juggConfig: JuggConfig = {};
+  private isProd: boolean;
 
   constructor(command: string, argv: any) {
+    this.isProd = process.env.NODE_ENV === 'production';
     this.juggConfig = readConfig();
     this.loadPlugins();
     this.run(command, argv);
@@ -15,6 +17,10 @@ export default class Jugg {
 
   get JConfig() {
     return this.juggConfig;
+  }
+
+  get IsProd() {
+    return this.isProd;
   }
 
   loadPlugins() {
@@ -47,7 +53,7 @@ export default class Jugg {
     // default < plugin < 用户
     const defaultCfg: Config = require(process.env.NODE_ENV === 'production'
       ? './env/prod'
-      : './env/dev').default();
+      : './env/dev').default(this);
 
     // plugin & default
     mergeJuggWebpack(defaultCfg, [...cfgs]);

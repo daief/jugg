@@ -2,9 +2,10 @@ import webpack from 'webpack';
 import Config from 'webpack-chain';
 import baseConfig from './base';
 import MiniCss from 'mini-css-extract-plugin';
+import { Jugg } from '..';
 
-export default (): Config => {
-  const config = baseConfig();
+export default (jugg: Jugg): Config => {
+  const config = baseConfig(jugg);
 
   config.devtool('cheap-module-source-map');
 
