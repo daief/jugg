@@ -14,7 +14,7 @@ export default (_: Jugg): Config => {
 
   config
     .entry('index')
-    .add(getAbsolutePath('src', 'index.js'))
+    .add(getAbsolutePath('src', 'index.ts'))
     .end()
     .output.path(getAbsolutePath('dist'))
     .filename('[name].[hash].js')
