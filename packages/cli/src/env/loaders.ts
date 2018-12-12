@@ -1,5 +1,5 @@
 import Config from 'webpack-chain';
-// import { getAbsolutePath } from '../utils';
+import { getAbsolutePath } from '../utils';
 
 export default (config: Config) => {
   const isProd = process.env.NODE_ENV === 'production';
@@ -14,6 +14,25 @@ export default (config: Config) => {
       limit: 8192,
       name: 'static/[name].[hash:8].[ext]',
     });
+
+  config.module
+    // --------------- ts-loader
+    .rule('ts-loader')
+    .test(/\.tsx?$/)
+    .use('ts-loader')
+    .loader(require.resolve('ts-loader'))
+    .options({
+      transpileOnly: true,
+      happyPackMode: true,
+    });
+
+  config.plugin('fork-ts-checker-webpack-plugin').use(require('fork-ts-checker-webpack-plugin'), [
+    {
+      tsconfig: getAbsolutePath('tsconfig.json'),
+      checkSyntacticErrors: true,
+      formatter: 'codeframe',
+    },
+  ]);
 
   // XXX
   // config
