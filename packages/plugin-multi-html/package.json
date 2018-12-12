@@ -18,5 +18,8 @@
   "devDependencies": {
     "typescript": "^3.2.2"
   },
-  "files": ["lib", "types"]
+  "files": ["lib", "types"],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  }
 }

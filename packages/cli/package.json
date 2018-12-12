@@ -2,7 +2,7 @@
   "name": "@jugg/jugg",
   "version": "0.0.1",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "main": "./lib/index.js",
   "types": "./types",
   "bin": {
@@ -10,7 +10,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
     "typescript": "^3"
@@ -50,5 +51,9 @@
   "devDependencies": {
     "typescript": "^3.2.2"
   },
-  "files": ["lib", "types"]
+  "files": ["lib", "types"],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  }
 }
