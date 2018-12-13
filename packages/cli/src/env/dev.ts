@@ -9,6 +9,12 @@ export default (jugg: Jugg): Config => {
 
   config.devtool('cheap-module-source-map');
 
+  // TODO
+  config
+    .entry('index')
+    .prepend(require.resolve('webpack-dev-server/client') + '?http://localhost:3000/sockjs-node')
+    .prepend(require.resolve('webpack/hot/dev-server'));
+
   config
     .plugin('hot-module-replacement-plugin')
     .use(webpack.HotModuleReplacementPlugin)
