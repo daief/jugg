@@ -11,9 +11,11 @@ export default class Jugg {
 
   constructor(command: string, argv: any) {
     this.isProd = process.env.NODE_ENV === 'production';
-    this.juggConfig = readConfig();
-    this.loadPlugins();
-    this.run(command, argv);
+    readConfig().then(config => {
+      this.juggConfig = config;
+      this.loadPlugins();
+      this.run(command, argv);
+    });
   }
 
   get JConfig() {
