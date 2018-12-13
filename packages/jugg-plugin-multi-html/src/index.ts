@@ -41,6 +41,18 @@ const p: Plugin = (jugg: Jugg, opts: Option) => {
                   ? defaultTpl
                   : builtInTpl,
               inject: true,
+              minify: {
+                caseSensitive: true,
+                collapseWhitespace: true,
+                conservativeCollapse: true,
+                removeAttributeQuotes: false,
+                removeComments: true,
+                removeScriptTypeAttributes: true,
+                removeStyleLinkTypeAttributes: true,
+                minifyCSS: true,
+                minifyJS: true,
+                minifyURLs: true,
+              },
             },
           ])
           .end();

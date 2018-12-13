@@ -31,6 +31,25 @@ export default (jugg: Jugg): Config => {
         chunkFilename: `${filename}.css`,
       },
     ])
+    .end()
+    .plugin('html-webpack-plugin-base')
+    .tap(c => [
+      {
+        minify: {
+          caseSensitive: true,
+          collapseWhitespace: true,
+          conservativeCollapse: true,
+          removeAttributeQuotes: false,
+          removeComments: true,
+          removeScriptTypeAttributes: true,
+          removeStyleLinkTypeAttributes: true,
+          minifyCSS: true,
+          minifyJS: true,
+          minifyURLs: true,
+        },
+        ...c,
+      },
+    ])
     .end();
 
   config.optimization
