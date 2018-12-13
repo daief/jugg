@@ -1,4 +1,4 @@
-import { Plugin, Jugg } from '@jugg/jugg';
+import { Plugin, Jugg } from '@axew/jugg';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import nodePath from 'path';
 import fs from 'fs';
