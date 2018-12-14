@@ -47,7 +47,7 @@ export default (jugg: Jugg): Config => {
           minifyJS: true,
           minifyURLs: true,
         },
-        ...c,
+        ...c[0],
       },
     ])
     .end();
