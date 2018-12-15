@@ -7,6 +7,7 @@ import { getAbsolutePath } from '../utils';
 import setLoaders from './loaders';
 import { FilterCSSConflictingWarning } from '../plugins';
 import { Jugg } from '..';
+import fs from 'fs';
 
 export default (_: Jugg): Config => {
   const config = new Config();
@@ -23,13 +24,18 @@ export default (_: Jugg): Config => {
     .end()
     .resolve.extensions.merge(['.js', '.jsx', '.ts', '.tsx', '.vue']);
 
+  const userTpl = getAbsolutePath('src', 'document.ejs');
   config
     .plugin('html-webpack-plugin-base')
     .use(HtmlWebpackPlugin, [
       {
         filename: getAbsolutePath('dist', 'index.html'),
-        template: getAbsolutePath('src', 'document.ejs'),
         inject: true,
+        ...(fs.existsSync(userTpl)
+          ? {
+              template: userTpl,
+            }
+          : {}),
       },
     ])
     .end()
