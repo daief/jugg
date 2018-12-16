@@ -11,7 +11,7 @@ commandList.forEach(schema => {
   const line = program.command(command);
 
   if (description) {
-    program.description(description);
+    line.description(description);
   }
 
   (option || []).forEach(opt => {
