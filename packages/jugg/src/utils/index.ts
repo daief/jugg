@@ -6,7 +6,7 @@ import { logger } from './logger';
 
 export function readConfig(): Promise<JuggConfig> {
   return loadConfig('jugg').then((cfg: JuggConfig) => {
-    const { publicPath, outputDir, plugins, webpack, define } = cfg;
+    const { publicPath, outputDir, plugins, webpack, define, chunks } = cfg;
 
     return {
       publicPath: publicPath || '/',
@@ -14,6 +14,7 @@ export function readConfig(): Promise<JuggConfig> {
       plugins: plugins || [],
       webpack: webpack || {},
       define: define || {},
+      chunks: chunks !== false ? true : false,
     };
   });
 }

@@ -1,5 +1,4 @@
 // ref: https://github.com/EndemolShineGroup/cosmiconfig-typescript-loader
-// XXX use what tsconfig ?
 import 'ts-node/register';
 
 /**

@@ -26,10 +26,20 @@ export type WebpackChainFun = (
 export type JuggWebpack = Configuration | WebpackChainFun;
 
 export interface JuggConfig {
+  /**
+   * publicPath of webpack, default '/'
+   */
   publicPath?: string;
+  /**
+   * output path of webpack, default 'dist'
+   */
   outputDir?: string;
   plugins?: Array<string | [string, { [k: string]: any }]>;
   define?: { [k: string]: any };
+  /**
+   * open chunks config? default true
+   */
+  chunks?: boolean;
   webpack?: JuggWebpack;
 }
 

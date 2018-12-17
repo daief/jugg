@@ -61,5 +61,25 @@ export default (jugg: Jugg): Config => {
     .use(UglifyjsPlugin, [uglifyjsOpt])
     .end();
 
+  if (JConfig.chunks === true) {
+    config.optimization
+      .splitChunks({
+        cacheGroups: {
+          vendors: {
+            name: 'vendors',
+            chunks: 'all',
+            test: /[\\/]node_modules[\\/]/,
+          },
+          commons: {
+            name: 'commons',
+            chunks: 'async',
+            minChunks: 2,
+          },
+        },
+      })
+      .runtimeChunk(false)
+      .end();
+  }
+
   return config;
 };
