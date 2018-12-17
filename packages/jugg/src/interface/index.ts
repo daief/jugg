@@ -29,6 +29,7 @@ export interface JuggConfig {
   publicPath?: string;
   outputDir?: string;
   plugins?: Array<string | [string, { [k: string]: any }]>;
+  define?: { [k: string]: any };
   webpack?: JuggWebpack;
 }
 

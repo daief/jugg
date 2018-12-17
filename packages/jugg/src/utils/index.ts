@@ -6,13 +6,14 @@ import { logger } from './logger';
 
 export function readConfig(): Promise<JuggConfig> {
   return loadConfig('jugg').then((cfg: JuggConfig) => {
-    const { publicPath, outputDir, plugins, webpack } = cfg;
+    const { publicPath, outputDir, plugins, webpack, define } = cfg;
 
     return {
       publicPath: publicPath || '/',
       outputDir: outputDir || 'dist',
       plugins: plugins || [],
       webpack: webpack || {},
+      define: define || {},
     };
   });
 }

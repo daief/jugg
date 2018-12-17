@@ -9,6 +9,7 @@ import { FilterCSSConflictingWarning } from '../plugins';
 import { Jugg } from '..';
 import fs from 'fs';
 import { logger } from '../utils/logger';
+import webpack from 'webpack';
 
 export default (jugg: Jugg): Config => {
   const config = new Config();
@@ -45,6 +46,21 @@ export default (jugg: Jugg): Config => {
     .end()
     .plugin('friendly-errors-webpack-plugin')
     .use(FriendlyErrorsWebpackPlugin)
+    .end()
+    .plugin('define')
+    .use(webpack.DefinePlugin, [
+      {
+        ...(() => {
+          // convert object
+          const { define } = JConfig;
+          const result: any = {};
+          Object.keys(define).forEach(key => {
+            result[key] = JSON.stringify(define[key]);
+          });
+          return result;
+        })(),
+      },
+    ])
     .end();
 
   // -------------------------------------- set loaders
