@@ -10,18 +10,21 @@ import { Jugg } from '..';
 import fs from 'fs';
 import { logger } from '../utils/logger';
 
-export default (_: Jugg): Config => {
+export default (jugg: Jugg): Config => {
   const config = new Config();
+  const { JConfig } = jugg;
+  const { outputDir } = JConfig;
+
   (config as any).mode(process.env.NODE_ENV);
 
   config
     .entry('index')
     .add(getAbsolutePath('src', 'index'))
     .end()
-    .output.path(getAbsolutePath('dist'))
+    .output.path(getAbsolutePath(outputDir))
     .filename('[name].[hash].js')
     .chunkFilename('[name].[chunkhash].js')
-    .publicPath('/')
+    .publicPath(JConfig.publicPath)
     .end()
     .resolve.extensions.merge(['.js', '.jsx', '.ts', '.tsx', '.vue']);
 
@@ -29,7 +32,7 @@ export default (_: Jugg): Config => {
     .plugin('html-webpack-plugin-base')
     .use(HtmlWebpackPlugin, [
       {
-        filename: getAbsolutePath('dist', 'index.html'),
+        filename: getAbsolutePath(outputDir, 'index.html'),
         inject: true,
       },
     ])

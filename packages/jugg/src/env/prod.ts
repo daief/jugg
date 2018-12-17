@@ -10,15 +10,16 @@ import uglifyjsOpt from './uglifyjsOpt';
 import { Jugg } from '..';
 
 export default (jugg: Jugg): Config => {
+  const { JConfig } = jugg;
   const config = baseConfig(jugg);
   const filename = '[name].[chunkhash]';
 
-  config.output.path(getAbsolutePath('dist')).filename(`${filename}.js`);
+  config.output.path(getAbsolutePath(JConfig.outputDir)).filename(`${filename}.js`);
 
   config
     .plugin('clean-webpack-plugin')
     .use(cleanWebPackPlugin, [
-      [getAbsolutePath('dist')],
+      [getAbsolutePath(JConfig.outputDir)],
       {
         root: process.cwd(),
       },

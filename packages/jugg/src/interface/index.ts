@@ -1,5 +1,4 @@
 import { Configuration } from 'webpack';
-import { Configuration as DevConfiguration } from 'webpack-dev-server';
 import Config from 'webpack-chain';
 import Jugg from '../Jugg';
 
@@ -17,12 +16,6 @@ export interface CommandSchema {
   };
 }
 
-export interface DevOpts {
-  port?: number;
-  webpackConfig: Configuration;
-  serverConfig?: DevConfiguration;
-}
-
 export type WebpackChainFun = (
   param: {
     config: Config;
@@ -33,6 +26,8 @@ export type WebpackChainFun = (
 export type JuggWebpack = Configuration | WebpackChainFun;
 
 export interface JuggConfig {
+  publicPath?: string;
+  outputDir?: string;
   plugins?: Array<string | [string, { [k: string]: any }]>;
   webpack?: JuggWebpack;
 }

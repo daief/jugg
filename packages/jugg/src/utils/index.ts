@@ -5,7 +5,16 @@ import TypeScriptLoader from './readTs';
 import { logger } from './logger';
 
 export function readConfig(): Promise<JuggConfig> {
-  return loadConfig('jugg');
+  return loadConfig('jugg').then((cfg: JuggConfig) => {
+    const { publicPath, outputDir, plugins, webpack } = cfg;
+
+    return {
+      publicPath: publicPath || '/',
+      outputDir: outputDir || 'dist',
+      plugins: plugins || [],
+      webpack: webpack || {},
+    };
+  });
 }
 
 export function getAbsolutePath(...p: string[]) {

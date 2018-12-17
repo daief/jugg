@@ -4,7 +4,8 @@ import webpack, { Configuration } from 'webpack';
 import { getAbsolutePath } from '../utils';
 
 export default function dev(jugg: Jugg, argv: any) {
-  const wbpCfg = jugg.JConfig.webpack as Configuration;
+  const { JConfig } = jugg;
+  const wbpCfg = JConfig.webpack as Configuration;
   const compiler = webpack(wbpCfg);
   const { port } = argv;
   const HOST = '0.0.0.0';
@@ -15,7 +16,7 @@ export default function dev(jugg: Jugg, argv: any) {
     clientLogLevel: 'none',
     hot: true,
     quiet: true,
-    contentBase: getAbsolutePath('dist'),
+    contentBase: getAbsolutePath(JConfig.outputDir),
     headers: {
       'access-control-allow-origin': '*',
     },

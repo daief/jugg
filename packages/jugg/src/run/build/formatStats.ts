@@ -12,6 +12,7 @@ const chalk = require('chalk');
 const ui = require('cliui')({ width: 80 });
 
 export function formatStats(stats: Stats, jugg: Jugg) {
+  const dir = jugg.JConfig.outputDir;
   const json = stats.toJson({
     hash: false,
     modules: false,
@@ -55,8 +56,7 @@ export function formatStats(stats: Stats, jugg: Jugg) {
   }
 
   function getGzippedSize(asset: any) {
-    // TODO
-    const filepath = jugg.Utils.getAbsolutePath('dist', asset.name);
+    const filepath = jugg.Utils.getAbsolutePath(dir, asset.name);
     const buffer = fs.readFileSync(filepath);
     return formatSize(zlib.gzipSync(buffer).length);
   }
@@ -72,8 +72,8 @@ export function formatStats(stats: Stats, jugg: Jugg) {
         .map((asset: any) =>
           makeRow(
             /js$/.test(asset.name)
-              ? chalk.green(path.join('dist', asset.name))
-              : chalk.blue(path.join('dist', asset.name)),
+              ? chalk.green(path.join(dir, asset.name))
+              : chalk.blue(path.join(dir, asset.name)),
             formatSize(asset.size),
             getGzippedSize(asset)
           )
