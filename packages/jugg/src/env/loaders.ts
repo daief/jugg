@@ -4,16 +4,52 @@ import { getAbsolutePath } from '../utils';
 export default (config: Config) => {
   const isProd = process.env.NODE_ENV === 'production';
 
+  const genUrlLoaderOptions = () => {
+    return {
+      limit: 4096,
+      // use explicit fallback to avoid regression in url-loader>=1.1.0
+      fallback: {
+        loader: 'file-loader',
+        options: {
+          name: 'static/[name].[hash:8].[ext]',
+        },
+      },
+    };
+  };
+
   config.module
-    // --------------- url-loader
-    .rule('url-loader')
-    .test(/\.(gif|png|jpe?g|svg)$/i)
+    // --------------- images url-loader
+    .rule('images-url-loader')
+    .test(/\.(png|jpe?g|gif|webp)(\?.*)?$/)
     .use('url-loader')
     .loader(require.resolve('url-loader'))
+    .options(genUrlLoaderOptions());
+
+  config.module
+    // --------------- svg file-loader
+    .rule('svg-file-loader')
+    .test(/\.(svg)(\?.*)?$/)
+    .use('file-loader')
+    .loader(require.resolve('file-loader'))
     .options({
-      limit: 8192,
       name: 'static/[name].[hash:8].[ext]',
     });
+
+  config.module
+    // --------------- media url-loader
+    .rule('media-url-loader')
+    .test(/\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/)
+    .use('url-loader')
+    .loader('url-loader')
+    .options(genUrlLoaderOptions());
+
+  config.module
+    // --------------- fonts url-loader
+    .rule('fonts-url-loader')
+    .test(/\.(woff2?|eot|ttf|otf)(\?.*)?$/i)
+    .use('url-loader')
+    .loader('url-loader')
+    .options(genUrlLoaderOptions());
 
   config.module
     // --------------- ts-loader
@@ -34,20 +70,11 @@ export default (config: Config) => {
     },
   ]);
 
-  // XXX
-  // config
-  //   .module
-  //   // --------------- file-loader
-  //   .rule('file-loader')
-  //   .test(/\.(csv)$/i)
-  //   .use('file-loader')
-  //   .loader(require.resolve('file-loader'));
-
   if (isProd) {
     config.module
       // --------------- image-webpack-loader
       .rule('image-webpack-loader')
-      .test(/\.(gif|png|jpe?g|svg)$/i)
+      .test(/\.(png|jpe?g|gif|webp|svg)(\?.*)?$/)
       .use('image-webpack-loader')
       .loader(require.resolve('image-webpack-loader'))
       .options({
