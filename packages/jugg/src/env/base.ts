@@ -8,6 +8,7 @@ import setLoaders from './loaders';
 import { FilterCSSConflictingWarning } from '../plugins';
 import { Jugg } from '..';
 import fs from 'fs';
+import { logger } from '../utils/logger';
 
 export default (_: Jugg): Config => {
   const config = new Config();
@@ -24,18 +25,12 @@ export default (_: Jugg): Config => {
     .end()
     .resolve.extensions.merge(['.js', '.jsx', '.ts', '.tsx', '.vue']);
 
-  const userTpl = getAbsolutePath('src', 'document.ejs');
   config
     .plugin('html-webpack-plugin-base')
     .use(HtmlWebpackPlugin, [
       {
         filename: getAbsolutePath('dist', 'index.html'),
         inject: true,
-        ...(fs.existsSync(userTpl)
-          ? {
-              template: userTpl,
-            }
-          : {}),
       },
     ])
     .end()
@@ -49,8 +44,21 @@ export default (_: Jugg): Config => {
     .use(FriendlyErrorsWebpackPlugin)
     .end();
 
-  // set loaders
+  // -------------------------------------- set loaders
   setLoaders(config);
+
+  // -------------------------------------- Modify the Config
+  const userTpl = getAbsolutePath('src', 'document.ejs');
+  if (fs.existsSync(userTpl)) {
+    config.plugin('html-webpack-plugin-base').tap(c => [
+      {
+        template: userTpl,
+        ...c[0],
+      },
+    ]);
+  } else {
+    logger.warn('Cannot find document.ejs, use default template');
+  }
 
   return config;
 };

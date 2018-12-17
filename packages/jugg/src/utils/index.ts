@@ -2,6 +2,7 @@ import { JuggConfig } from '../interface';
 import path from 'path';
 import cosmiconfig from 'cosmiconfig';
 import TypeScriptLoader from './readTs';
+import { logger } from './logger';
 
 export function readConfig(): Promise<JuggConfig> {
   return loadConfig('jugg');
@@ -39,9 +40,8 @@ export function loadConfig(name: string): Promise<any> {
     .then((result: any) => {
       return result ? result.config : {};
     })
-    .catch((e: any) => {
-      // tslint:disable no-console
-      console.log('Read config error:', e);
+    .catch((e: Error) => {
+      logger.error(e, 'Read config error');
       return {};
     });
 }
