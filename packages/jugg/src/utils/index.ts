@@ -1,20 +1,10 @@
-import { JuggConfig, WebpackChainFun } from './interface';
-import Config from 'webpack-chain';
-// import resolveCwd from 'resolve-cwd';
+import { JuggConfig } from '../interface';
 import path from 'path';
-import { Configuration } from 'webpack';
 import cosmiconfig from 'cosmiconfig';
-import TypeScriptLoader from './others/readTs';
+import TypeScriptLoader from './readTs';
 
 export function readConfig(): Promise<JuggConfig> {
   return loadConfig('jugg');
-}
-
-export function mergeJuggWebpack(config: Config, cfgs: WebpackChainFun[]): Configuration {
-  cfgs.map(fn => {
-    fn({ config, webpack: config.toConfig() });
-  });
-  return config.toConfig();
 }
 
 export function getAbsolutePath(...p: string[]) {

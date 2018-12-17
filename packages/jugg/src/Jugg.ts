@@ -2,7 +2,9 @@ import Config from 'webpack-chain';
 import merge from 'webpack-merge';
 import resolveCwd from 'resolve-cwd';
 import { JuggConfig, Plugin, WebpackChainFun } from './interface';
-import { mergeJuggWebpack, readConfig, getAbsolutePath } from './utils';
+import { readConfig, getAbsolutePath } from './utils';
+import { logger } from './utils/logger';
+import readTs from './utils/readTs';
 import { commandList } from './bin/commands';
 
 export default class Jugg {
@@ -30,6 +32,8 @@ export default class Jugg {
     return {
       getAbsolutePath,
       resolveCwd,
+      logger,
+      readTs,
     };
   }
 
@@ -41,10 +45,8 @@ export default class Jugg {
         try {
           const pluginFun: Plugin = require(moduleId).default;
           return pluginFun(this, plOpt);
-        } catch (_) {
-          // TODO warn
-          // tslint:disable no-console
-          console.log('plugin missing', _);
+        } catch (e) {
+          logger.error(e, `Plugin \`${moduleId}\` missing`);
           return null;
         }
       })
@@ -65,8 +67,10 @@ export default class Jugg {
       ? './env/prod'
       : './env/dev').default(this);
 
-    // plugin & default
-    mergeJuggWebpack(defaultCfg, [...cfgs]);
+    // merge plugin config to defaultCfg
+    cfgs.forEach(fn => {
+      fn({ config: defaultCfg, webpack: defaultCfg.toConfig() });
+    });
 
     // merge user config
     const { webpack } = this.juggConfig;
