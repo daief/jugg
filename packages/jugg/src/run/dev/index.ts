@@ -3,7 +3,6 @@
  */
 import WebpackDevServer, { Configuration as DevConfiguration } from 'webpack-dev-server';
 import webpack, { Configuration } from 'webpack';
-import { getAbsolutePath } from '../../utils';
 import { logger } from '../../utils/logger';
 import portfinder from 'portfinder';
 import { prepareUrls } from './prepareURL';
@@ -64,7 +63,7 @@ export default function dev(api: PluginAPI) {
         clientLogLevel: 'none',
         hot: true,
         quiet: true,
-        contentBase: getAbsolutePath(JConfig.outputDir),
+        contentBase: JConfig.outputDir,
         headers: {
           'access-control-allow-origin': '*',
         },

@@ -18,9 +18,11 @@ export default (jugg: Jugg): Config => {
 
   (config as any).mode(process.env.NODE_ENV);
 
+  config.context(jugg.context);
+
   config
     .entry('index')
-    .add(getAbsolutePath('src', 'index'))
+    .add('./src/index')
     .end()
     .output.path(getAbsolutePath(outputDir))
     .filename('[name].[hash].js')
@@ -71,7 +73,7 @@ export default (jugg: Jugg): Config => {
   if (fs.existsSync(userTpl)) {
     config.plugin('html-webpack-plugin-base').tap(c => [
       {
-        template: userTpl,
+        template: 'src/document.ejs',
         ...c[0],
       },
     ]);

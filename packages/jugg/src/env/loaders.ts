@@ -1,5 +1,4 @@
 import Config from 'webpack-chain';
-import { getAbsolutePath } from '../utils';
 
 export default (config: Config) => {
   const isProd = process.env.NODE_ENV === 'production';
@@ -64,7 +63,7 @@ export default (config: Config) => {
 
   config.plugin('fork-ts-checker-webpack-plugin').use(require('fork-ts-checker-webpack-plugin'), [
     {
-      tsconfig: getAbsolutePath('tsconfig.json'),
+      tsconfig: 'tsconfig.json',
       checkSyntacticErrors: true,
       formatter: 'codeframe',
     },

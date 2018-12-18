@@ -5,7 +5,6 @@ import MiniCss from 'mini-css-extract-plugin';
 import UglifyjsPlugin from 'uglifyjs-webpack-plugin';
 import OptimizeCss from 'optimize-css-assets-webpack-plugin';
 import baseConfig from './base';
-import { getAbsolutePath } from '../utils';
 import uglifyjsOpt from './uglifyjsOpt';
 import { Jugg } from '..';
 
@@ -14,12 +13,12 @@ export default (jugg: Jugg): Config => {
   const config = baseConfig(jugg);
   const filename = '[name].[chunkhash]';
 
-  config.output.path(getAbsolutePath(JConfig.outputDir)).filename(`${filename}.js`);
+  config.output.filename(`${filename}.js`);
 
   config
     .plugin('clean-webpack-plugin')
     .use(cleanWebPackPlugin, [
-      [getAbsolutePath(JConfig.outputDir)],
+      [JConfig.outputDir],
       {
         root: process.cwd(),
       },
