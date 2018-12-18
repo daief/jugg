@@ -14,8 +14,7 @@ const p: Plugin = (api, opts: Option) => {
   const { routes } = opts;
 
   api.chainWebpack(({ config }) => {
-    const { IsProd, Utils } = api.jugg;
-    const { getAbsolutePath } = Utils;
+    const { IsProd } = api.jugg;
 
     if (!IsProd) {
       return;
@@ -37,7 +36,7 @@ const p: Plugin = (api, opts: Option) => {
         .plugin(`html-webpack-plugin-multi-html-${index}`)
         .use(HtmlWebpackPlugin, [
           {
-            filename: getAbsolutePath('dist', path, 'index.html'),
+            filename: `${path.replace(/^\//, '')}/index.html`,
             template:
               template && fs.existsSync(tpl)
                 ? tpl

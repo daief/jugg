@@ -20,7 +20,7 @@ export function readConfig(): Promise<JuggConfig> {
 }
 
 export function getAbsolutePath(...p: string[]) {
-  return path.resolve(process.cwd(), ...p);
+  return path.join(process.cwd(), ...p);
 }
 
 /**

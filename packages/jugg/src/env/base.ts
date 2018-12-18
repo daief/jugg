@@ -33,7 +33,7 @@ export default (jugg: Jugg): Config => {
     .plugin('html-webpack-plugin-base')
     .use(HtmlWebpackPlugin, [
       {
-        filename: getAbsolutePath(outputDir, 'index.html'),
+        filename: 'index.html',
         inject: true,
       },
     ])
