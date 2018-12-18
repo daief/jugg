@@ -5,7 +5,7 @@ import Webpackbar from 'webpackbar';
 import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
 import { getAbsolutePath } from '../utils';
 import setLoaders from './loaders';
-import { FilterCSSConflictingWarning } from '../plugins';
+import { FilterCSSConflictingWarning } from './plugins';
 import { Jugg } from '..';
 import fs from 'fs';
 import { logger } from '../utils/logger';
