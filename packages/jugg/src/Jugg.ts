@@ -66,17 +66,29 @@ export default class Jugg {
 
     const builtIn: string[] = ['./run/dev', './run/build'].map(p => resolve(__dirname, p));
 
-    // TODO support relative path plugin
-    [...builtIn, ...(plugins || [])].map(p => {
-      const [moduleId, plOpt] = Array.isArray(p) ? p : [p, {}];
-      try {
-        const pluginFun: Plugin = require(moduleId).default || require(moduleId);
-        return pluginFun(new PluginAPI(moduleId, this), plOpt);
-      } catch (e) {
-        logger.error(e, `Plugin \`${moduleId}\` missing`);
-        return null;
-      }
-    });
+    [...builtIn, ...(plugins || [])]
+      .map(p => {
+        const [moduleId, plOpt] = Array.isArray(p) ? p : [p, {}];
+        return [moduleId, plOpt];
+      })
+      .map((p: [string, any]) => {
+        if (/^\./.test(p[0])) {
+          // relative path plugin
+          return [getAbsolutePath(p[0]), p[1]];
+        } else {
+          return p;
+        }
+      })
+      .map((p: [string, any]) => {
+        const [moduleId, plOpt] = p;
+        try {
+          const pluginFun: Plugin = require(moduleId).default || require(moduleId);
+          return pluginFun(new PluginAPI(moduleId, this), plOpt);
+        } catch (e) {
+          logger.error(e, `Plugin \`${moduleId}\` error`);
+          return null;
+        }
+      });
   }
 
   /**
