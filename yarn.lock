@@ -219,13 +219,6 @@
     "@types/express-serve-static-core" "*"
     "@types/serve-static" "*"
 
-"@types/friendly-errors-webpack-plugin@^0.1.1":
-  version "0.1.1"
-  resolved "http://registry.npm.taobao.org/@types/friendly-errors-webpack-plugin/download/@types/friendly-errors-webpack-plugin-0.1.1.tgz#b56dd545d235823e000c3cba67f4f624f46173d1"
-  integrity sha1-tW3VRdI1gj4ADDy6Z/T2JPRhc9E=
-  dependencies:
-    "@types/webpack" "*"
-
 "@types/http-proxy-middleware@*":
   version "0.19.0"
   resolved "http://registry.npm.taobao.org/@types/http-proxy-middleware/download/@types/http-proxy-middleware-0.19.0.tgz#7cc0d9776994b5675a71c1f4dfa8251db3ea774d"

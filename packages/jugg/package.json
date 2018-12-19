@@ -18,7 +18,6 @@
     "typescript": "^3"
   },
   "dependencies": {
-    "@types/friendly-errors-webpack-plugin": "^0.1.1",
     "@types/webpack": "^4.4.21",
     "@types/webpack-chain": "^5.0.0",
     "@types/webpack-dev-server": "^3.1.1",
