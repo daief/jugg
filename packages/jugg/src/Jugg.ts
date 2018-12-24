@@ -45,15 +45,18 @@ export default class Jugg {
     };
   }
 
-  async init() {
+  init() {
     if (this.initialized) {
       return;
     }
 
-    this.juggConfig = await readConfig();
+    this.initialized = true;
+
+    this.loadEnv();
+
+    this.juggConfig = readConfig();
 
     this.loadPlugins();
-    this.initialized = true;
 
     this.registerCommands();
 
@@ -121,11 +124,26 @@ export default class Jugg {
   }
 
   /**
+   * load env
+   * TODO load .env file
+   */
+  private loadEnv() {
+    const c = this.commander.parse(process.argv);
+    const cName = c.args ? c.args[0] : '';
+
+    if (cName === 'dev') {
+      process.env.NODE_ENV = 'development';
+    } else if (cName === 'build') {
+      process.env.NODE_ENV = 'production';
+    }
+  }
+
+  /**
    * 注册命令行语句
    */
   private registerCommands() {
     this.commands.forEach(schema => {
-      const { command, description, option, env, action } = schema;
+      const { command, description, option, action } = schema;
       const line = this.commander.command(command);
 
       if (description) {
@@ -143,10 +161,6 @@ export default class Jugg {
       });
 
       line.action(opt => {
-        // set env
-        Object.keys(env || {}).forEach(key => {
-          process.env[key] = env[key];
-        });
         // exec
         if (action) {
           action(opt);
