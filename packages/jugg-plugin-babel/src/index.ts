@@ -6,6 +6,7 @@ export interface Option {
   babelrc?: boolean;
   presets?: Array<string | [string, any]>;
   plugins?: Array<string | [string, any]>;
+  // some options about @babel/preset-env & @babel/plugin-transform-runtime
   juggPreset?: IJuggPreset;
 }
 
@@ -38,5 +39,15 @@ export default (api: PluginAPI, opts: Option) => {
         presets: [[require.resolve('./preset'), juggPreset], ...presets],
         plugins: [...plugins],
       });
+
+    // add polyfill to entry
+    // if (api.jugg.IsProd) {
+    //   const entries = config.entryPoints.entries();
+    //   if (entries) {
+    //     Object.keys(entries).forEach(key => {
+    //       config.entryPoints.get(key).prepend(require.resolve('@babel/polyfill'));
+    //     });
+    //   }
+    // }
   });
 };

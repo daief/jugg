@@ -5,14 +5,18 @@
  */
 
 export interface IJuggPreset {
+  // https://babeljs.io/docs/en/babel-preset-env
   useBuiltIns?: string | boolean;
   loose?: boolean;
   targets?: {
     browsers: string[];
+    [k: string]: any;
   };
+  modules?: string | boolean;
   env?: {
     [k: string]: any;
   };
+  // https://babeljs.io/docs/en/babel-plugin-transform-runtime
   transformRuntime?: {
     [k: string]: any;
   };
@@ -21,7 +25,6 @@ export interface IJuggPreset {
 export default (_: any, opts: IJuggPreset = {}): any => {
   const {
     useBuiltIns = 'usage',
-    // useBuiltIns = false,
     loose = false,
     targets = {
       browsers: [
@@ -33,6 +36,7 @@ export default (_: any, opts: IJuggPreset = {}): any => {
         'Android >= 4.4',
       ],
     },
+    modules = false,
     env = {},
     transformRuntime = {},
   } = opts;
@@ -86,10 +90,11 @@ export default (_: any, opts: IJuggPreset = {}): any => {
   presets.push([
     require('@babel/preset-env'),
     {
+      useBuiltIns,
       targets,
       exclude,
       loose,
-      modules: 'commonjs',
+      modules,
       ...env,
     },
   ]);
