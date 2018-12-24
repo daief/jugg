@@ -1,4 +1,6 @@
 import Config from 'webpack-chain';
+import { existsSync } from 'fs';
+import { getAbsolutePath } from '../utils';
 
 export default (config: Config) => {
   const isProd = process.env.NODE_ENV === 'production';
@@ -50,24 +52,28 @@ export default (config: Config) => {
     .loader('url-loader')
     .options(genUrlLoaderOptions());
 
-  config.module
-    // --------------- ts-loader
-    .rule('ts-loader')
-    .test(/\.tsx?$/)
-    .use('ts-loader')
-    .loader(require.resolve('ts-loader'))
-    .options({
-      transpileOnly: true,
-      happyPackMode: true,
-    });
+  // TODO 考虑抽离 TS 部分
+  // ts project
+  if (existsSync(getAbsolutePath('tsconfig.json'))) {
+    config.module
+      // --------------- ts-loader
+      .rule('ts-loader')
+      .test(/\.tsx?$/)
+      .use('ts-loader')
+      .loader(require.resolve('ts-loader'))
+      .options({
+        transpileOnly: true,
+        happyPackMode: true,
+      });
 
-  config.plugin('fork-ts-checker-webpack-plugin').use(require('fork-ts-checker-webpack-plugin'), [
-    {
-      tsconfig: 'tsconfig.json',
-      checkSyntacticErrors: true,
-      formatter: 'codeframe',
-    },
-  ]);
+    config.plugin('fork-ts-checker-webpack-plugin').use(require('fork-ts-checker-webpack-plugin'), [
+      {
+        tsconfig: 'tsconfig.json',
+        checkSyntacticErrors: true,
+        formatter: 'codeframe',
+      },
+    ]);
+  }
 
   if (isProd) {
     config.module
