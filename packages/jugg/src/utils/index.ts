@@ -5,7 +5,7 @@ import TypeScriptLoader from './readTs';
 import { logger } from './logger';
 
 export function readConfig(): JuggConfig {
-  const { publicPath, outputDir, plugins, webpack, define, chunks } = loadConfig(
+  const { publicPath, outputDir, plugins, webpack, define, chunks, sourceMap } = loadConfig(
     'jugg'
   ) as JuggConfig;
 
@@ -16,6 +16,7 @@ export function readConfig(): JuggConfig {
     webpack: webpack || {},
     define: define || {},
     chunks: chunks !== false ? true : false,
+    sourceMap: sourceMap !== false ? true : false,
   };
 }
 

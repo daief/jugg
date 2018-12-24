@@ -38,6 +38,10 @@ export interface JuggConfig {
    * open chunks config? default true
    */
   chunks?: boolean;
+  /**
+   * sourceMap, default true
+   */
+  sourceMap?: boolean;
   webpack?: JuggWebpack;
 }
 

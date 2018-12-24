@@ -15,6 +15,10 @@ export default (jugg: Jugg): Config => {
 
   config.output.filename(`${filename}.js`);
 
+  if (JConfig.sourceMap) {
+    config.devtool('source-map');
+  }
+
   config
     .plugin('clean-webpack-plugin')
     .use(cleanWebPackPlugin, [
@@ -54,10 +58,10 @@ export default (jugg: Jugg): Config => {
 
   config.optimization
     .minimizer('optimize-css-assets-webpack-plugin')
-    .use(OptimizeCss)
+    .use(OptimizeCss, [{}])
     .end()
     .minimizer('uglifyjs-webpack-plugin')
-    .use(UglifyjsPlugin, [uglifyjsOpt])
+    .use(UglifyjsPlugin, [uglifyjsOpt(JConfig)])
     .end();
 
   if (JConfig.chunks === true) {
