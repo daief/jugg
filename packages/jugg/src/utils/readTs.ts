@@ -5,7 +5,7 @@ import 'ts-node/register';
  * read a ts file
  * @param filePath
  */
-export default async function(filePath: string) {
+export default function(filePath: string) {
   try {
     const result = require(filePath);
     return result.default || result;

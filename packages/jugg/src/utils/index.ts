@@ -4,19 +4,19 @@ import cosmiconfig from 'cosmiconfig';
 import TypeScriptLoader from './readTs';
 import { logger } from './logger';
 
-export function readConfig(): Promise<JuggConfig> {
-  return loadConfig('jugg').then((cfg: JuggConfig) => {
-    const { publicPath, outputDir, plugins, webpack, define, chunks } = cfg;
+export function readConfig(): JuggConfig {
+  const { publicPath, outputDir, plugins, webpack, define, chunks } = loadConfig(
+    'jugg'
+  ) as JuggConfig;
 
-    return {
-      publicPath: publicPath || '/',
-      outputDir: outputDir || 'dist',
-      plugins: plugins || [],
-      webpack: webpack || {},
-      define: define || {},
-      chunks: chunks !== false ? true : false,
-    };
-  });
+  return {
+    publicPath: publicPath || '/',
+    outputDir: outputDir || 'dist',
+    plugins: plugins || [],
+    webpack: webpack || {},
+    define: define || {},
+    chunks: chunks !== false ? true : false,
+  };
 }
 
 export function getAbsolutePath(...p: string[]) {
@@ -24,7 +24,7 @@ export function getAbsolutePath(...p: string[]) {
 }
 
 /**
- * load a config, async
+ * load a config, sync
  * @param name
  */
 export function loadConfig(name: string): Promise<any> {
@@ -40,19 +40,17 @@ export function loadConfig(name: string): Promise<any> {
     ],
     loaders: {
       '.ts': {
-        async: TypeScriptLoader,
+        sync: TypeScriptLoader,
+        // async: TypeScriptLoader,
       },
       noExt: cosmiconfig.loadJs,
     },
   });
 
-  return explorer
-    .search()
-    .then((result: any) => {
-      return result ? result.config : {};
-    })
-    .catch((e: Error) => {
-      logger.error(e, 'Read config error');
-      return {};
-    });
+  try {
+    const result = explorer.searchSync();
+    return result ? result.config : {};
+  } catch (e) {
+    logger.error(e, 'Read config error');
+  }
 }
