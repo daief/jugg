@@ -11,9 +11,6 @@ export interface CommandSchema {
     fn?: ((arg1: any, arg2: any) => void) | RegExp;
     defaultValue?: any;
   }>;
-  env?: {
-    [key: string]: string;
-  };
   action?: (args: any) => void;
 }
 

@@ -21,9 +21,6 @@ export default function dev(api: PluginAPI) {
         defaultValue: '3000',
       },
     ],
-    env: {
-      NODE_ENV: 'development',
-    },
     action: async (argv: any) => {
       const { JConfig } = api.jugg;
       const wbpCfg = api.jugg.mergeConfig();
