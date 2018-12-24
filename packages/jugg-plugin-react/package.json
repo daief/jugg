@@ -1,0 +1,37 @@
+{
+  "name": "@axew/jugg-plugin-react",
+  "version": "0.0.1",
+  "license": "MIT",
+  "private": true,
+  "main": "./lib/index.js",
+  "types": "./types",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "prebuild": "rimraf lib/ types/",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "@axew/jugg": ">= 0.0.5"
+  },
+  "dependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/runtime": "^7.2.0",
+    "babel-loader": "^8.0.4",
+    "babel-plugin-react-require": "^3.0.1",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.21"
+  },
+  "devDependencies": {
+    "@axew/jugg": "~0.0.5",
+    "rimraf": "^2.6.2",
+    "typescript": "^3.2.2"
+  },
+  "files": ["lib", "types"],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  }
+}

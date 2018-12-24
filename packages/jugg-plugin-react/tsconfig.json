@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "declarationDir": "types",
+    "outDir": "lib"
+  },
+  "include": ["src/*", "src/**/*", "../../typings"],
+  "exclude": ["node_modules"]
+}
