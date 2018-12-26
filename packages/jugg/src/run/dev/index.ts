@@ -18,7 +18,6 @@ export default function dev(api: PluginAPI) {
       {
         flags: '-p, --port <port>',
         description: 'dev server port',
-        defaultValue: '3000',
       },
     ],
     action: async (argv: any) => {
