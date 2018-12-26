@@ -10,13 +10,13 @@ export default function build(api: PluginAPI) {
       // const wbpCfg = api.jugg.JConfig.webpack as Configuration;
       const wbpCfg = api.jugg.mergeConfig();
       const compiler = webpack(wbpCfg);
-      // tslint:disable no-console
+
       compiler.run((err, stats: Stats) => {
         if (err) {
-          return console.log('build err', err);
+          return api.jugg.Utils.logger.error(err, 'Build error: ');
         }
 
-        console.log(formatStats(stats, api.jugg), '\nbuild success');
+        api.jugg.Utils.logger.log(formatStats(stats, api.jugg));
       });
     },
   });
