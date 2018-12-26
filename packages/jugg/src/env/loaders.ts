@@ -181,10 +181,48 @@ function setStyleLoaders(config: Config) {
     }
   }
 
+  // --------------- css ---------------
   setCssLoaders(
     config.module
       .rule('css.module')
-      .test(/\.module\.(le|c)ss$/i)
+      .test(/\.module\.css$/i)
+      .exclude.add(path => /node_modules/i.test(path))
+      .end(),
+    {
+      isModule: true,
+      less: false,
+    }
+  );
+
+  setCssLoaders(
+    config.module
+      .rule('css')
+      .test(/\.css$/i)
+      .exclude.add(cssExclude)
+      .end(),
+    {
+      isModule: false,
+      less: false,
+    }
+  );
+
+  setCssLoaders(
+    config.module
+      .rule('css-in-node_modules')
+      .test(/\.css$/i)
+      .include.add(/node_modules/)
+      .end(),
+    {
+      isModule: false,
+      less: false,
+    }
+  );
+
+  // --------------- less ---------------
+  setCssLoaders(
+    config.module
+      .rule('less.module')
+      .test(/\.module\.less$/i)
       .exclude.add(path => /node_modules/i.test(path))
       .end(),
     {
@@ -195,8 +233,8 @@ function setStyleLoaders(config: Config) {
 
   setCssLoaders(
     config.module
-      .rule('css')
-      .test(/\.(le|c)ss$/i)
+      .rule('less')
+      .test(/\.less$/i)
       .exclude.add(cssExclude)
       .end(),
     {
@@ -207,8 +245,8 @@ function setStyleLoaders(config: Config) {
 
   setCssLoaders(
     config.module
-      .rule('css-in-node_modules')
-      .test(/\.(le|c)ss$/i)
+      .rule('less-in-node_modules')
+      .test(/\.less$/i)
       .include.add(/node_modules/)
       .end(),
     {
