@@ -23,7 +23,7 @@ export default function dev(api: PluginAPI) {
     action: async (argv: any) => {
       const { JConfig } = api.jugg;
       const wbpCfg = api.jugg.mergeConfig();
-      const { devServer } = wbpCfg;
+      const { devServer = {} } = wbpCfg;
       const useDevServer: DevConfiguration = {
         ...devServer,
         port: argv.port || devServer.port || '3000',
