@@ -1,9 +1,16 @@
 import { PluginAPI } from '@axew/jugg/types/PluginAPI';
+import { JReactPresetOption } from './preset';
+
+export interface Options {
+  jReactPresetOption?: JReactPresetOption;
+}
 
 /**
  * if need to expand babel, you'd better make options on  `jugg-plugin-babel`
  */
-export default (api: PluginAPI) => {
+export default (api: PluginAPI, opts: Options) => {
+  const { jReactPresetOption } = opts;
+
   api.chainWebpack(({ config }) => {
     if (config.module.rules.has('jugg-plugin-babel-rule')) {
       config.module
@@ -17,7 +24,7 @@ export default (api: PluginAPI) => {
           const { presets } = c;
           return {
             ...c,
-            presets: [...(presets || []), require.resolve('./preset')],
+            presets: [...(presets || []), [require.resolve('./preset'), jReactPresetOption]],
           };
         });
     } else {
