@@ -28,6 +28,15 @@ Simple directory can be something like this, default entry can be `src/index.{ts
 
 ```
 
+# env
+
+- ANALYZE
+  - enable webpack-bundle-analyzer
+- ANALYZE_PORT
+  - webpack-bundle-analyzer server port, default 8888
+- ANALYZE_DUMP
+  - generate stats file while ANALYZE_DUMP exist
+
 # Notice
 
 - `import()` works with `"module": "esnext"` in `tsconfig.json`, [detail](https://github.com/webpack/webpack/issues/5703#issuecomment-357512412).

@@ -85,5 +85,21 @@ export default (jugg: Jugg): Config => {
     logger.warn('Cannot find document.ejs, use default template');
   }
 
+  // -------------------------------------- webpack-bundle-analyzer
+  if (process.env.ANALYZE) {
+    config
+      .plugin('webpack-bundle-analyzer')
+      .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin, [
+        {
+          analyzerMode: 'server',
+          analyzerPort: process.env.ANALYZE_PORT || 8888,
+          openAnalyzer: true,
+          // generate stats file while ANALYZE_DUMP exist
+          generateStatsFile: !!process.env.ANALYZE_DUMP,
+          statsFilename: process.env.ANALYZE_DUMP || 'stats.json',
+        },
+      ]);
+  }
+
   return config;
 };
