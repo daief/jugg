@@ -3,21 +3,20 @@ import path from 'path';
 import cosmiconfig from 'cosmiconfig';
 import TypeScriptLoader from './readTs';
 import { logger } from './logger';
+import { defaultsDeep } from 'lodash';
+import { validateConfig, defaults, PROP_COMPARE } from './jConfigSchema';
+import { PluginAPI } from '../PluginAPI';
 
 export function readConfig(): JuggConfig {
-  const { publicPath, outputDir, plugins, webpack, define, chunks, sourceMap } = loadConfig(
-    'jugg'
-  ) as JuggConfig;
+  const { config, filepath } = loadConfig<JuggConfig>('jugg');
 
-  return {
-    publicPath: publicPath || '/',
-    outputDir: outputDir || 'dist',
-    plugins: plugins || [],
-    webpack: webpack || {},
-    define: define || {},
-    chunks: chunks !== false ? true : false,
-    sourceMap: sourceMap !== false ? true : false,
-  };
+  const info = validateConfig(config);
+  if (info.error) {
+    logger.error(`Invalid options: ${info.error.message}`, filepath);
+    process.exit(1);
+  }
+
+  return defaultsDeep(config, defaults());
 }
 
 export function getAbsolutePath(...p: string[]) {
@@ -28,31 +27,64 @@ export function getAbsolutePath(...p: string[]) {
  * load a config, sync
  * @param name
  */
-export function loadConfig(name: string): Promise<any> {
+export function loadConfig<T = any>(
+  name: string
+): {
+  config: T;
+  filepath: string;
+} {
   const explorer = cosmiconfig(name, {
     searchPlaces: [
+      `.${name}rc.js`,
+      `${name}.config.js`,
+      `.${name}rc.ts`,
       `.${name}rc`,
       `.${name}rc.json`,
       `.${name}rc.yaml`,
       `.${name}rc.yml`,
-      `.${name}rc.js`,
-      `.${name}rc.ts`,
-      `${name}.config.js`,
     ],
     cache: false,
     loaders: {
       '.ts': {
         sync: TypeScriptLoader,
-        // async: TypeScriptLoader,
       },
       noExt: cosmiconfig.loadJs,
     },
   });
 
   try {
-    const result = explorer.searchSync();
-    return result ? result.config : {};
+    return (
+      explorer.searchSync() || {
+        config: {},
+        filepath: '',
+      }
+    );
   } catch (e) {
     logger.error(e, 'Read config error');
   }
+}
+
+/**
+ * 配置比较
+ * @param config
+ */
+export function isUserConfigChanged(api: PluginAPI): boolean {
+  const config = api.jugg.JConfig;
+  const newCfg = readConfig();
+
+  let result: false | string = false;
+
+  Object.keys(newCfg).forEach(key => {
+    const compare = PROP_COMPARE[key];
+
+    if (result) {
+      return;
+    }
+
+    result =
+      (compare === undefined ? newCfg[key] !== config[key] : !compare(newCfg[key], config[key])) &&
+      key;
+  });
+
+  return result;
 }

@@ -43,6 +43,8 @@ export interface JuggConfig {
    */
   sourceMap?: boolean;
   webpack?: JuggWebpack;
+  // 添加索引签名
+  [k: string]: any;
 }
 
 export type Plugin = (api: PluginAPI, opts: any) => void;

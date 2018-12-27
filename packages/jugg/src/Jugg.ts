@@ -158,6 +158,8 @@ export default class Jugg {
     this.juggConfig = {};
     this.initialized = false;
 
+    this.eventBus.clear();
+
     this.init();
   }
 
@@ -180,6 +182,7 @@ export default class Jugg {
    * 注册命令行语句
    */
   private registerCommands() {
+    this.commander.removeAllListeners();
     this.commands.forEach(schema => {
       const { command, description, option, action } = schema;
       const line = this.commander.command(command);

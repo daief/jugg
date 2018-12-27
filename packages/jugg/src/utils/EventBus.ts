@@ -2,7 +2,7 @@
  * simple event bus
  */
 export default class {
-  listeners: { [k: string]: Item[] } = {};
+  private listeners: { [k: string]: Item[] } = {};
 
   on(type: string, fun: (p?: any) => void, opts?: Opts) {
     if (!type) {
@@ -12,7 +12,6 @@ export default class {
     this.listeners[type] = [
       ...(this.listeners[type] || []),
       {
-        type,
         callback: fun,
         opts,
       },
@@ -24,8 +23,9 @@ export default class {
   }
 
   dispatch(type: string, data: any) {
-    const item = (this.listeners[type] || []).find(i => i.type === type);
-    if (item) {
+    const items = this.listeners[type] || [];
+
+    items.forEach(item => {
       const { callback, opts = {} } = item;
 
       callback && callback(data);
@@ -33,12 +33,19 @@ export default class {
       if (opts.once === true) {
         this.off(type, callback);
       }
+    });
+  }
+
+  clear(type?: string) {
+    if (type) {
+      this.listeners[type] = [];
+    } else {
+      this.listeners = {};
     }
   }
 }
 
 export interface Item {
-  type: string;
   callback: (p?: any) => void;
   opts: Opts;
 }

@@ -9,8 +9,21 @@ import { prepareUrls } from './prepareURL';
 import url from 'url';
 import chalk from 'chalk';
 import { PluginAPI } from '../../PluginAPI';
+import { isUserConfigChanged } from '../../utils';
 
 export default function dev(api: PluginAPI) {
+  let server: WebpackDevServer = null;
+
+  // listen to config change
+  api.jugg.onWatchConfigChange(() => {
+    const changedKey = isUserConfigChanged(api);
+    if (server && changedKey) {
+      server.close(() => {
+        api.jugg.reload();
+      });
+    }
+  });
+
   api.registerCommand({
     command: 'dev',
     description: 'start dev server',
@@ -20,79 +33,85 @@ export default function dev(api: PluginAPI) {
         description: 'dev server port',
       },
     ],
-    action: async (argv: any) => {
-      const { JConfig } = api.jugg;
-      const wbpCfg = api.jugg.mergeConfig();
-      const { devServer = {} } = wbpCfg;
-      const useDevServer: DevConfiguration = {
-        ...devServer,
-        port: argv.port || devServer.port || '3000',
-        host: '0.0.0.0',
-      };
-
-      portfinder.basePort = useDevServer.port;
-      const port = await portfinder.getPortPromise();
-      const protocol = useDevServer.https ? 'https' : 'http';
-
-      const urls = prepareUrls(protocol, useDevServer.host, port + '', JConfig.publicPath);
-
-      const devClients = [
-        // dev server client
-        require.resolve(`webpack-dev-server/client`) +
-          `?${url.format({
-            protocol,
-            port,
-            hostname: urls.lanUrlForConfig || 'localhost',
-            pathname: '/sockjs-node',
-          })}`,
-        // hmr client
-        require.resolve(
-          useDevServer.hotOnly === true ? 'webpack/hot/only-dev-server' : 'webpack/hot/dev-server'
-        ),
-      ];
-
-      addDevClientToEntry(wbpCfg, devClients);
-
-      const serverConfig: WebpackDevServer.Configuration = {
-        disableHostCheck: true,
-        compress: true,
-        clientLogLevel: 'none',
-        hot: true,
-        quiet: true,
-        contentBase: JConfig.outputDir,
-        headers: {
-          'access-control-allow-origin': '*',
-        },
-        publicPath: wbpCfg.output.publicPath,
-        watchOptions: {
-          ignored: /node_modules/,
-        },
-        historyApiFallback: false,
-        overlay: true,
-        ...useDevServer,
-      };
-
-      const compiler = webpack(wbpCfg);
-
-      const server = new WebpackDevServer(compiler, serverConfig);
-
-      server.listen(port, useDevServer.host, err => {
-        if (err) {
-          return logger.error(err);
-        }
-      });
-
-      compiler.hooks.done.tap('jugg dev', stats => {
-        if (stats.hasErrors()) {
-          return;
-        }
-
-        logger.log(`\nThe App is running at`);
-        logger.log(`  - Local:     ${chalk.cyan(urls.localUrlForTerminal)}`);
-        logger.log(`  - Network:   ${chalk.cyan(urls.lanUrlForTerminal)}\n`);
-      });
+    action: async (args: ArgOpts) => {
+      server = await startServer(api, args);
     },
   });
+}
+
+async function startServer(api: PluginAPI, argv: ArgOpts) {
+  const { JConfig } = api.jugg;
+  const wbpCfg = api.jugg.mergeConfig();
+  const { devServer = {} } = wbpCfg;
+  const useDevServer: DevConfiguration = {
+    ...devServer,
+    port: argv.port || devServer.port || 3000,
+    host: '0.0.0.0',
+  };
+
+  portfinder.basePort = useDevServer.port;
+  const port = await portfinder.getPortPromise();
+  const protocol = useDevServer.https ? 'https' : 'http';
+
+  const urls = prepareUrls(protocol, useDevServer.host, port + '', JConfig.publicPath);
+
+  const devClients = [
+    // dev server client
+    require.resolve(`webpack-dev-server/client`) +
+      `?${url.format({
+        protocol,
+        port,
+        hostname: urls.lanUrlForConfig || 'localhost',
+        pathname: '/sockjs-node',
+      })}`,
+    // hmr client
+    require.resolve(
+      useDevServer.hotOnly === true ? 'webpack/hot/only-dev-server' : 'webpack/hot/dev-server'
+    ),
+  ];
+
+  addDevClientToEntry(wbpCfg, devClients);
+
+  const serverConfig: WebpackDevServer.Configuration = {
+    disableHostCheck: true,
+    compress: true,
+    clientLogLevel: 'none',
+    hot: true,
+    quiet: true,
+    contentBase: JConfig.outputDir,
+    headers: {
+      'access-control-allow-origin': '*',
+    },
+    publicPath: wbpCfg.output.publicPath,
+    watchOptions: {
+      ignored: /node_modules/,
+    },
+    historyApiFallback: false,
+    overlay: true,
+    ...useDevServer,
+  };
+
+  const compiler = webpack(wbpCfg);
+
+  const server = new WebpackDevServer(compiler, serverConfig);
+
+  server.listen(port, useDevServer.host, err => {
+    if (err) {
+      return logger.error(err);
+    }
+  });
+
+  compiler.hooks.done.tap('jugg dev', stats => {
+    if (stats.hasErrors()) {
+      return;
+    }
+
+    logger.log(`\nThe App is running at`);
+    logger.log(`  - Local:     ${chalk.cyan(urls.localUrlForTerminal)}`);
+    logger.log(`  - Network:   ${chalk.cyan(urls.lanUrlForTerminal)}\n`);
+  });
+
+  return server;
 }
 
 function addDevClientToEntry(config: Configuration, devClient: string[]) {
@@ -106,4 +125,8 @@ function addDevClientToEntry(config: Configuration, devClient: string[]) {
   } else {
     config.entry = devClient.concat(entry);
   }
+}
+
+interface ArgOpts {
+  port?: number;
 }
