@@ -9,15 +9,16 @@ import { prepareUrls } from './prepareURL';
 import url from 'url';
 import chalk from 'chalk';
 import { PluginAPI } from '../../PluginAPI';
-import { isUserConfigChanged } from '../../utils';
 
 export default function dev(api: PluginAPI) {
   let server: WebpackDevServer = null;
 
   // listen to config change
-  api.jugg.onWatchConfigChange(() => {
-    const changedKey = isUserConfigChanged(api);
-    if (server && changedKey) {
+  api.jugg.onWatchConfigChange(key => {
+    if (server && key) {
+      logger.log('');
+      logger.info('try to restart server...\n', `${key} changed`);
+
       server.close(() => {
         api.jugg.reload();
       });

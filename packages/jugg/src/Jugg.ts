@@ -2,7 +2,7 @@ import Config from 'webpack-chain';
 import merge from 'webpack-merge';
 import resolveCwd from 'resolve-cwd';
 import { JuggConfig, Plugin, WebpackChainFun, CommandSchema } from './interface';
-import { readConfig, getAbsolutePath } from './utils';
+import { readConfig, getAbsolutePath, isUserConfigChanged } from './utils';
 import { logger } from './utils/logger';
 import readTs from './utils/readTs';
 import { PluginAPI } from './PluginAPI';
@@ -218,7 +218,13 @@ export default class Jugg {
     }
   }
 
-  private handleConfigChange(path: string) {
-    this.eventBus.dispatch(WATCH_CONFIG_CHANGE_EVENT, path);
+  /**
+   * handle file change but only config change will dispatch
+   * @param _ path
+   */
+  private handleConfigChange(_: string) {
+    const key = isUserConfigChanged(this.juggConfig);
+
+    key && this.eventBus.dispatch(WATCH_CONFIG_CHANGE_EVENT, key);
   }
 }

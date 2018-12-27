@@ -5,7 +5,6 @@ import TypeScriptLoader from './readTs';
 import { logger } from './logger';
 import { defaultsDeep } from 'lodash';
 import { validateConfig, defaults, PROP_COMPARE } from './jConfigSchema';
-import { PluginAPI } from '../PluginAPI';
 
 export function readConfig(): JuggConfig {
   const { config, filepath } = loadConfig<JuggConfig>('jugg');
@@ -68,8 +67,7 @@ export function loadConfig<T = any>(
  * 配置比较
  * @param config
  */
-export function isUserConfigChanged(api: PluginAPI): boolean {
-  const config = api.jugg.JConfig;
+export function isUserConfigChanged(config: JuggConfig): boolean {
   const newCfg = readConfig();
 
   let result: false | string = false;
