@@ -7,7 +7,6 @@ export default function build(api: PluginAPI) {
     command: 'build',
     description: 'exec build',
     action: () => {
-      // const wbpCfg = api.jugg.JConfig.webpack as Configuration;
       const wbpCfg = api.jugg.mergeConfig();
       const compiler = webpack(wbpCfg);
 

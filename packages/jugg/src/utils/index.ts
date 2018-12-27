@@ -39,6 +39,7 @@ export function loadConfig(name: string): Promise<any> {
       `.${name}rc.ts`,
       `${name}.config.js`,
     ],
+    cache: false,
     loaders: {
       '.ts': {
         sync: TypeScriptLoader,

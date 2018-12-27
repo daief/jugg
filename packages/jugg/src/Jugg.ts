@@ -8,13 +8,21 @@ import readTs from './utils/readTs';
 import { PluginAPI } from './PluginAPI';
 import program, { CommanderStatic } from 'commander';
 import { Configuration } from 'webpack';
-import { resolve } from 'path';
+import { resolve, join } from 'path';
+import chokidar, { FSWatcher } from 'chokidar';
+import EventBus, { Opts } from './utils/EventBus';
+import { cloneDeepWith } from 'lodash';
 const packageJSON = require(resolve(__dirname, '../package.json'));
+
+const WATCH_CONFIG_CHANGE_EVENT = 'jugg/WATCH_CONFIG_CHANGE_EVENT';
 
 export default class Jugg {
   context: string = '';
   commands: CommandSchema[] = [];
   webpackChainFns: WebpackChainFun[] = [];
+
+  private fsWatcher: FSWatcher = null;
+  private eventBus: EventBus = null;
 
   private commander: CommanderStatic;
 
@@ -25,9 +33,20 @@ export default class Jugg {
     this.context = context;
     this.commander = program;
 
+    // TODO
+    this.fsWatcher = chokidar.watch(join(this.context, '.juggrc.js'));
+    this.eventBus = new EventBus();
+
+    this.loadEnv();
+
     this.init();
+
+    this.fsWatcher.on('change', p => this.handleConfigChange(p));
   }
 
+  /**
+   * user config
+   */
   get JConfig() {
     return this.juggConfig;
   }
@@ -45,6 +64,9 @@ export default class Jugg {
     };
   }
 
+  /**
+   * 初始化
+   */
   init() {
     if (this.initialized) {
       return;
@@ -52,18 +74,16 @@ export default class Jugg {
 
     this.initialized = true;
 
-    this.loadEnv();
-
     this.juggConfig = readConfig();
 
     this.loadPlugins();
 
     this.registerCommands();
-
-    // 可能不需要在此主动调用，谁需要谁调用
-    // this.mergeConfig()
   }
 
+  /**
+   * 加载插件
+   */
   loadPlugins() {
     const { plugins } = this.JConfig;
 
@@ -104,7 +124,9 @@ export default class Jugg {
 
     // priority: default < plugin < 用户
     // 1. get default cfg
-    const defaultCfg: Config = require(this.IsProd ? './env/prod' : './env/dev').default(this);
+    const defaultCfg: Config = cloneDeepWith(
+      require(this.IsProd ? './env/prod' : './env/dev').default(this)
+    );
 
     // 2. merge plugin config to defaultCfg
     this.webpackChainFns.forEach(fn => {
@@ -115,12 +137,28 @@ export default class Jugg {
     const { webpack } = this.juggConfig;
     if (typeof webpack === 'function') {
       webpack({ config: defaultCfg, webpack: defaultCfg.toConfig() });
-      this.juggConfig.webpack = defaultCfg.toConfig();
+      return defaultCfg.toConfig();
     } else {
-      this.juggConfig.webpack = merge(defaultCfg.toConfig(), webpack || {});
+      return merge(defaultCfg.toConfig(), webpack || {});
     }
+  }
 
-    return this.juggConfig.webpack;
+  /**
+   * 注册监听配置文件变化
+   * @param callback 回调
+   */
+  onWatchConfigChange(callback: (p?: any) => void, opts?: Opts) {
+    this.eventBus.on(WATCH_CONFIG_CHANGE_EVENT, callback, opts);
+  }
+
+  reload() {
+    this.commands = [];
+    this.webpackChainFns = [];
+
+    this.juggConfig = {};
+    this.initialized = false;
+
+    this.init();
   }
 
   /**
@@ -175,5 +213,9 @@ export default class Jugg {
       // default show help
       this.commander.help();
     }
+  }
+
+  private handleConfigChange(path: string) {
+    this.eventBus.dispatch(WATCH_CONFIG_CHANGE_EVENT, path);
   }
 }

@@ -1030,6 +1030,14 @@
     "@types/connect" "*"
     "@types/node" "*"
 
+"@types/chokidar@^1.7.5":
+  version "1.7.5"
+  resolved "http://registry.npm.taobao.org/@types/chokidar/download/@types/chokidar-1.7.5.tgz#1fa78c8803e035bed6d98e6949e514b133b0c9b6"
+  integrity sha1-H6eMiAPgNb7W2Y5pSeUUsTOwybY=
+  dependencies:
+    "@types/events" "*"
+    "@types/node" "*"
+
 "@types/connect@*":
   version "3.4.32"
   resolved "http://registry.npm.taobao.org/@types/connect/download/@types/connect-3.4.32.tgz#aa0e9616b9435ccad02bc52b5b454ffc2c70ba28"
@@ -1076,6 +1084,11 @@
   dependencies:
     "@types/events" "*"
     "@types/node" "*"
+
+"@types/lodash@^4.14.119":
+  version "4.14.119"
+  resolved "http://registry.npm.taobao.org/@types/lodash/download/@types/lodash-4.14.119.tgz#be847e5f4bc3e35e46d041c394ead8b603ad8b39"
+  integrity sha1-voR+X0vD415G0EHDlOrYtgOtizk=
 
 "@types/mime@*":
   version "2.0.0"
