@@ -1,6 +1,6 @@
-# jugg-plugin-multi-html
+# jugg-plugin-react
 
-A jugg plugin helps to dev with react.
+Support React.
 
 # config
 
@@ -15,24 +15,5 @@ interface JReactPresetOption {
   // use `babel-plugin-react-require` ? default false
   reactRequire?: boolean;
 }
-```
 
-# example
-
-```js
-// .juggrc.js
-export default {
-  plugins: [
-    '@axew/jugg-plugin-babel',
-    [
-      '@axew/jugg-plugin-react',
-      {
-        jReactPresetOption: {
-          removePropTypes: true,
-          reactRequire: true
-        }
-      }
-    ]
-  ]
-}
 ```
