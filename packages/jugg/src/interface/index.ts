@@ -50,3 +50,7 @@ export interface JuggConfig {
 export type Plugin = (api: PluginAPI, opts: any) => void;
 
 export type PluginCfgSchema = string | [string, { [k: string]: any }?];
+
+export interface KeyValuePair<T = any> {
+  [k: string]: T;
+}

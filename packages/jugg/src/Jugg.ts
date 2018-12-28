@@ -12,6 +12,7 @@ import { resolve, join } from 'path';
 import chokidar, { FSWatcher } from 'chokidar';
 import EventBus, { Opts } from './utils/EventBus';
 import { cloneDeepWith } from 'lodash';
+import { loadEnv } from './utils/loadEnv';
 const packageJSON = require(resolve(__dirname, '../package.json'));
 
 const WATCH_CONFIG_CHANGE_EVENT = 'jugg/WATCH_CONFIG_CHANGE_EVENT';
@@ -181,11 +182,14 @@ export default class Jugg {
 
   /**
    * load env
-   * TODO load .env file
+   * TODO load mode .env file
    */
   private loadEnv() {
     const c = this.commander.parse(process.argv);
     const cName = c.args ? c.args[0] : '';
+    const basePath = getAbsolutePath('.env');
+
+    loadEnv(basePath);
 
     if (cName === 'dev') {
       process.env.NODE_ENV = 'development';
