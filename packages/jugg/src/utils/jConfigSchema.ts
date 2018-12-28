@@ -1,5 +1,6 @@
 import Joi from 'joi';
-import { JuggConfig } from '../interface';
+import { JuggConfig, JuggWebpack } from '../interface';
+import Config from 'webpack-chain';
 
 /**
  * 配置规则
@@ -46,9 +47,19 @@ export const PROP_COMPARE: {
   plugins: (left, right) => {
     return JSON.stringify(left) === JSON.stringify(right);
   },
-  webpack: (left, right) => {
-    // TODO
-    // simply use stringify
+  webpack: (left: JuggWebpack, right: JuggWebpack) => {
+    const leftCfg = new Config();
+    const rightCfg = new Config();
+
+    if (typeof left === 'function' && typeof right === 'function') {
+      const leftObjectCfg = left({ config: leftCfg, webpack: leftCfg.toConfig() });
+      const rightObjectCfg = right({ config: rightCfg, webpack: rightCfg.toConfig() });
+
+      const chainCompareResult = (leftCfg as any).toString() === (rightCfg as any).toString();
+
+      return chainCompareResult && JSON.stringify(leftObjectCfg) === JSON.stringify(rightObjectCfg);
+    }
+
     return JSON.stringify(left) === JSON.stringify(right);
   },
   define: (left, right) => {
