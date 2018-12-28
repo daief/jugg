@@ -1,6 +1,6 @@
 {
   "name": "@axew/jugg-plugin-vue",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "private": true,
   "main": "./lib/index.js",
