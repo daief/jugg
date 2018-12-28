@@ -19,7 +19,7 @@ export type WebpackChainFun = (
     config: Config;
     webpack: Configuration;
   }
-) => void;
+) => void | Configuration;
 
 export type JuggWebpack = Configuration | WebpackChainFun;
 

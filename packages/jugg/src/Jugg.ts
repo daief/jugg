@@ -122,25 +122,31 @@ export default class Jugg {
       throw new Error('Jugg now is not initialized');
     }
 
-    // priority: default < plugin < 用户
+    // config priority: default < plugin < user ,
+    //      chain cfg < object cfg
+
     // 1. get default cfg
     const defaultCfg: Config = cloneDeepWith(
       require(this.IsProd ? './env/prod' : './env/dev').default(this)
     );
 
-    // 2. merge plugin config to defaultCfg
-    this.webpackChainFns.forEach(fn => {
-      fn({ config: defaultCfg, webpack: defaultCfg.toConfig() });
-    });
+    // 2. merge plugin chain-config to defaultCfg, get object cfg
+    const pluginsWebpackObjectCfgList: Configuration[] = this.webpackChainFns
+      .map(fn => fn({ config: defaultCfg, webpack: defaultCfg.toConfig() }))
+      //  type predicate, ref: https://stackoverflow.com/a/46700791/10528190
+      .filter((cfg): cfg is Configuration => !!cfg);
 
-    // 3. merge user config
+    const mergedPluginsWebpackObjectCfg: Configuration = merge(...pluginsWebpackObjectCfgList);
+
+    // 3. handle user chain-config and object cfg
     const { webpack } = this.juggConfig;
-    if (typeof webpack === 'function') {
-      webpack({ config: defaultCfg, webpack: defaultCfg.toConfig() });
-      return defaultCfg.toConfig();
-    } else {
-      return merge(defaultCfg.toConfig(), webpack || {});
-    }
+    const userWebpackObjectCfg: Configuration | void =
+      typeof webpack === 'function'
+        ? webpack({ config: defaultCfg, webpack: defaultCfg.toConfig() })
+        : webpack;
+
+    // 4. merge all
+    return merge(defaultCfg.toConfig(), mergedPluginsWebpackObjectCfg, userWebpackObjectCfg || {});
   }
 
   /**
