@@ -1,11 +1,12 @@
 import { PluginAPI } from '@axew/jugg/types/PluginAPI';
 import { IJuggPreset } from './preset';
+import { PluginCfgSchema } from '@axew/jugg/types';
 
 export interface Option {
   cache?: boolean;
   babelrc?: boolean;
-  presets?: Array<string | [string, any]>;
-  plugins?: Array<string | [string, any]>;
+  presets?: PluginCfgSchema[];
+  plugins?: PluginCfgSchema[];
   // some options about @babel/preset-env & @babel/plugin-transform-runtime
   juggPreset?: IJuggPreset;
 }

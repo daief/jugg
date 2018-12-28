@@ -32,7 +32,7 @@ export interface JuggConfig {
    * output path of webpack, default 'dist'
    */
   outputDir?: string;
-  plugins?: Array<string | [string, { [k: string]: any }]>;
+  plugins?: PluginCfgSchema[];
   define?: { [k: string]: any };
   /**
    * open chunks config? default true
@@ -48,3 +48,5 @@ export interface JuggConfig {
 }
 
 export type Plugin = (api: PluginAPI, opts: any) => void;
+
+export type PluginCfgSchema = string | [string, { [k: string]: any }?];

@@ -1,3 +1,5 @@
+import { PluginCfgSchema } from '@axew/jugg/types';
+
 /**
  * ref:
  *  babel-preset-umi@1.2.1
@@ -52,8 +54,8 @@ export default (_: any, opts: IJuggPreset = {}): any => {
     'transform-literals',
   ];
 
-  const presets: Array<string | [string, any]> = [];
-  const plugins: Array<string | [string, any]> = [];
+  const presets: PluginCfgSchema[] = [];
+  const plugins: PluginCfgSchema[] = [];
 
   plugins.push(
     require.resolve('@babel/plugin-syntax-dynamic-import'),

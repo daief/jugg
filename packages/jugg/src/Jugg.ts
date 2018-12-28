@@ -151,6 +151,10 @@ export default class Jugg {
     this.eventBus.on(WATCH_CONFIG_CHANGE_EVENT, callback, opts);
   }
 
+  /**
+   * 清空、重新加载
+   * TODO 是否需要重新加载 env
+   */
   reload() {
     this.commands = [];
     this.webpackChainFns = [];
@@ -158,7 +162,7 @@ export default class Jugg {
     this.juggConfig = {};
     this.initialized = false;
 
-    this.eventBus.clear();
+    this.eventBus.clear(WATCH_CONFIG_CHANGE_EVENT);
 
     this.init();
   }
