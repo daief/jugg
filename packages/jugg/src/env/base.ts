@@ -30,7 +30,10 @@ export default (jugg: Jugg): Config => {
     .chunkFilename('[name].[chunkhash].js')
     .publicPath(JConfig.publicPath)
     .end()
-    .resolve.extensions.merge(['.js', '.jsx', '.ts', '.tsx', '.vue']);
+    .resolve.extensions.merge(['.js', '.jsx', '.ts', '.tsx', '.vue'])
+    .end()
+    .alias.set('@', getAbsolutePath('src'))
+    .end();
 
   config
     .plugin('html-webpack-plugin-base')
