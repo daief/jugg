@@ -2,7 +2,7 @@ import Config from 'webpack-chain';
 import merge from 'webpack-merge';
 import resolveCwd from 'resolve-cwd';
 import { JuggConfig, Plugin, WebpackChainFun, CommandSchema } from './interface';
-import { readConfig, getAbsolutePath, isUserConfigChanged } from './utils';
+import { readConfig, getAbsolutePath, isUserConfigChanged, searchPlaces } from './utils';
 import { logger } from './utils/logger';
 import readTs from './utils/readTs';
 import { PluginAPI } from './PluginAPI';
@@ -33,8 +33,7 @@ export default class Jugg {
     this.context = context;
     this.commander = program;
 
-    // TODO
-    this.fsWatcher = chokidar.watch(join(this.context, '.juggrc.js'));
+    this.fsWatcher = chokidar.watch(searchPlaces('jugg').map(name => join(this.context, name)));
     this.eventBus = new EventBus();
 
     this.loadEnv();
