@@ -73,15 +73,17 @@ export function isUserConfigChanged(config: JuggConfig): boolean {
   let result: false | string = false;
 
   Object.keys(newCfg).forEach(key => {
-    const compare = PROP_COMPARE[key];
+    const doCompare = PROP_COMPARE[key];
 
     if (result) {
+      // no more compare
       return;
     }
 
     result =
-      (compare === undefined ? newCfg[key] !== config[key] : !compare(newCfg[key], config[key])) &&
-      key;
+      (doCompare === undefined
+        ? newCfg[key] !== config[key]
+        : !doCompare(newCfg[key], config[key])) && key;
   });
 
   return result;
