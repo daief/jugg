@@ -55,16 +55,26 @@ export default (config: Config) => {
   // TODO 考虑抽离 TS 部分
   // ts project
   if (existsSync(getAbsolutePath('tsconfig.json'))) {
+    const tsOpts = {
+      transpileOnly: true,
+      happyPackMode: true,
+    };
+
     config.module
-      // --------------- ts-loader
-      .rule('ts-loader')
-      .test(/\.tsx?$/)
+      // --------------- ts-loader, tx
+      .rule('ts-rule')
+      .test(/\.ts$/)
       .use('ts-loader')
       .loader(require.resolve('ts-loader'))
-      .options({
-        transpileOnly: true,
-        happyPackMode: true,
-      });
+      .options(tsOpts);
+
+    config.module
+      // --------------- ts-loader, txx
+      .rule('tsx-rule')
+      .test(/\.tsx$/)
+      .use('ts-loader')
+      .loader(require.resolve('ts-loader'))
+      .options(tsOpts);
 
     config.plugin('fork-ts-checker-webpack-plugin').use(require('fork-ts-checker-webpack-plugin'), [
       {
