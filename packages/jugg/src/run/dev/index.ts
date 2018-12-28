@@ -20,6 +20,7 @@ export default function dev(api: PluginAPI) {
       logger.info('try to restart server...\n', `${key} changed`);
 
       server.close(() => {
+        server = null;
         api.jugg.reload();
       });
     }

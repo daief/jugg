@@ -173,6 +173,13 @@ export default class Jugg {
   }
 
   /**
+   * some thing should be close before exit
+   */
+  exit() {
+    this.fsWatcher.close();
+  }
+
+  /**
    * load env
    * TODO load .env file
    */

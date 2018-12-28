@@ -16,6 +16,7 @@ export default function build(api: PluginAPI) {
         }
 
         api.jugg.Utils.logger.log(formatStats(stats, api.jugg));
+        api.jugg.exit();
       });
     },
   });
