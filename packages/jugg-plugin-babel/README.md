@@ -23,6 +23,7 @@ interface IJuggPreset {
     [k: string]: any;
   };
   modules?: string | boolean;
+  // rest options of `@babel/preset-env`
   env?: {
     [k: string]: any;
   };
