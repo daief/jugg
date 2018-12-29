@@ -6,10 +6,16 @@ A set of babel config.
 
 ```ts
 interface Option {
+  // use cache? default true
   cache?: boolean;
+  // allow .babelrc? default false
   babelrc?: boolean;
+  // more presets
   presets?: PluginCfgSchema[];
+  // more plugins
   plugins?: PluginCfgSchema[];
+  // use babel to compile ts、tsx, enabling this will clear built-in ts-loader, default false,
+  compileTs?: boolean;
   // some options about @babel/preset-env & @babel/plugin-transform-runtime
   juggPreset?: IJuggPreset;
 }
