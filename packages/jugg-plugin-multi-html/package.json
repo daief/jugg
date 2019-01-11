@@ -1,6 +1,6 @@
 {
   "name": "@axew/jugg-plugin-multi-html",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "license": "MIT",
   "main": "./lib/index.js",
   "types": "./types",
@@ -18,7 +18,7 @@
     "html-webpack-plugin": "^3.2.0"
   },
   "devDependencies": {
-    "@axew/jugg": "^0.0.9",
+    "@axew/jugg": "^0.0.10",
     "typescript": "^3.2.2"
   },
   "files": ["lib", "types"],
