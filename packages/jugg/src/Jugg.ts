@@ -189,7 +189,14 @@ export default class Jugg {
     const cName = c.args ? c.args[0] : '';
     const basePath = getAbsolutePath('.env');
 
-    loadEnv(basePath);
+    try {
+      loadEnv(basePath);
+    } catch (err) {
+      // only ignore error if file is not found
+      if (err.toString().indexOf('ENOENT') < 0) {
+        logger.error(err);
+      }
+    }
 
     if (cName === 'dev') {
       process.env.NODE_ENV = 'development';
