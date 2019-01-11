@@ -42,10 +42,11 @@ export function createTransformer() {
               return;
             }
 
-            if (classEle.name.getText() !== REGENERATE_METHOD) {
-              hasMethods = true;
-            } else {
-              hasRegenerateMethod = true;
+            // notice node type check
+            if (ts.isMethodDeclaration(classEle) || ts.isPropertyDeclaration(classEle)) {
+              const propName = classEle.name.getText();
+              hasMethods = propName !== REGENERATE_METHOD;
+              hasRegenerateMethod = propName === REGENERATE_METHOD;
             }
           });
 
