@@ -3,10 +3,16 @@
   "useWorkspaces": true,
   "version": "independent",
   "command": {
-    "publish": {
-      "ignoreChanges": ["*.md", "*.txt", "test/**", "example/**"]
-    }
+    "publish": {}
   },
+  "ignoreChanges": [
+    "*.txt",
+    "test/**",
+    "./examples/**",
+    "**/__fixtures__/**",
+    "**/__tests__/**",
+    "**/*.md"
+  ],
   "changelog": {
     "labels": {
       "enhancement": ":rocket: Enhancement",
