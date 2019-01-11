@@ -56,5 +56,5 @@
     },
     "ignore": []
   },
-  "workspaces": ["packages/*"]
+  "workspaces": ["packages/*", "examples/*"]
 }
