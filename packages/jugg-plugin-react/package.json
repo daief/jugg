@@ -26,7 +26,6 @@
     "babel-plugin-transform-react-remove-prop-types": "^0.4.21"
   },
   "devDependencies": {
-    "@axew/jugg": "^0.0.10",
     "react-hot-loader": "^4.6.3",
     "rimraf": "^2.6.2",
     "typescript": "^3.2.2"
