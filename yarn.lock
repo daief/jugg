@@ -2,6 +2,20 @@
 # yarn lockfile v1
 
 
+"@axew/jugg-plugin-react@^0.0.4":
+  version "0.0.4"
+  resolved "http://registry.npm.taobao.org/@axew/jugg-plugin-react/download/@axew/jugg-plugin-react-0.0.4.tgz#f4340a4358dc3cea49d04a2ae835632cb5cf59b9"
+  integrity sha1-9DQKQ1jcPOpJ0Eoq6DVjLLXPWbk=
+  dependencies:
+    "@babel/core" "^7.2.2"
+    "@babel/plugin-transform-runtime" "^7.2.0"
+    "@babel/preset-env" "^7.2.0"
+    "@babel/preset-react" "^7.0.0"
+    "@babel/runtime" "^7.2.0"
+    babel-loader "^8.0.4"
+    babel-plugin-react-require "^3.0.1"
+    babel-plugin-transform-react-remove-prop-types "^0.4.21"
+
 "@babel/code-frame@^7.0.0":
   version "7.0.0"
   resolved "http://registry.npm.taobao.org/@babel/code-frame/download/@babel/code-frame-7.0.0.tgz#06e2ab19bdb535385559aabb5ba59729482800f8"
