@@ -22,7 +22,7 @@ export function createTransformer() {
          *    }
          * ```
          */
-        if (ts.isClassDeclaration(node)) {
+        if (ts.isClassLike(node)) {
           let hasRegenerateMethod = false;
           let hasMethods = false;
 
@@ -73,21 +73,34 @@ export function createTransformer() {
               ])
             );
 
-            // update the AST ClassDeclaration node
-            return ts.updateClassDeclaration(
-              node,
-              node.decorators,
-              node.modifiers,
-              node.name,
-              node.typeParameters,
-              node.heritageClauses,
-              node.members.concat([method])
+            // update the AST ClassDeclaration node, and recursive
+            return ts.visitEachChild(
+              ts.isClassDeclaration(node)
+                ? ts.updateClassDeclaration(
+                    node,
+                    node.decorators,
+                    node.modifiers,
+                    node.name,
+                    node.typeParameters,
+                    node.heritageClauses,
+                    node.members.concat([method])
+                  )
+                : ts.updateClassExpression(
+                    node,
+                    node.modifiers,
+                    node.name,
+                    node.typeParameters,
+                    node.heritageClauses,
+                    node.members.concat([method])
+                  ),
+              visitor,
+              context
             );
-          } // if ts.isClassDeclaration
-        } // visitor
+          }
+        } // if ts.isClassDeclaration
 
         return ts.visitEachChild(node, visitor, context);
-      };
+      }; // visitor
 
       return ts.visitNode(transformerNode, visitor);
     };
