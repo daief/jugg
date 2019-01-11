@@ -73,7 +73,7 @@ export default (jugg: Jugg): Config => {
     .end();
 
   // -------------------------------------- set loaders
-  setLoaders(config);
+  setLoaders(config, jugg);
 
   // -------------------------------------- Modify the Config
   const userTpl = getAbsolutePath('src', 'document.ejs');

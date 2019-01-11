@@ -2,20 +2,26 @@ import Joi from 'joi';
 import { JuggConfig, JuggWebpack } from '../interface';
 import Config from 'webpack-chain';
 
+const pluginSchemaArray = Joi.array().items(
+  Joi.string(),
+  Joi.array().items(Joi.string().required(), Joi.object())
+);
+
 /**
  * 配置规则
  */
 export const schema = Joi.object().keys({
   publicPath: Joi.string(),
   outputDir: Joi.string(),
-  plugins: Joi.array().items(
-    Joi.string(),
-    Joi.array().items(Joi.string().required(), Joi.object())
-  ),
+  plugins: pluginSchemaArray,
   webpack: Joi.alternatives(Joi.object(), Joi.func()),
   define: Joi.object(),
   chunks: Joi.bool(),
   sourceMap: Joi.bool(),
+  tsCustomTransformers: Joi.object().keys({
+    before: pluginSchemaArray,
+    after: pluginSchemaArray,
+  }),
 });
 
 /**
@@ -38,6 +44,7 @@ export function defaults(): JuggConfig {
     define: {},
     chunks: true,
     sourceMap: true,
+    tsCustomTransformers: {},
   };
 }
 
@@ -65,4 +72,5 @@ export const PROP_COMPARE: {
   define: (left, right) => {
     return JSON.stringify(left) === JSON.stringify(right);
   },
+  tsCustomTransformers: (left, right) => JSON.stringify(left) === JSON.stringify(right),
 };

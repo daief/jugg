@@ -43,6 +43,13 @@ export interface JuggConfig {
    */
   sourceMap?: boolean;
   webpack?: JuggWebpack;
+  /**
+   * ts-loader custom transformers, only work when ts-loader is enabled
+   */
+  tsCustomTransformers?: {
+    before?: PluginCfgSchema[];
+    after?: PluginCfgSchema[];
+  };
   // 添加索引签名
   [k: string]: any;
 }

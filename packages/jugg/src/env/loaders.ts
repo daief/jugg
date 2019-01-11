@@ -1,9 +1,12 @@
 import Config from 'webpack-chain';
 import { existsSync } from 'fs';
 import { getAbsolutePath } from '../utils';
+import { Jugg } from '..';
+import { PluginCfgSchema } from '../interface';
 
-export default (config: Config) => {
-  const isProd = process.env.NODE_ENV === 'production';
+export default (config: Config, jugg: Jugg) => {
+  const isProd = jugg.IsProd;
+  const { tsCustomTransformers } = jugg.JConfig;
 
   const genUrlLoaderOptions = () => {
     return {
@@ -55,9 +58,27 @@ export default (config: Config) => {
   // TODO 考虑抽离 TS 部分
   // ts project
   if (existsSync(getAbsolutePath('tsconfig.json'))) {
+    const { before = [], after = [] } = tsCustomTransformers;
+
+    const handlePlugin = (t: PluginCfgSchema) => {
+      if (typeof t === 'string') {
+        return (require(t).default || require(t))();
+      } else {
+        const [tpath, opts = {}] = t;
+        return (require(tpath).default || require(tpath))(opts);
+      }
+    };
+
+    const beforeTransformers = before.map(handlePlugin);
+    const afterTransformers = after.map(handlePlugin);
+
     const tsOpts = {
       transpileOnly: true,
       happyPackMode: true,
+      getCustomTransformers: () => ({
+        before: beforeTransformers,
+        after: afterTransformers,
+      }),
     };
 
     config.module
