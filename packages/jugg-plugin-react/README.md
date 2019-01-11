@@ -1,6 +1,6 @@
 # jugg-plugin-react
 
-Support React.
+Support React depending on `jugg-plugin-babel`.
 
 # config
 
@@ -23,7 +23,7 @@ interface JReactPresetOption {
 [you should add code like this](https://www.npmjs.com/package/react-hot-loader/v/4.6.3#getting-started):
 
 ```js
-// App.js
+// App.js  root component
 import { hot } from 'react-hot-loader/root'
 const App = () => <div>Hello World!</div>
 export default hot(App)
@@ -31,4 +31,17 @@ export default hot(App)
 
 ## notice
 
-- Want to support hot reload friendly in TypeScript, you'd better change ts compiler to babel, set `compileTs: true` in `jugg-plugin-babel` config, [detail](https://www.npmjs.com/package/react-hot-loader/v/4.6.3#typescript).
+- there are two way to support hot reload friendly in TypeScript.
+  - change ts compiler to babel, set `compileTs: true` in `jugg-plugin-babel` config, which will use `react-hot-loader/babel`, [detail](https://www.npmjs.com/package/react-hot-loader/v/4.6.3#typescript).
+  - use ts transformer, for example, in `.juggrc.js`:
+
+  ```js
+    const config = {
+      tsCustomTransformers: {
+        // add this
+        before: ['@axew/jugg-plugin-react/lib/ts-rhl-transformer']
+      }
+    };
+
+    module.exports = config;
+  ```

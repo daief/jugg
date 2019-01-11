@@ -11,7 +11,7 @@
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
-    "@axew/jugg": ">= 0.0.5",
+    "@axew/jugg": ">= 0.0.10",
     "@axew/jugg-plugin-babel": ">= 0.0.2",
     "react-hot-loader": "^4.6.0"
   },
