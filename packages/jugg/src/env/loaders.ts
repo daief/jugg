@@ -90,9 +90,25 @@ export default (config: Config, jugg: Jugg) => {
       .options(tsOpts);
 
     config.module
-      // --------------- ts-loader, txx
+      // --------------- ts-loader, tsx
       .rule('tsx-rule')
       .test(/\.tsx$/)
+      .use('ts-loader')
+      .loader(require.resolve('ts-loader'))
+      .options(tsOpts);
+
+    config.module
+      // --------------- ts-loader, js
+      .rule('ts-js-rule')
+      .test(/\.js$/)
+      .use('ts-loader')
+      .loader(require.resolve('ts-loader'))
+      .options(tsOpts);
+
+    config.module
+      // --------------- ts-loader, jsx
+      .rule('ts-jsx-rule')
+      .test(/\.jsx$/)
       .use('ts-loader')
       .loader(require.resolve('ts-loader'))
       .options(tsOpts);
