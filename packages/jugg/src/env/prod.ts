@@ -7,6 +7,7 @@ import OptimizeCss from 'optimize-css-assets-webpack-plugin';
 import baseConfig from './base';
 import uglifyjsOpt from './uglifyjsOpt';
 import { Jugg } from '..';
+import { Plugin, Minimizer } from './chainCfgMap';
 
 export default (jugg: Jugg): Config => {
   const { JConfig } = jugg;
@@ -20,7 +21,7 @@ export default (jugg: Jugg): Config => {
   }
 
   config
-    .plugin('clean-webpack-plugin')
+    .plugin(Plugin.CLEAN_WEBPACK_PLUGIN)
     .use(cleanWebPackPlugin, [
       [JConfig.outputDir],
       {
@@ -28,7 +29,7 @@ export default (jugg: Jugg): Config => {
       },
     ])
     .end()
-    .plugin('mini-css-extract-plugin')
+    .plugin(Plugin.MINI_CSS_EXTRACT)
     .use(MiniCss, [
       {
         filename: `${filename}.css`,
@@ -36,7 +37,7 @@ export default (jugg: Jugg): Config => {
       },
     ])
     .end()
-    .plugin('html-webpack-plugin-base')
+    .plugin(Plugin.BASE_HTML_PLUGIN)
     .tap(c => [
       {
         minify: {
@@ -57,10 +58,10 @@ export default (jugg: Jugg): Config => {
     .end();
 
   config.optimization
-    .minimizer('optimize-css-assets-webpack-plugin')
+    .minimizer(Minimizer.OPTIMIZE_CSS_ASSETS)
     .use(OptimizeCss, [{}])
     .end()
-    .minimizer('uglifyjs-webpack-plugin')
+    .minimizer(Minimizer.UGLIFYJS_WEBPACK)
     .use(UglifyjsPlugin, [uglifyjsOpt(JConfig)])
     .end();
 

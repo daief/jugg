@@ -13,6 +13,7 @@ import chokidar, { FSWatcher } from 'chokidar';
 import EventBus, { Opts } from './utils/EventBus';
 import { cloneDeepWith } from 'lodash';
 import { loadEnv } from './utils/loadEnv';
+import { CHAIN_CONFIG_MAP } from './env/chainCfgMap';
 const packageJSON = require(resolve(__dirname, '../package.json'));
 
 const WATCH_CONFIG_CHANGE_EVENT = 'jugg/WATCH_CONFIG_CHANGE_EVENT';
@@ -61,6 +62,7 @@ export default class Jugg {
       logger,
       readTs,
       getAbsolutePath,
+      CHAIN_CONFIG_MAP,
     };
   }
 

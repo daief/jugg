@@ -3,6 +3,7 @@ import { existsSync } from 'fs';
 import { getAbsolutePath } from '../utils';
 import { Jugg } from '..';
 import { PluginCfgSchema } from '../interface';
+import { Rule, Plugin } from './chainCfgMap';
 
 export default (config: Config, jugg: Jugg) => {
   const isProd = jugg.IsProd;
@@ -23,7 +24,7 @@ export default (config: Config, jugg: Jugg) => {
 
   config.module
     // --------------- images url-loader
-    .rule('images-url-loader')
+    .rule(Rule.IMAGES_RULE)
     .test(/\.(png|jpe?g|gif|webp)(\?.*)?$/)
     .use('url-loader')
     .loader(require.resolve('url-loader'))
@@ -31,7 +32,7 @@ export default (config: Config, jugg: Jugg) => {
 
   config.module
     // --------------- svg file-loader
-    .rule('svg-file-loader')
+    .rule(Rule.SVG_RULE)
     .test(/\.(svg)(\?.*)?$/)
     .use('file-loader')
     .loader(require.resolve('file-loader'))
@@ -41,7 +42,7 @@ export default (config: Config, jugg: Jugg) => {
 
   config.module
     // --------------- media url-loader
-    .rule('media-url-loader')
+    .rule(Rule.MEDIA_RULE)
     .test(/\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/)
     .use('url-loader')
     .loader('url-loader')
@@ -49,7 +50,7 @@ export default (config: Config, jugg: Jugg) => {
 
   config.module
     // --------------- fonts url-loader
-    .rule('fonts-url-loader')
+    .rule(Rule.FONTS_RULE)
     .test(/\.(woff2?|eot|ttf|otf)(\?.*)?$/i)
     .use('url-loader')
     .loader('url-loader')
@@ -83,7 +84,7 @@ export default (config: Config, jugg: Jugg) => {
 
     config.module
       // --------------- ts-loader, tx
-      .rule('ts-rule')
+      .rule(Rule.TS_RULE)
       .test(/\.ts$/)
       .use('ts-loader')
       .loader(require.resolve('ts-loader'))
@@ -91,7 +92,7 @@ export default (config: Config, jugg: Jugg) => {
 
     config.module
       // --------------- ts-loader, tsx
-      .rule('tsx-rule')
+      .rule(Rule.TSX_RULE)
       .test(/\.tsx$/)
       .use('ts-loader')
       .loader(require.resolve('ts-loader'))
@@ -99,7 +100,7 @@ export default (config: Config, jugg: Jugg) => {
 
     config.module
       // --------------- ts-loader, js
-      .rule('ts-js-rule')
+      .rule(Rule.JS_RULE)
       .test(/\.js$/)
       .use('ts-loader')
       .loader(require.resolve('ts-loader'))
@@ -107,13 +108,13 @@ export default (config: Config, jugg: Jugg) => {
 
     config.module
       // --------------- ts-loader, jsx
-      .rule('ts-jsx-rule')
+      .rule(Rule.JSX_RULE)
       .test(/\.jsx$/)
       .use('ts-loader')
       .loader(require.resolve('ts-loader'))
       .options(tsOpts);
 
-    config.plugin('fork-ts-checker-webpack-plugin').use(require('fork-ts-checker-webpack-plugin'), [
+    config.plugin(Plugin.FORK_TS_CHECKER_PLUGIN).use(require('fork-ts-checker-webpack-plugin'), [
       {
         tsconfig: 'tsconfig.json',
         checkSyntacticErrors: true,
@@ -125,7 +126,7 @@ export default (config: Config, jugg: Jugg) => {
   if (isProd) {
     config.module
       // --------------- image-webpack-loader
-      .rule('image-webpack-loader')
+      .rule(Rule.IMAGES_IMAGE_WEBPACK_LOADER_RULE)
       .test(/\.(png|jpe?g|gif|webp|svg)(\?.*)?$/)
       .use('image-webpack-loader')
       .loader(require.resolve('image-webpack-loader'))
@@ -231,7 +232,7 @@ function setStyleLoaders(config: Config) {
   // --------------- css ---------------
   setCssLoaders(
     config.module
-      .rule('css.module')
+      .rule(Rule.CSS_MODULE_RULE)
       .test(/\.module\.css$/i)
       .exclude.add(path => /node_modules/i.test(path))
       .end(),
@@ -243,7 +244,7 @@ function setStyleLoaders(config: Config) {
 
   setCssLoaders(
     config.module
-      .rule('css')
+      .rule(Rule.CSS_RULE)
       .test(/\.css$/i)
       .exclude.add(cssExclude)
       .end(),
@@ -255,7 +256,7 @@ function setStyleLoaders(config: Config) {
 
   setCssLoaders(
     config.module
-      .rule('css-in-node_modules')
+      .rule(Rule.CSS_IN_NODE_MODULES_RULE)
       .test(/\.css$/i)
       .include.add(/node_modules/)
       .end(),
@@ -268,7 +269,7 @@ function setStyleLoaders(config: Config) {
   // --------------- less ---------------
   setCssLoaders(
     config.module
-      .rule('less.module')
+      .rule(Rule.LESS_MODULE_RULE)
       .test(/\.module\.less$/i)
       .exclude.add(path => /node_modules/i.test(path))
       .end(),
@@ -280,7 +281,7 @@ function setStyleLoaders(config: Config) {
 
   setCssLoaders(
     config.module
-      .rule('less')
+      .rule(Rule.LESS_RULE)
       .test(/\.less$/i)
       .exclude.add(cssExclude)
       .end(),
@@ -292,7 +293,7 @@ function setStyleLoaders(config: Config) {
 
   setCssLoaders(
     config.module
-      .rule('less-in-node_modules')
+      .rule(Rule.LESS_IN_NODE_MODULES_RULE)
       .test(/\.less$/i)
       .include.add(/node_modules/)
       .end(),

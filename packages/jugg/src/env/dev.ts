@@ -3,6 +3,7 @@ import Config from 'webpack-chain';
 import baseConfig from './base';
 import MiniCss from 'mini-css-extract-plugin';
 import { Jugg } from '..';
+import { Plugin } from './chainCfgMap';
 
 export default (jugg: Jugg): Config => {
   const config = baseConfig(jugg);
@@ -16,10 +17,10 @@ export default (jugg: Jugg): Config => {
   //   .prepend(require.resolve('webpack/hot/dev-server'));
 
   config
-    .plugin('hot-module-replacement-plugin')
+    .plugin(Plugin.HOT_MODULE_REPLACEMENT)
     .use(webpack.HotModuleReplacementPlugin)
     .end()
-    .plugin('mini-css-extract-plugin')
+    .plugin(Plugin.MINI_CSS_EXTRACT)
     .use(MiniCss)
     .end();
 

@@ -11,6 +11,7 @@ import { Jugg } from '..';
 import fs from 'fs';
 import { logger } from '../utils/logger';
 import webpack from 'webpack';
+import { Entry, Plugin } from './chainCfgMap';
 
 export default (jugg: Jugg): Config => {
   const config = new Config();
@@ -22,7 +23,7 @@ export default (jugg: Jugg): Config => {
   config.context(jugg.context);
 
   config
-    .entry('index')
+    .entry(Entry.INDEX)
     .add('./src/index')
     .end()
     .output.path(getAbsolutePath(outputDir))
@@ -36,7 +37,7 @@ export default (jugg: Jugg): Config => {
     .end();
 
   config
-    .plugin('html-webpack-plugin-base')
+    .plugin(Plugin.BASE_HTML_PLUGIN)
     .use(HtmlWebpackPlugin, [
       {
         filename: 'index.html',
@@ -44,16 +45,16 @@ export default (jugg: Jugg): Config => {
       },
     ])
     .end()
-    .plugin('webpackbar')
+    .plugin(Plugin.WEBPACKBAR_PLUGIN)
     .use(Webpackbar)
     .end()
-    .plugin('filter-css-conflict-warning')
+    .plugin(Plugin.FILTER_CSS_CONFLICT_WARNING_PLUGIN)
     .use(FilterCSSConflictingWarning)
     .end()
-    .plugin('friendly-errors-webpack-plugin')
+    .plugin(Plugin.FRIENDLY_ERRORS_PLUGIN)
     .use(FriendlyErrorsWebpackPlugin)
     .end()
-    .plugin('define')
+    .plugin(Plugin.DEFINE_PLUGIN)
     .use(webpack.DefinePlugin, [
       {
         ...(() => {
@@ -68,7 +69,7 @@ export default (jugg: Jugg): Config => {
       },
     ])
     .end()
-    .plugin('case-sensitive-paths')
+    .plugin(Plugin.CASE_SENSITIVE_PATHS_PLUGIN)
     .use(CaseSensitivePathsPlugin)
     .end();
 
@@ -78,7 +79,7 @@ export default (jugg: Jugg): Config => {
   // -------------------------------------- Modify the Config
   const userTpl = getAbsolutePath('src', 'document.ejs');
   if (fs.existsSync(userTpl)) {
-    config.plugin('html-webpack-plugin-base').tap(c => [
+    config.plugin(Plugin.BASE_HTML_PLUGIN).tap(c => [
       {
         template: 'src/document.ejs',
         ...c[0],
@@ -91,7 +92,7 @@ export default (jugg: Jugg): Config => {
   // -------------------------------------- webpack-bundle-analyzer
   if (process.env.ANALYZE) {
     config
-      .plugin('webpack-bundle-analyzer')
+      .plugin(Plugin.BUNDLE_ANALYZER)
       .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin, [
         {
           analyzerMode: 'server',
