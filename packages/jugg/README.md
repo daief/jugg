@@ -37,6 +37,19 @@ Simple directory can be something like this, default entry can be `src/index.{ts
 - ANALYZE_DUMP
   - generate stats file while ANALYZE_DUMP exist
 
+# `TS` or `JS`
+
+Both `TS` and `JS` can be used together in a project with `jugg`. There are several situations with handleing TS and JS:
+- **Default & Recommended**: create a `tsconfig.json`, then jugg will open ts-loader and use it to compile ts, tsx, js, tsx. `babel` is needless here.
+  - ts-loader: ts, tsx, js, jsx
+  - babel: needless
+- Set config in `.juggrc.js` with `jugg-plugin-babel`. Babel plugin will rewrite built-in config of ts-loader for js and jsx and handle then with itself.
+  - ts-loader: ts, tsx
+  - babel: js, jsx
+- Set `compileTs: true` in `jugg-plugin-babel` config will clean all built-in ts-loader options. Babel handles all the file.
+  - ts-loader: cleaned
+  - babel: ts, tsx, js, jsx
+
 # Notice
 
 - `import()` works with `"module": "esnext"` in `tsconfig.json`, [detail](https://github.com/webpack/webpack/issues/5703#issuecomment-357512412).
