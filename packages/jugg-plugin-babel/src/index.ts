@@ -13,6 +13,11 @@ export interface Option {
   juggPreset?: IJuggPreset;
 }
 
+export enum BABEL_CHAIN_CONFIG_MAP {
+  BABEL_JS_RULE = 'jugg-plugin-babel-js-rule',
+  BABEL_TS_RULE = 'jugg-plugin-babel-ts-rule',
+}
+
 export default (api: PluginAPI, opts: Option) => {
   const dCfg: Option = {
     cache: true,
@@ -35,9 +40,19 @@ export default (api: PluginAPI, opts: Option) => {
   };
 
   api.chainWebpack(({ config }) => {
+    const { CHAIN_CONFIG_MAP } = api.jugg.Utils;
+    const cfgModule = config.module;
+
+    // rm ts-loader for js, jsx
+    // check if user does not have a tsconfig.json
+    cfgModule.rules.has(CHAIN_CONFIG_MAP.rule.JS_RULE) &&
+      cfgModule.rule(CHAIN_CONFIG_MAP.rule.JS_RULE).uses.delete('ts-loader');
+    cfgModule.rules.has(CHAIN_CONFIG_MAP.rule.JSX_RULE) &&
+      cfgModule.rule(CHAIN_CONFIG_MAP.rule.JSX_RULE).uses.delete('ts-loader');
+
     // ------------------------- jsx? file babel config
-    config.module
-      .rule('jugg-plugin-babel-rule')
+    cfgModule
+      .rule(BABEL_CHAIN_CONFIG_MAP.BABEL_JS_RULE)
       .test(/\.jsx?$/)
       .exclude.add(filepath => /node_modules/.test(filepath))
       .end()
@@ -48,13 +63,12 @@ export default (api: PluginAPI, opts: Option) => {
     // use babel to compile typescript
     // ------------------------- tsx? file babel config
     if (compileTs === true) {
-      // rm ts-loader
-      config.module.rule('ts-rule').uses.clear();
+      // rm ts-loader for tsx?
+      cfgModule.rule(CHAIN_CONFIG_MAP.rule.TS_RULE).uses.delete('ts-loader');
+      cfgModule.rule(CHAIN_CONFIG_MAP.rule.TSX_RULE).uses.delete('ts-loader');
 
-      config.module.rule('tsx-rule').uses.clear();
-
-      config.module
-        .rule('jugg-plugin-babel-ts-rule')
+      cfgModule
+        .rule(BABEL_CHAIN_CONFIG_MAP.BABEL_TS_RULE)
         .test(/\.tsx?$/)
         .exclude.add(filepath => /node_modules/.test(filepath))
         .end()
