@@ -1,5 +1,6 @@
 import { PluginAPI } from '@axew/jugg/types/PluginAPI';
 import { JReactPresetOption } from './preset';
+import { BABEL_CHAIN_CONFIG_MAP } from '@axew/jugg-plugin-babel';
 
 export interface Options {
   jReactPresetOption?: JReactPresetOption;
@@ -12,10 +13,7 @@ export default (api: PluginAPI, opts: Options) => {
   const { jReactPresetOption } = opts;
 
   api.chainWebpack(({ config }) => {
-    const JS_BABEL = 'jugg-plugin-babel-rule';
-    const TS_BABEL = 'jugg-plugin-babel-ts-rule';
-
-    if (config.module.rules.has(JS_BABEL)) {
+    if (config.module.rules.has(BABEL_CHAIN_CONFIG_MAP.BABEL_JS_RULE)) {
       const tapOptions = (c: any = {}) => {
         const { presets, plugins } = c;
         return {
@@ -30,13 +28,13 @@ export default (api: PluginAPI, opts: Options) => {
       };
 
       config.module
-        .rule(JS_BABEL)
+        .rule(BABEL_CHAIN_CONFIG_MAP.BABEL_JS_RULE)
         .use('babel-loader')
         .tap(tapOptions);
 
-      if (config.module.rules.has(TS_BABEL)) {
+      if (config.module.rules.has(BABEL_CHAIN_CONFIG_MAP.BABEL_TS_RULE)) {
         config.module
-          .rule(TS_BABEL)
+          .rule(BABEL_CHAIN_CONFIG_MAP.BABEL_TS_RULE)
           .use('babel-loader')
           .tap(tapOptions);
       }
