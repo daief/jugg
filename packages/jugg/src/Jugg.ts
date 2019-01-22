@@ -11,7 +11,6 @@ import { Configuration } from 'webpack';
 import { resolve, join } from 'path';
 import chokidar, { FSWatcher } from 'chokidar';
 import EventBus, { Opts } from './utils/EventBus';
-import { cloneDeepWith } from 'lodash';
 import { loadEnv } from './utils/loadEnv';
 import { CHAIN_CONFIG_MAP } from './env/chainCfgMap';
 const packageJSON = require(resolve(__dirname, '../package.json'));
@@ -128,9 +127,7 @@ export default class Jugg {
     //      chain cfg < object cfg
 
     // 1. get default cfg
-    const defaultCfg: Config = cloneDeepWith(
-      require(this.IsProd ? './env/prod' : './env/dev').default(this)
-    );
+    const defaultCfg: Config = require(this.IsProd ? './env/prod' : './env/dev').default(this);
 
     // 2. merge plugin chain-config to defaultCfg, get object cfg
     const pluginsWebpackObjectCfgList: Configuration[] = this.webpackChainFns
