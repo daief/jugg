@@ -1,10 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`test bindings.js 1`] = `
-"(function () {
-     var enterModule = require('react-hot-loader').enterModule;
-     enterModule && enterModule(module);
-   }());
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
 
 
 ;
@@ -36,13 +38,18 @@ export default _default_1;
 
 ;
 (function () { 
-                  var reactHotLoader = require('react-hot-loader').default;
-                  var leaveModule = require('react-hot-loader').leaveModule;
-                  if (!reactHotLoader) {
-                    return;
-                  }
-                ; reactHotLoader.register(_default_1, \\"default\\", \\"/Users/daief/Desktop/jugg/packages/jugg-plugin-react/src/ts-rhl-transformer/bindings.js\\"); 
-leaveModule(module); }());
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(A, \\"A\\", \\"bindings.js\\"); 
+; reactHotLoader.register(B, \\"B\\", \\"bindings.js\\"); 
+; reactHotLoader.register(C, \\"C\\", \\"bindings.js\\"); 
+; reactHotLoader.register(D, \\"D\\", \\"bindings.js\\"); 
+; reactHotLoader.register(E, \\"E\\", \\"bindings.js\\"); 
+; reactHotLoader.register(_default_1, \\"default\\", \\"bindings.js\\"); 
+; leaveModule(module); }());
 
 
 ;
@@ -50,10 +57,12 @@ leaveModule(module); }());
 `;
 
 exports[`test export-default-anonymous-class.js 1`] = `
-"(function () {
-     var enterModule = require('react-hot-loader').enterModule;
-     enterModule && enterModule(module);
-   }());
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
 
 
 ;
@@ -66,13 +75,13 @@ export default _default_1;
 
 ;
 (function () { 
-                  var reactHotLoader = require('react-hot-loader').default;
-                  var leaveModule = require('react-hot-loader').leaveModule;
-                  if (!reactHotLoader) {
-                    return;
-                  }
-                ; reactHotLoader.register(_default_1, \\"default\\", \\"/Users/daief/Desktop/jugg/packages/jugg-plugin-react/src/ts-rhl-transformer/export-default-anonymous-class.js\\"); 
-leaveModule(module); }());
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(_default_1, \\"default\\", \\"export-default-anonymous-class.js\\"); 
+; leaveModule(module); }());
 
 
 ;
@@ -80,10 +89,12 @@ leaveModule(module); }());
 `;
 
 exports[`test export-default-assignment-arrow-func.js 1`] = `
-"(function () {
-     var enterModule = require('react-hot-loader').enterModule;
-     enterModule && enterModule(module);
-   }());
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
 
 
 ;
@@ -93,26 +104,53 @@ export default _default_1;
 
 ;
 (function () { 
-                  var reactHotLoader = require('react-hot-loader').default;
-                  var leaveModule = require('react-hot-loader').leaveModule;
-                  if (!reactHotLoader) {
-                    return;
-                  }
-                ; reactHotLoader.register(_default_1, \\"default\\", \\"/Users/daief/Desktop/jugg/packages/jugg-plugin-react/src/ts-rhl-transformer/export-default-assignment-arrow-func.js\\"); 
-leaveModule(module); }());
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(_default_1, \\"default\\", \\"export-default-assignment-arrow-func.js\\"); 
+; leaveModule(module); }());
 
 
 ;
 "
 `;
 
-exports[`test export-default-class.js 1`] = `""`;
+exports[`test export-default-class.js 1`] = `
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
+
+
+;
+
+
+;
+(function () { 
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(a, \\"a\\", \\"export-default-class.js\\"); 
+; leaveModule(module); }());
+
+
+;
+"
+`;
 
 exports[`test name-clash.js 1`] = `
-"(function () {
-     var enterModule = require('react-hot-loader').enterModule;
-     enterModule && enterModule(module);
-   }());
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
 
 
 ;
@@ -123,13 +161,14 @@ export default _default_1;
 
 ;
 (function () { 
-                  var reactHotLoader = require('react-hot-loader').default;
-                  var leaveModule = require('react-hot-loader').leaveModule;
-                  if (!reactHotLoader) {
-                    return;
-                  }
-                ; reactHotLoader.register(_default_1, \\"default\\", \\"/Users/daief/Desktop/jugg/packages/jugg-plugin-react/src/ts-rhl-transformer/name-clash.js\\"); 
-leaveModule(module); }());
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(_default, \\"_default\\", \\"name-clash.js\\"); 
+; reactHotLoader.register(_default_1, \\"default\\", \\"name-clash.js\\"); 
+; leaveModule(module); }());
 
 
 ;

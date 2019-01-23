@@ -47,10 +47,6 @@ function createParenthesizedExpression(expression: ts.Expression) {
   return node;
 }
 
-// const buildRegistration = template(
-//   'reactHotLoader.register(ID, NAME, FILENAME);',
-// );
-
 /**
  * 生成如下语句
  * ```js
@@ -78,25 +74,13 @@ const buildRegistrationExpression = (
 };
 
 const headerTemplate = template(
-  `(function () {
-     var enterModule = require('react-hot-loader').enterModule;
-     enterModule && enterModule(module);
-   }())`
+  `
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+`
 );
-
-// const buildTagger = template(
-//   `
-//     (function () {
-//       var reactHotLoader = require('react-hot-loader').default;
-//       var leaveModule = require('react-hot-loader').leaveModule;
-//       if (!reactHotLoader) {
-//         return;
-//       }
-//       REGISTRATIONS
-//       leaveModule(module);
-//     }());
-//   `
-// );
 
 /**
  * 生成如下语句
@@ -114,6 +98,9 @@ const headerTemplate = template(
  * @param regisrations registration statements
  */
 const buildTaggerExpression = (registrations: ts.ExpressionStatement[]) => {
+  const list: ts.Statement[] = [];
+  // 添加换行
+  registrations.forEach(s => list.push(s, ts.createStatement(ts.createIdentifier('\n'))));
   return ts.createExpressionStatement(
     createParenthesizedExpression(
       ts.createCall(
@@ -128,16 +115,16 @@ const buildTaggerExpression = (registrations: ts.ExpressionStatement[]) => {
             ts.createStatement(
               ts.createIdentifier(
                 `
-                  var reactHotLoader = require('react-hot-loader').default;
-                  var leaveModule = require('react-hot-loader').leaveModule;
-                  if (!reactHotLoader) {
-                    return;
-                  }
-                `
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+`
               )
             ),
-            ...registrations,
-            ts.createStatement(ts.createIdentifier('\nleaveModule(module)\n')),
+            ...list,
+            ts.createStatement(ts.createIdentifier('leaveModule(module)')),
           ])
         ),
         undefined,
@@ -153,18 +140,6 @@ function shouldRegisterBinding(node: ts.Node) {
     case ts.SyntaxKind.ClassDeclaration:
     case ts.SyntaxKind.VariableStatement:
       return true;
-    case ts.SyntaxKind.VariableDeclaration: {
-      const { initializer } = node as ts.VariableDeclaration;
-      if (
-        initializer &&
-        ts.isCallExpression(initializer) &&
-        initializer.expression &&
-        initializer.expression.getText() === 'require'
-      ) {
-        return false;
-      }
-      return true;
-    }
     default:
       return false;
   }
@@ -182,8 +157,9 @@ function isExportDefaultDeclaration(node: ts.Node): node is ts.DeclarationStatem
 export function createTransformer() {
   const transformer: ts.TransformerFactory<ts.SourceFile> = context => {
     return transformerNode => {
-      // XXX absolute file name
-      const FILE_NAME = join(__dirname, transformerNode.fileName);
+      // XXX absolute file name ?
+      // const FILE_NAME = join(__dirname, transformerNode.fileName);
+      const FILE_NAME = transformerNode.fileName;
       const REGISTRATIONS: ts.ExpressionStatement[] = [];
 
       /**
@@ -277,6 +253,18 @@ export function createTransformer() {
         return ts.visitEachChild(node, visitorClassLike, context);
       }; // end ---------------------------------- visitorClassLike
 
+      /**
+       * 对默认导出语句变换
+       * ```js
+       * export default class {}
+       *
+       * // ---- 变换为如下形式 ----
+       *
+       * const _default = class {}
+       * export default _default
+       * ```
+       * @param node
+       */
       const visitorExportDefault: ts.Visitor = node => {
         if (ts.isExportAssignment(node) || isExportDefaultDeclaration(node)) {
           /**
@@ -291,7 +279,7 @@ export function createTransformer() {
           if (node.name) {
             return;
           }
-          // XXX
+
           const id = ts.createUniqueName('_default');
           let expression: ts.Expression;
           if (ts.isFunctionDeclaration(node)) {
@@ -357,12 +345,59 @@ export function createTransformer() {
         return ts.visitEachChild(node, visitorExportDefault, context);
       }; // end ---------------------------------- visitorExportDefault
 
+      /**
+       * 寻找顶层变量声明，进行记录，之后进行注册操作
+       * @param node
+       */
       const visitorTopScope: ts.Visitor = node => {
-        return node;
+        if (shouldRegisterBinding(node)) {
+          const ids: ts.Identifier[] = [];
+
+          if (ts.isVariableStatement(node)) {
+            node.declarationList.declarations.forEach(declaration => {
+              const { initializer } = declaration;
+              if (
+                initializer &&
+                ts.isCallExpression(initializer) &&
+                initializer.expression &&
+                initializer.expression.getText() === 'require'
+              ) {
+                return;
+              }
+
+              const declarationNameNode = declaration.name;
+              if (
+                ts.isObjectBindingPattern(declarationNameNode) ||
+                ts.isArrayBindingPattern(declarationNameNode)
+              ) {
+                declarationNameNode.elements.forEach(el => ids.push(el.name as any));
+              } else {
+                ids.push(declarationNameNode);
+              }
+            });
+          } else if (ts.isFunctionDeclaration(node) || ts.isClassDeclaration(node)) {
+            ids.push(node.name);
+          }
+
+          ids
+            .filter(id => !!id)
+            .forEach(id =>
+              REGISTRATIONS.push(
+                buildRegistrationExpression(
+                  id,
+                  ts.createStringLiteral(id.text),
+                  ts.createStringLiteral(FILE_NAME)
+                )
+              )
+            );
+          return node;
+        }
+
+        return ts.visitEachChild(node, visitorTopScope, context);
       }; // end ---------------------------------- visitorTopScope
 
       let newSourceFile = ts.visitNode(transformerNode, visitorTopScope);
-      newSourceFile = ts.visitNode(transformerNode, visitorClassLike);
+      newSourceFile = ts.visitNode(newSourceFile, visitorClassLike);
       newSourceFile = ts.visitNode(newSourceFile, visitorExportDefault);
 
       if (REGISTRATIONS.length && !shouldIgnoreFile(FILE_NAME)) {
