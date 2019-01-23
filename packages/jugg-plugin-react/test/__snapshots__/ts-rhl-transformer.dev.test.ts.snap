@@ -1,0 +1,137 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test bindings.js 1`] = `
+"(function () {
+     var enterModule = require('react-hot-loader').enterModule;
+     enterModule && enterModule(module);
+   }());
+
+
+;
+import P, { Q } from \\"left-pad\\";
+const A = 42;
+function B() {
+    function R() { }
+    class S {
+    }
+    const T = 42;
+}
+export class C {
+    U() {
+        function V() {
+            class W {
+            }
+        }
+    }
+    __reactstandin__regenerateByEval(key, code) { this[key] = eval(code); }
+}
+const D = class X {
+};
+let E = D;
+var Y = require(\\"left-pad\\");
+var { Z } = require(\\"left-pad\\");
+const _default_1 = React.createClass({})
+export default _default_1;
+
+
+;
+(function () { 
+                  var reactHotLoader = require('react-hot-loader').default;
+                  var leaveModule = require('react-hot-loader').leaveModule;
+                  if (!reactHotLoader) {
+                    return;
+                  }
+                ; reactHotLoader.register(_default_1, \\"default\\", \\"/Users/daief/Desktop/jugg/packages/jugg-plugin-react/src/ts-rhl-transformer/bindings.js\\"); 
+leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`test export-default-anonymous-class.js 1`] = `
+"(function () {
+     var enterModule = require('react-hot-loader').enterModule;
+     enterModule && enterModule(module);
+   }());
+
+
+;
+const _default_1 = class {
+    a() { }
+    __reactstandin__regenerateByEval(key, code) { this[key] = eval(code); }
+}
+export default _default_1;
+
+
+;
+(function () { 
+                  var reactHotLoader = require('react-hot-loader').default;
+                  var leaveModule = require('react-hot-loader').leaveModule;
+                  if (!reactHotLoader) {
+                    return;
+                  }
+                ; reactHotLoader.register(_default_1, \\"default\\", \\"/Users/daief/Desktop/jugg/packages/jugg-plugin-react/src/ts-rhl-transformer/export-default-anonymous-class.js\\"); 
+leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`test export-default-assignment-arrow-func.js 1`] = `
+"(function () {
+     var enterModule = require('react-hot-loader').enterModule;
+     enterModule && enterModule(module);
+   }());
+
+
+;
+const _default_1 = () => console.log('export-default-assignment-arrow-func')
+export default _default_1;
+
+
+;
+(function () { 
+                  var reactHotLoader = require('react-hot-loader').default;
+                  var leaveModule = require('react-hot-loader').leaveModule;
+                  if (!reactHotLoader) {
+                    return;
+                  }
+                ; reactHotLoader.register(_default_1, \\"default\\", \\"/Users/daief/Desktop/jugg/packages/jugg-plugin-react/src/ts-rhl-transformer/export-default-assignment-arrow-func.js\\"); 
+leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`test export-default-class.js 1`] = `""`;
+
+exports[`test name-clash.js 1`] = `
+"(function () {
+     var enterModule = require('react-hot-loader').enterModule;
+     enterModule && enterModule(module);
+   }());
+
+
+;
+const _default = 10;
+const _default_1 = 42
+export default _default_1;
+
+
+;
+(function () { 
+                  var reactHotLoader = require('react-hot-loader').default;
+                  var leaveModule = require('react-hot-loader').leaveModule;
+                  if (!reactHotLoader) {
+                    return;
+                  }
+                ; reactHotLoader.register(_default_1, \\"default\\", \\"/Users/daief/Desktop/jugg/packages/jugg-plugin-react/src/ts-rhl-transformer/name-clash.js\\"); 
+leaveModule(module); }());
+
+
+;
+"
+`;
