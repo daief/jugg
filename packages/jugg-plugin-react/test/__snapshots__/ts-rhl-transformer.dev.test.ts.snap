@@ -48,6 +48,7 @@ class Foo {
     constructor() {
         this.onClick = (e) => e.target.value;
     }
+    __reactstandin__regenerateByEval(key, code) { this[key] = eval(code); }
 }
 
 
@@ -423,6 +424,38 @@ if (!reactHotLoader) {
   return;
 }
 ; reactHotLoader.register(Foo, \\"Foo\\", \\"not-an-arrow-function.js\\"); 
+; leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`ts-rhl-transformer copies arrow function body block onto hidden class methods only-constructor.js 1`] = `
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
+
+
+;
+class Foo {
+    constructor() {
+    }
+    __reactstandin__regenerateByEval(key, code) { this[key] = eval(code); }
+}
+
+
+;
+(function () { 
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(Foo, \\"Foo\\", \\"only-constructor.js\\"); 
 ; leaveModule(module); }());
 
 

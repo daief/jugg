@@ -193,8 +193,12 @@ export function createTransformer() {
             }
 
             // notice node type check
-            if (ts.isMethodDeclaration(classEle) || ts.isPropertyDeclaration(classEle)) {
-              const propName = classEle.name.getText();
+            if (
+              ts.isMethodDeclaration(classEle) ||
+              ts.isPropertyDeclaration(classEle) ||
+              ts.isConstructorDeclaration(classEle)
+            ) {
+              const propName = classEle.name ? classEle.name.getText() : 'constructor';
               hasMethods = propName !== REGENERATE_METHOD;
               hasRegenerateMethod = propName === REGENERATE_METHOD;
             }
