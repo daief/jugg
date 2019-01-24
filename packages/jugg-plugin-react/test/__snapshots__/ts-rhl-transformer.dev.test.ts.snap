@@ -1,6 +1,504 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`test bindings.js 1`] = `
+exports[`ts-rhl-transformer copies arrow function body block onto hidden class methods arguments.js 1`] = `
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
+
+
+;
+class Foo {
+    bar = (a, b) => {
+        arguments;
+        return a(b);
+    };
+    __reactstandin__regenerateByEval(key, code) { this[key] = eval(code); }
+}
+
+
+;
+(function () { 
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(Foo, \\"Foo\\", \\"arguments.js\\"); 
+; leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`ts-rhl-transformer copies arrow function body block onto hidden class methods arrow-function-in-constructor.js 1`] = `
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
+
+
+;
+class Foo {
+    constructor() {
+        this.onClick = (e) => e.target.value;
+    }
+}
+
+
+;
+(function () { 
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(Foo, \\"Foo\\", \\"arrow-function-in-constructor.js\\"); 
+; leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`ts-rhl-transformer copies arrow function body block onto hidden class methods async-functions.js 1`] = `
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
+
+
+;
+class Foo {
+    bar = async (a, b) => {
+        return await a(b);
+    };
+    __reactstandin__regenerateByEval(key, code) { this[key] = eval(code); }
+}
+
+
+;
+(function () { 
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(Foo, \\"Foo\\", \\"async-functions.js\\"); 
+; leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`ts-rhl-transformer copies arrow function body block onto hidden class methods async-functions-expression-body.js 1`] = `
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
+
+
+;
+class Foo {
+    bar = async (a, b) => await b(a);
+    __reactstandin__regenerateByEval(key, code) { this[key] = eval(code); }
+}
+
+
+;
+(function () { 
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(Foo, \\"Foo\\", \\"async-functions-expression-body.js\\"); 
+; leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`ts-rhl-transformer copies arrow function body block onto hidden class methods block-body.js 1`] = `
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
+
+
+;
+class Foo {
+    bar = (a, b) => {
+        return a(b);
+    };
+    __reactstandin__regenerateByEval(key, code) { this[key] = eval(code); }
+}
+
+
+;
+(function () { 
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(Foo, \\"Foo\\", \\"block-body.js\\"); 
+; leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`ts-rhl-transformer copies arrow function body block onto hidden class methods default-params.js 1`] = `
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
+
+
+;
+class Foo {
+    bar = (a = \\"foo\\") => {
+        return \`\${a}bar\`;
+    };
+    __reactstandin__regenerateByEval(key, code) { this[key] = eval(code); }
+}
+
+
+;
+(function () { 
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(Foo, \\"Foo\\", \\"default-params.js\\"); 
+; leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`ts-rhl-transformer copies arrow function body block onto hidden class methods destructured-params.js 1`] = `
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
+
+
+;
+class Foo {
+    bar = ({ a }, { b }) => {
+        return \`\${a}\${b}\`;
+    };
+    __reactstandin__regenerateByEval(key, code) { this[key] = eval(code); }
+}
+
+
+;
+(function () { 
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(Foo, \\"Foo\\", \\"destructured-params.js\\"); 
+; leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`ts-rhl-transformer copies arrow function body block onto hidden class methods expression-body.js 1`] = `
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
+
+
+;
+class Foo {
+    onClick = (e) => e.target.value;
+    __reactstandin__regenerateByEval(key, code) { this[key] = eval(code); }
+}
+
+
+;
+(function () { 
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(Foo, \\"Foo\\", \\"expression-body.js\\"); 
+; leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`ts-rhl-transformer copies arrow function body block onto hidden class methods nested-arguments.js 1`] = `
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
+
+
+;
+class Foo {
+    bar = (a, b) => {
+        () => {
+            arguments;
+        };
+        return a(b);
+    };
+    __reactstandin__regenerateByEval(key, code) { this[key] = eval(code); }
+}
+
+
+;
+(function () { 
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(Foo, \\"Foo\\", \\"nested-arguments.js\\"); 
+; leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`ts-rhl-transformer copies arrow function body block onto hidden class methods nested-new.target.js 1`] = `
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
+
+
+;
+class Foo {
+    bar = (a, b) => {
+        () => {
+            new.target;
+        };
+        return a(b);
+    };
+    __reactstandin__regenerateByEval(key, code) { this[key] = eval(code); }
+}
+
+
+;
+(function () { 
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(Foo, \\"Foo\\", \\"nested-new.target.js\\"); 
+; leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`ts-rhl-transformer copies arrow function body block onto hidden class methods new.target.js 1`] = `
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
+
+
+;
+class Foo {
+    bar = (a, b) => {
+        new.target;
+        return a(b);
+    };
+    __reactstandin__regenerateByEval(key, code) { this[key] = eval(code); }
+}
+
+
+;
+(function () { 
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(Foo, \\"Foo\\", \\"new.target.js\\"); 
+; leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`ts-rhl-transformer copies arrow function body block onto hidden class methods not-a-function.js 1`] = `
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
+
+
+;
+class Foo {
+    bar = 2;
+    __reactstandin__regenerateByEval(key, code) { this[key] = eval(code); }
+}
+
+
+;
+(function () { 
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(Foo, \\"Foo\\", \\"not-a-function.js\\"); 
+; leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`ts-rhl-transformer copies arrow function body block onto hidden class methods not-an-arrow-function.js 1`] = `
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
+
+
+;
+class Foo {
+    bar = function (a, b) {
+        return a(b);
+    };
+    __reactstandin__regenerateByEval(key, code) { this[key] = eval(code); }
+}
+
+
+;
+(function () { 
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(Foo, \\"Foo\\", \\"not-an-arrow-function.js\\"); 
+; leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`ts-rhl-transformer copies arrow function body block onto hidden class methods same-name-as-class-method.js 1`] = `
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
+
+
+;
+class Foo {
+    bar = (a, b) => {
+        return a(b);
+    };
+    bar() {
+        return 2;
+    }
+    __reactstandin__regenerateByEval(key, code) { this[key] = eval(code); }
+}
+
+
+;
+(function () { 
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(Foo, \\"Foo\\", \\"same-name-as-class-method.js\\"); 
+; leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`ts-rhl-transformer copies arrow function body block onto hidden class methods static-property.js 1`] = `
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
+
+
+;
+class Foo {
+    static bar = (a, b) => {
+        return a(b);
+    };
+}
+
+
+;
+(function () { 
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(Foo, \\"Foo\\", \\"static-property.js\\"); 
+; leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`ts-rhl-transformer react components bindings.js 1`] = `
 "
 (function () {
   var enterModule = require('react-hot-loader').enterModule;
@@ -56,7 +554,39 @@ if (!reactHotLoader) {
 "
 `;
 
-exports[`test export-default-anonymous-class.js 1`] = `
+exports[`ts-rhl-transformer react components counter.js 1`] = `
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
+
+
+;
+class Counter {
+}
+const _default_1 = () => <div><Counter /></div>
+export default _default_1;
+
+
+;
+(function () { 
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(Counter, \\"Counter\\", \\"counter.js\\"); 
+; reactHotLoader.register(_default_1, \\"default\\", \\"counter.js\\"); 
+; leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`ts-rhl-transformer react components export-default-anonymous-class.js 1`] = `
 "
 (function () {
   var enterModule = require('react-hot-loader').enterModule;
@@ -88,7 +618,7 @@ if (!reactHotLoader) {
 "
 `;
 
-exports[`test export-default-assignment-arrow-func.js 1`] = `
+exports[`ts-rhl-transformer react components export-default-assignment-arrow-func.js 1`] = `
 "
 (function () {
   var enterModule = require('react-hot-loader').enterModule;
@@ -117,7 +647,7 @@ if (!reactHotLoader) {
 "
 `;
 
-exports[`test export-default-class.js 1`] = `
+exports[`ts-rhl-transformer react components export-default-class.js 1`] = `
 "
 (function () {
   var enterModule = require('react-hot-loader').enterModule;
@@ -144,7 +674,7 @@ if (!reactHotLoader) {
 "
 `;
 
-exports[`test name-clash.js 1`] = `
+exports[`ts-rhl-transformer react components name-clash.js 1`] = `
 "
 (function () {
   var enterModule = require('react-hot-loader').enterModule;
@@ -168,6 +698,36 @@ if (!reactHotLoader) {
 }
 ; reactHotLoader.register(_default, \\"_default\\", \\"name-clash.js\\"); 
 ; reactHotLoader.register(_default_1, \\"default\\", \\"name-clash.js\\"); 
+; leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`ts-rhl-transformer react components rhl-issye-246.js 1`] = `
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
+
+
+;
+export function spread(...args) {
+    return args.push(1);
+}
+
+
+;
+(function () { 
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(spread, \\"spread\\", \\"rhl-issye-246.js\\"); 
 ; leaveModule(module); }());
 
 
