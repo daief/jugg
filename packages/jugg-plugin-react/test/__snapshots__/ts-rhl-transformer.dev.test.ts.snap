@@ -164,6 +164,75 @@ if (!reactHotLoader) {
 "
 `;
 
+exports[`ts-rhl-transformer copies arrow function body block onto hidden class methods class-named-with-decorate.js 1`] = `
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
+
+
+;
+@aaa
+export default class _default_1 {
+}
+
+
+;
+(function () { 
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(_default_1, \\"_default_1\\", \\"class-named-with-decorate.js\\"); 
+; leaveModule(module); }());
+
+
+;
+"
+`;
+
+exports[`ts-rhl-transformer copies arrow function body block onto hidden class methods class-with-decorate.js 1`] = `
+"
+(function () {
+  var enterModule = require('react-hot-loader').enterModule;
+  enterModule && enterModule(module);
+}())
+;
+
+
+;
+@bbb('xx')
+@ccc
+@ddd
+class _default_2 {
+    a() {
+    }
+    __reactstandin__regenerateByEval(key, code) { this[key] = eval(code); }
+}
+export default _default_2;
+const _default_1 = class {
+};
+
+
+;
+(function () { 
+var reactHotLoader = require('react-hot-loader').default;
+var leaveModule = require('react-hot-loader').leaveModule;
+if (!reactHotLoader) {
+  return;
+}
+; reactHotLoader.register(_default_1, \\"_default_1\\", \\"class-with-decorate.js\\"); 
+; reactHotLoader.register(_default_2, \\"default\\", \\"class-with-decorate.js\\"); 
+; leaveModule(module); }());
+
+
+;
+"
+`;
+
 exports[`ts-rhl-transformer copies arrow function body block onto hidden class methods default-params.js 1`] = `
 "
 (function () {
@@ -690,6 +759,8 @@ exports[`ts-rhl-transformer react components export-default-class.js 1`] = `
 
 
 ;
+export default class a {
+}
 
 
 ;

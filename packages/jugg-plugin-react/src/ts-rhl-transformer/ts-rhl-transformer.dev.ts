@@ -2,10 +2,10 @@
  * ts transformer, from react-hot-loader@4 https://github.com/gaearon/react-hot-loader/blob/master/src/babel.dev.js
  * a simple version, handle the class declaration node
  * using this with ts-loader and without babel, you can also make react hot-reload well in typescript
+ * thanks: https://github.com/Jetsly/ts-react-hot-transformer
  */
 
 import * as ts from 'typescript';
-import { join } from 'path';
 
 const PREFIX = '__reactstandin__';
 const REGENERATE_METHOD = `${PREFIX}regenerateByEval`;
@@ -145,12 +145,14 @@ function shouldRegisterBinding(node: ts.Node) {
   }
 }
 
+function hasExportAndDefaultKeyWord(kind: ts.SyntaxKind) {
+  return [ts.SyntaxKind.ExportKeyword, ts.SyntaxKind.DefaultKeyword].includes(kind);
+}
+
 function isExportDefaultDeclaration(node: ts.Node): node is ts.DeclarationStatement {
   return (
     node.modifiers &&
-    node.modifiers.filter(({ kind }) =>
-      [ts.SyntaxKind.ExportKeyword, ts.SyntaxKind.DefaultKeyword].includes(kind)
-    ).length === 2
+    node.modifiers.filter(({ kind }) => hasExportAndDefaultKeyWord(kind)).length === 2
   );
 }
 
@@ -281,10 +283,19 @@ export function createTransformer() {
            *  - ...
            */
           if (node.name) {
-            return;
+            return node;
           }
 
           const id = ts.createUniqueName('_default');
+
+          REGISTRATIONS.push(
+            buildRegistrationExpression(
+              id,
+              ts.createStringLiteral('default'),
+              ts.createStringLiteral(FILE_NAME)
+            )
+          );
+
           let expression: ts.Expression;
           if (ts.isFunctionDeclaration(node)) {
             /**
@@ -300,21 +311,40 @@ export function createTransformer() {
               node.type,
               node.body
             );
-          } else if (ts.isClassDeclaration(node)) {
+          } else if (ts.isClassDeclaration(node) && !node.decorators) {
             /**
+             * without decorators
              * statements like this
              *  - export default class {}
              *  - export default class A {}
              */
             expression = ts.createClassExpression(
-              node.modifiers.filter(
-                m => ![ts.SyntaxKind.ExportKeyword, ts.SyntaxKind.DefaultKeyword].includes(m.kind)
-              ),
+              node.modifiers.filter(m => !hasExportAndDefaultKeyWord(m.kind)),
               node.name,
               node.typeParameters,
               node.heritageClauses,
               node.members
             );
+          } else if (ts.isClassDeclaration(node) && node.decorators) {
+            /**
+             * with decorators
+             * statements like this
+             *  -
+             *    @ddd
+             *    export default class {}
+             */
+            return [
+              ts.updateClassDeclaration(
+                node,
+                node.decorators,
+                node.modifiers.filter(m => !hasExportAndDefaultKeyWord(m.kind)),
+                id,
+                node.typeParameters,
+                node.heritageClauses,
+                node.members
+              ),
+              ts.createExportAssignment(undefined, undefined, false, id),
+            ];
           } else if (ts.isExportAssignment(node)) {
             /**
              * statements like this
@@ -323,19 +353,6 @@ export function createTransformer() {
              */
             expression = node.expression;
           }
-          // else {
-          //   // TODO with decorator
-          //   // @xxx
-          //   // class A {}
-          // }
-
-          REGISTRATIONS.push(
-            buildRegistrationExpression(
-              id,
-              ts.createStringLiteral('default'),
-              ts.createStringLiteral(FILE_NAME)
-            )
-          );
 
           return [
             ts.createVariableDeclarationList(
