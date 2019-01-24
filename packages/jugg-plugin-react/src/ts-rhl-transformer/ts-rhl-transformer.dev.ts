@@ -1,6 +1,5 @@
 /**
  * ts transformer, from react-hot-loader@4 https://github.com/gaearon/react-hot-loader/blob/master/src/babel.dev.js
- * a simple version, handle the class declaration node
  * using this with ts-loader and without babel, you can also make react hot-reload well in typescript
  * thanks: https://github.com/Jetsly/ts-react-hot-transformer
  */
