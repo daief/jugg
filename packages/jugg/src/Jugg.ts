@@ -177,6 +177,7 @@ export default class Jugg {
    */
   exit() {
     this.fsWatcher.close();
+    process.exit(0);
   }
 
   /**
