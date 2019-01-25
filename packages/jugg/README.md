@@ -28,6 +28,50 @@ Simple directory can be something like this, default entry can be `src/index.{ts
 
 ```
 
+# config
+
+Create a file named `.juggrc.js`, `.juggrc.ts`, `jugg.config.js`, etc. Or write config object in `package.json`.
+
+```ts
+interface JuggConfig {
+  /**
+   * publicPath of webpack, default '/'
+   */
+  publicPath?: string;
+  /**
+   * output path of webpack, default 'dist'
+   */
+  outputDir?: string;
+  plugins?: PluginCfgSchema[];
+  define?: { [k: string]: any };
+  /**
+   * open chunks config? default true
+   */
+  chunks?: boolean;
+  /**
+   * sourceMap, default true
+   */
+  sourceMap?: boolean;
+  webpack?: JuggWebpack;
+  /**
+   * ts-loader custom transformers, only work when ts-loader is enabled
+   */
+  tsCustomTransformers?: {
+    before?: PluginCfgSchema[];
+    after?: PluginCfgSchema[];
+  };
+}
+
+type JuggWebpack = webpack.Configuration | (
+  param: {
+    config: webpackChain.Config;
+    webpack: webpack.Configuration;
+  }
+) => void | webpack.Configuration;
+
+type PluginCfgSchema = string | [string, { [k: string]: any }?];
+```
+
 # env
 
 - ANALYZE

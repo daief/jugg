@@ -39,7 +39,7 @@
     "typescript": "^3.2.2"
   },
   "files": ["lib", "types"],
-  "keywords": ["jugg", "jugg-plugin-react", "ts-rhl-transformer"],
+  "keywords": ["jugg", "jugg-plugin-react", "ts-rhl-transformer", "typescript"],
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"

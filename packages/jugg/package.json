@@ -7,6 +7,8 @@
   "bin": {
     "jugg": "lib/bin/index.js"
   },
+  "homepage": "https://github.com/daief/jugg/tree/master/packages/jugg",
+  "repository": "https://github.com/daief/jugg/tree/master/packages/jugg",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
@@ -69,6 +71,7 @@
     "typescript": "^3.2.2"
   },
   "files": ["lib", "types"],
+  "keywords": ["jugg", "cli", "webpack", "typescript"],
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
