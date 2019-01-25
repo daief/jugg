@@ -82,37 +82,41 @@ export default (config: Config, jugg: Jugg) => {
       }),
     };
 
-    config.module
-      // --------------- ts-loader, tx
-      .rule(Rule.TS_RULE)
-      .test(/\.ts$/)
-      .use('ts-loader')
-      .loader(require.resolve('ts-loader'))
-      .options(tsOpts);
+    const setTsLoader = (param: { rule: Rule; test: RegExp }) => {
+      const { rule, test } = param;
+      config.module
+        .rule(rule)
+        .test(test)
+        .exclude.add((path: string) => /node_modules/.test(path))
+        .end()
+        .use('ts-loader')
+        .loader(require.resolve('ts-loader'))
+        .options(tsOpts);
+    };
 
-    config.module
-      // --------------- ts-loader, tsx
-      .rule(Rule.TSX_RULE)
-      .test(/\.tsx$/)
-      .use('ts-loader')
-      .loader(require.resolve('ts-loader'))
-      .options(tsOpts);
+    // --------------- ts-loader, tx
+    setTsLoader({
+      rule: Rule.TS_RULE,
+      test: /\.ts$/,
+    });
 
-    config.module
-      // --------------- ts-loader, js
-      .rule(Rule.JS_RULE)
-      .test(/\.js$/)
-      .use('ts-loader')
-      .loader(require.resolve('ts-loader'))
-      .options(tsOpts);
+    // --------------- ts-loader, txx
+    setTsLoader({
+      rule: Rule.TSX_RULE,
+      test: /\.tsx$/,
+    });
 
-    config.module
-      // --------------- ts-loader, jsx
-      .rule(Rule.JSX_RULE)
-      .test(/\.jsx$/)
-      .use('ts-loader')
-      .loader(require.resolve('ts-loader'))
-      .options(tsOpts);
+    // --------------- ts-loader, js
+    setTsLoader({
+      rule: Rule.JS_RULE,
+      test: /\.js$/,
+    });
+
+    // --------------- ts-loader, jsx
+    setTsLoader({
+      rule: Rule.JSX_RULE,
+      test: /\.jsx$/,
+    });
 
     config.plugin(Plugin.FORK_TS_CHECKER_PLUGIN).use(require('fork-ts-checker-webpack-plugin'), [
       {
