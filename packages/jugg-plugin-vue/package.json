@@ -4,6 +4,8 @@
   "license": "MIT",
   "main": "./lib/index.js",
   "types": "./types",
+  "homepage": "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-vue",
+  "repository": "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-vue",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
@@ -11,17 +13,18 @@
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
-    "@axew/jugg": ">= 0.0.5"
+    "@axew/jugg": ">= 0.0.5",
+    "vue-template-compiler": ">= 2"
   },
   "dependencies": {
-    "vue-loader": "^15.4.2",
-    "vue-template-compiler": "^2.5.21"
+    "vue-loader": "^15.4.2"
   },
   "devDependencies": {
     "rimraf": "^2.6.2",
     "typescript": "^3.2.2"
   },
   "files": ["lib", "types"],
+  "keywords": ["jugg", "jugg-plugin-vue", "typescript"],
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"

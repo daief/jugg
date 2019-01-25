@@ -9,8 +9,9 @@ export default (api: PluginAPI, vueLoaderOpts: any) => {
   const { CHAIN_CONFIG_MAP } = api.jugg.Utils;
 
   api.chainWebpack(({ config }) => {
+    const cfgModule = config.module;
     // vue-loader
-    config.module
+    cfgModule
       .rule(VUE_CHAIN_CONFIG_MAP.VUE_RULE)
       .test(/\.vue$/)
       .use('vue-loader')
@@ -29,7 +30,7 @@ export default (api: PluginAPI, vueLoaderOpts: any) => {
     if (api.resolve('tsconfig.json')) {
       // ts env
       // https://github.com/TypeStrong/ts-loader#appendtsxsuffixto-regexp-default
-      config.module
+      cfgModule
         .rule(CHAIN_CONFIG_MAP.rule.TS_RULE)
         .use('ts-loader')
         .tap(c => ({
@@ -37,7 +38,7 @@ export default (api: PluginAPI, vueLoaderOpts: any) => {
           appendTsSuffixTo: ['\\.vue$'],
         }));
 
-      config.module
+      cfgModule
         .rule(CHAIN_CONFIG_MAP.rule.TSX_RULE)
         .use('ts-loader')
         .tap(c => ({
