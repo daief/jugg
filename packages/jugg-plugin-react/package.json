@@ -4,6 +4,10 @@
   "license": "MIT",
   "main": "./lib/index.js",
   "types": "./types",
+  "homepage":
+    "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-react",
+  "repository":
+    "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-react",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
@@ -35,6 +39,7 @@
     "typescript": "^3.2.2"
   },
   "files": ["lib", "types"],
+  "keywords": ["jugg", "jugg-plugin-react", "ts-rhl-transformer"],
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"

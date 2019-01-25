@@ -1,6 +1,12 @@
 # jugg-plugin-react
 
-Support React depending on `jugg-plugin-babel`.
+A set of babel config to support React.
+Config of babel depending on `jugg-plugin-babel`.
+There is also some config for RHL(react-hot-loader).
+
+# ts-rhl-transformer
+
+It's located at `@axew/jugg-plugin-react/lib/ts-rhl-transformer`. It is a TypeScript compiler transformer handling the most same as `react-hot-loader/babel` and working with ts-loader.
 
 # config
 
@@ -31,17 +37,14 @@ export default hot(App)
 
 ## notice
 
-- there are two way to support hot reload friendly in TypeScript.
-  - change ts compiler to babel, set `compileTs: true` in `jugg-plugin-babel` config, which will use `react-hot-loader/babel`, [detail](https://www.npmjs.com/package/react-hot-loader/v/4.6.3#typescript).
-  - use ts transformer, for example, in `.juggrc.js`:
-
+- there are two ways to support hot reload friendly in TypeScript.
+  - use ts transformer, for example in `.juggrc.js`. This plugin can be used independently, that means you can remove babel config only using ts-loader to handle ts, tsx, js and jsx:
   ```js
-    const config = {
+    module.exports = {
       tsCustomTransformers: {
         // add this
         before: ['@axew/jugg-plugin-react/lib/ts-rhl-transformer']
       }
     };
-
-    module.exports = config;
   ```
+  - change ts compiler to babel, set `compileTs: true` in `jugg-plugin-babel` config, which will use `react-hot-loader/babel`, [detail](https://www.npmjs.com/package/react-hot-loader/v/4.6.3#typescript).
