@@ -118,13 +118,15 @@ export default (config: Config, jugg: Jugg) => {
       test: /\.jsx$/,
     });
 
-    config.plugin(Plugin.FORK_TS_CHECKER_PLUGIN).use(require('fork-ts-checker-webpack-plugin'), [
-      {
-        tsconfig: 'tsconfig.json',
-        checkSyntacticErrors: true,
-        formatter: 'codeframe',
-      },
-    ]);
+    if (process.env.FORK_TS_CHECKER !== 'none') {
+      config.plugin(Plugin.FORK_TS_CHECKER_PLUGIN).use(require('fork-ts-checker-webpack-plugin'), [
+        {
+          tsconfig: 'tsconfig.json',
+          checkSyntacticErrors: true,
+          formatter: 'codeframe',
+        },
+      ]);
+    }
   }
 
   if (isProd) {

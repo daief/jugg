@@ -36,6 +36,8 @@ Simple directory can be something like this, default entry can be `src/index.{ts
   - webpack-bundle-analyzer server port, default 8888
 - ANALYZE_DUMP
   - generate stats file while ANALYZE_DUMP exist
+- FORK_TS_CHECKER
+  - set `none`, disbale fork-ts-checker-webpack-plugin
 
 # `TS` or `JS`
 
