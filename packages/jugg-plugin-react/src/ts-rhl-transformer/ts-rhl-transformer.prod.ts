@@ -1,7 +1,32 @@
-// do nothing
+/**
+ * 以下的目的应该是要移除 hot 的调用
+ * ```js
+ * import {hot} from 'react-hot-loader'
+ * const a = hot(module)(Component)
+ *
+ * // 转变为
+ * import {hot} from 'react-hot-loader'
+ * const a = Component
+ * ```
+ *
+ * 此处的 TS 实现会涉及到一些无辜代码，如：
+ * ```js
+ * function a(hot) {
+ *  return hot(module)(Component)
+ * }
+ * ```
+ *
+ * 实际上 react-hot-loader/hot.prod 为：
+ * ```js
+ * export default () => Component => Component
+ * ```
+ *
+ * 所以现在先不作处理
+ */
 
 import * as ts from 'typescript';
 
+/*
 const RHLPackage = 'react-hot-loader';
 
 interface ISpecifier {
@@ -61,21 +86,6 @@ function getRHLContext(node: ts.SourceFile): ISpecifier[] {
   return context;
 }
 
-// function isImportedFromRHL(node: ts.Node, name: string) {
-//   const binding = path.scope.getBinding(name)
-//   const bindingType = binding && binding.path.node.type
-
-//   if (
-//     bindingType === 'ImportSpecifier' ||
-//     bindingType === 'ImportNamespaceSpecifier'
-//   ) {
-//     const bindingParent = binding.path.parent
-//     return bindingParent.source.value === RHLPackage
-//   }
-
-//   return false
-// }
-
 export function createTransformer() {
   const transformer: ts.TransformerFactory<ts.SourceFile> = context => {
     return transformerNode => {
@@ -124,6 +134,19 @@ export function createTransformer() {
     };
   };
 
+  return transformer;
+}
+*/
+
+/**
+ * do nothing
+ */
+export function createTransformer() {
+  const transformer: ts.TransformerFactory<ts.SourceFile> = () => {
+    return transformerNode => {
+      return transformerNode;
+    };
+  };
   return transformer;
 }
 

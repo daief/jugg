@@ -22,3 +22,7 @@ RHL.foo(module)(App);
 NOTRHL.hot(module)(App);
 
 export { a, b, c, d, e };
+
+function A(hot, C) {
+  return hot(module)(C)
+}
