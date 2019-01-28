@@ -11,7 +11,8 @@
     "./examples/**",
     "**/__fixtures__/**",
     "**/__tests__/**",
-    "**/*.md"
+    "**/*.md",
+    "**/tsconfig.json"
   ],
   "changelog": {
     "labels": {
