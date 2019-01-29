@@ -1,0 +1,41 @@
+{
+  "name": "@axew/jugg-plugin-lib",
+  "version": "0.0.0",
+  "license": "MIT",
+  "main": "./lib/index.js",
+  "types": "./types",
+  "homepage":
+    "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-lib",
+  "repository":
+    "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-lib",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "prebuild": "rimraf lib/ types/",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "@axew/jugg": ">= 0.0.5"
+  },
+  "dependencies": {
+    "autoprefixer": "^9.4.7",
+    "gulp": "^4.0.0",
+    "gulp-typescript": "^5.0.0",
+    "less": "^3.9.0",
+    "less-plugin-npm-import": "^2.1.0",
+    "merge2": "^1.2.3",
+    "rucksack-css": "^1.0.2",
+    "through2": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/gulp": "^4.0.5",
+    "rimraf": "^2.6.2",
+    "typescript": "^3.2.2"
+  },
+  "files": ["lib", "types"],
+  "keywords": ["jugg", "jugg-plugin-lib", "typescript"],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  }
+}
