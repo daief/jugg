@@ -34,14 +34,11 @@ export default class Jugg {
     this.context = context;
     this.commander = program;
 
-    this.fsWatcher = chokidar.watch(searchPlaces('jugg').map(name => join(this.context, name)));
     this.eventBus = new EventBus();
 
     this.loadEnv();
 
     this.init();
-
-    this.fsWatcher.on('change', p => this.handleConfigChange(p));
   }
 
   /**
@@ -153,6 +150,10 @@ export default class Jugg {
    * @param callback 回调
    */
   onWatchConfigChange(callback: (p?: any) => void, opts?: Opts) {
+    if (this.fsWatcher === null) {
+      this.fsWatcher = chokidar.watch(searchPlaces('jugg').map(name => join(this.context, name)));
+      this.fsWatcher.on('change', p => this.handleConfigChange(p));
+    }
     this.eventBus.on(WATCH_CONFIG_CHANGE_EVENT, callback, opts);
   }
 
@@ -176,8 +177,12 @@ export default class Jugg {
    * some thing should be close before exit
    */
   exit() {
-    this.fsWatcher.close();
-    process.exit(0);
+    if (this.fsWatcher) {
+      this.fsWatcher.removeAllListeners();
+      this.fsWatcher.close();
+      this.fsWatcher = null;
+    }
+    // process.exit(0);
   }
 
   /**
