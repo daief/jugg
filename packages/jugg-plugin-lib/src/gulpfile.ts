@@ -5,7 +5,16 @@ import transformLess from './transformLess';
 import ts from 'gulp-typescript';
 import merge2 from 'merge2';
 
-export default (_: any, api: PluginAPI) => {
+export interface IOptions {
+  /**
+   * convert less import in es/lib to css file path, default `true`
+   */
+  convertLessImport2Css?: boolean;
+}
+
+export default (opts: IOptions, api: PluginAPI) => {
+  const { convertLessImport2Css = true } = opts;
+
   const { getAbsolutePath, logger } = api.jugg.Utils;
   const LIB_DIR = getAbsolutePath('lib');
   const ES_DIR = getAbsolutePath('es');
@@ -40,13 +49,11 @@ export default (_: any, api: PluginAPI) => {
       .pipe(gulp.dest(TARGET_DIR));
 
     const tsProject = ts.createProject(getAbsolutePath('tsconfig.json'), {
-      allowJs: false,
       target: 'es5',
       noUnusedParameters: true,
       noUnusedLocals: true,
       strictNullChecks: true,
       moduleResolution: 'node',
-      declaration: true,
       allowSyntheticDefaultImports: true,
       module: modules ? 'commonjs' : 'esnext',
     });
@@ -74,7 +81,28 @@ export default (_: any, api: PluginAPI) => {
 
     return merge2([
       less,
-      tsResult.js.pipe(gulp.dest(TARGET_DIR)),
+      tsResult.js
+        .pipe(
+          through2.obj(function z(file, encoding, next) {
+            this.push(file.clone());
+            if (file.path.match(/(\/|\\)style(\/|\\)index\.js/) && convertLessImport2Css === true) {
+              const content = file.contents.toString(encoding);
+              const cssInjection = (c: string) =>
+                c
+                  .replace(/\/style\/?'/g, `/style/css'`)
+                  .replace(/\/style\/?"/g, `/style/css"`)
+                  .replace(/\.less/g, '.css');
+
+              file.contents = Buffer.from(cssInjection(content));
+              file.path = file.path.replace(/index\.js/, 'css.js');
+              this.push(file);
+              next();
+            } else {
+              next();
+            }
+          })
+        )
+        .pipe(gulp.dest(TARGET_DIR)),
       tsResult.dts.pipe(gulp.dest(TARGET_DIR)),
       assets,
     ]);

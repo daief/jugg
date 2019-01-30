@@ -1,13 +1,13 @@
 import { PluginAPI } from '@axew/jugg/types/PluginAPI';
 import { runTask } from './runTask';
-import gulpfile from './gulpfile';
+import gulpfile, { IOptions } from './gulpfile';
 
-export default function build(api: PluginAPI) {
+export default function(api: PluginAPI, opts: IOptions = {}) {
   api.registerCommand({
     command: 'lib',
-    description: 'build lib',
+    description: 'build lib/ & es/ dir from src/',
     action: () => {
-      gulpfile({}, api);
+      gulpfile(opts, api);
       runTask('compile');
     },
   });
