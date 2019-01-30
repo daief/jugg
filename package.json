@@ -50,7 +50,7 @@
       "*.json": ["prettier --parser json --write", "git add"],
       "*.ts": [
         "tslint --fix",
-        "prettier --print-width 100 --tab-width 2 --single-quote true --trailing-comma es5 --arrow-parens avoid --write",
+        "prettier --parser typescript --print-width 100 --tab-width 2 --single-quote true --trailing-comma es5 --arrow-parens avoid --write",
         "git add"
       ]
     },

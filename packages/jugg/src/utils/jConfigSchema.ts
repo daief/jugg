@@ -22,6 +22,8 @@ export const schema = Joi.object().keys({
     before: pluginSchemaArray,
     after: pluginSchemaArray,
   }),
+  filename: Joi.string(),
+  html: Joi.alternatives(false, Joi.object()),
 });
 
 /**
@@ -45,15 +47,19 @@ export function defaults(): JuggConfig {
     chunks: true,
     sourceMap: true,
     tsCustomTransformers: {},
+    filename: '[name].[chunkhash]',
+    html: {},
   };
+}
+
+export function stringifyEqual(left: any, right: any) {
+  return JSON.stringify(left) === JSON.stringify(right);
 }
 
 export const PROP_COMPARE: {
   [k: string]: (left: any, right: any) => boolean;
 } = {
-  plugins: (left, right) => {
-    return JSON.stringify(left) === JSON.stringify(right);
-  },
+  plugins: stringifyEqual,
   webpack: (left: JuggWebpack, right: JuggWebpack) => {
     const leftCfg = new Config();
     const rightCfg = new Config();
@@ -69,8 +75,7 @@ export const PROP_COMPARE: {
 
     return JSON.stringify(left) === JSON.stringify(right);
   },
-  define: (left, right) => {
-    return JSON.stringify(left) === JSON.stringify(right);
-  },
-  tsCustomTransformers: (left, right) => JSON.stringify(left) === JSON.stringify(right),
+  define: stringifyEqual,
+  tsCustomTransformers: stringifyEqual,
+  html: stringifyEqual,
 };

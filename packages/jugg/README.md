@@ -60,6 +60,16 @@ interface JuggConfig {
     before?: PluginCfgSchema[];
     after?: PluginCfgSchema[];
   };
+  /**
+   * bundle file name, default `[name].[chunkhash]`.
+   * affect js, css
+   */
+  filename?: string;
+  /**
+   * built-in base webpack html plugin config in production env.
+   * set false to rm plugin.
+   */
+  html?: false | { [k: string]: any };
 }
 
 type JuggWebpack = webpack.Configuration | (

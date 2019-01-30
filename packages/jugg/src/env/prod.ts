@@ -11,19 +11,19 @@ import { Plugin, Minimizer } from './chainCfgMap';
 
 export default (jugg: Jugg): Config => {
   const { JConfig } = jugg;
+  const { outputDir, filename, html, chunks, sourceMap } = JConfig;
   const config = baseConfig(jugg);
-  const filename = '[name].[chunkhash]';
 
   config.output.filename(`${filename}.js`);
 
-  if (JConfig.sourceMap) {
+  if (sourceMap) {
     config.devtool('source-map');
   }
 
   config
     .plugin(Plugin.CLEAN_WEBPACK_PLUGIN)
     .use(cleanWebPackPlugin, [
-      [JConfig.outputDir],
+      [outputDir],
       {
         root: process.cwd(),
       },
@@ -36,26 +36,34 @@ export default (jugg: Jugg): Config => {
         chunkFilename: `${filename}.css`,
       },
     ])
-    .end()
-    .plugin(Plugin.BASE_HTML_PLUGIN)
-    .tap(c => [
-      {
-        minify: {
-          caseSensitive: true,
-          collapseWhitespace: true,
-          conservativeCollapse: true,
-          removeAttributeQuotes: false,
-          removeComments: true,
-          removeScriptTypeAttributes: true,
-          removeStyleLinkTypeAttributes: true,
-          minifyCSS: true,
-          minifyJS: true,
-          minifyURLs: true,
-        },
-        ...c[0],
-      },
-    ])
     .end();
+
+  if (html !== false) {
+    config
+      .plugin(Plugin.BASE_HTML_PLUGIN)
+      .tap(c => [
+        {
+          minify: {
+            caseSensitive: true,
+            collapseWhitespace: true,
+            conservativeCollapse: true,
+            removeAttributeQuotes: false,
+            removeComments: true,
+            removeScriptTypeAttributes: true,
+            removeStyleLinkTypeAttributes: true,
+            minifyCSS: true,
+            minifyJS: true,
+            minifyURLs: true,
+          },
+          ...c[0],
+          ...html,
+        },
+      ])
+      .end();
+  } else {
+    // remove html plugin
+    config.plugins.delete(Plugin.BASE_HTML_PLUGIN);
+  }
 
   config.optimization
     .minimizer(Minimizer.OPTIMIZE_CSS_ASSETS)
@@ -65,7 +73,7 @@ export default (jugg: Jugg): Config => {
     .use(UglifyjsPlugin, [uglifyjsOpt(JConfig)])
     .end();
 
-  if (JConfig.chunks === true) {
+  if (chunks === true) {
     config.optimization
       .splitChunks({
         cacheGroups: {
