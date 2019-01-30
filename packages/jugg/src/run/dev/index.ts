@@ -13,18 +13,20 @@ import { PluginAPI } from '../../PluginAPI';
 export default function dev(api: PluginAPI) {
   let server: WebpackDevServer = null;
 
-  // listen to config change
-  api.jugg.onWatchConfigChange(key => {
-    if (server && key) {
-      logger.log('');
-      logger.info('try to restart server...\n', `${key} changed`);
+  function addFileWatch() {
+    // listen to config change
+    api.jugg.onWatchConfigChange(key => {
+      if (server && key) {
+        logger.log('');
+        logger.info('try to restart server...\n', `${key} changed`);
 
-      server.close(() => {
-        server = null;
-        api.jugg.reload();
-      });
-    }
-  });
+        server.close(() => {
+          server = null;
+          api.jugg.reload();
+        });
+      }
+    });
+  }
 
   api.registerCommand({
     command: 'dev',
@@ -36,6 +38,7 @@ export default function dev(api: PluginAPI) {
       },
     ],
     action: async (args: ArgOpts) => {
+      addFileWatch();
       server = await startServer(api, args);
     },
   });
