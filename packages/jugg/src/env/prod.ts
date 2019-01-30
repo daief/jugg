@@ -67,7 +67,19 @@ export default (jugg: Jugg): Config => {
 
   config.optimization
     .minimizer(Minimizer.OPTIMIZE_CSS_ASSETS)
-    .use(OptimizeCss, [{}])
+    // https://github.com/webpack-contrib/mini-css-extract-plugin/issues/141#issuecomment-393140346
+    .use(OptimizeCss, [
+      {
+        cssProcessorOptions: {
+          // set to false if you want CSS source maps
+          ...(sourceMap === true
+            ? {
+                map: { inline: false },
+              }
+            : {}),
+        },
+      },
+    ])
     .end()
     .minimizer(Minimizer.UGLIFYJS_WEBPACK)
     .use(UglifyjsPlugin, [uglifyjsOpt(JConfig)])
