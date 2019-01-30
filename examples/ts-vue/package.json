@@ -1,6 +1,6 @@
 {
   "name": "ts-vue",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -19,7 +19,7 @@
     "vuex-class": "^0.3.1"
   },
   "devDependencies": {
-    "@axew/jugg": "^0.0.14",
+    "@axew/jugg": "^0.0.15",
     "@axew/jugg-plugin-vue": "^0.0.6",
     "react-hot-loader": "^4.6.3",
     "typescript": "^3.2.2",
