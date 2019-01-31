@@ -1,5 +1,4 @@
 import { JuggConfig } from '../interface';
-import path from 'path';
 import cosmiconfig from 'cosmiconfig';
 import TypeScriptLoader from './readTs';
 import { logger } from './logger';
@@ -16,10 +15,6 @@ export function readConfig(): JuggConfig {
   }
 
   return defaultsDeep(config, defaults());
-}
-
-export function getAbsolutePath(...p: string[]) {
-  return path.join(process.cwd(), ...p);
 }
 
 /**

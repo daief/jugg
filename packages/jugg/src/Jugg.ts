@@ -2,7 +2,7 @@ import Config from 'webpack-chain';
 import merge from 'webpack-merge';
 import resolveCwd from 'resolve-cwd';
 import { JuggConfig, Plugin, WebpackChainFun, CommandSchema } from './interface';
-import { readConfig, getAbsolutePath, isUserConfigChanged, searchPlaces } from './utils';
+import { readConfig, isUserConfigChanged, searchPlaces } from './utils';
 import { logger } from './utils/logger';
 import readTs from './utils/readTs';
 import { PluginAPI } from './PluginAPI';
@@ -57,8 +57,10 @@ export default class Jugg {
       resolveCwd,
       logger,
       readTs,
-      getAbsolutePath,
       CHAIN_CONFIG_MAP,
+      getAbsolutePath: (...p: string[]) => {
+        return join(this.context, ...p);
+      },
     };
   }
 
@@ -95,7 +97,7 @@ export default class Jugg {
       .map((p: [string, any]) => {
         if (/^\./.test(p[0])) {
           // relative path plugin
-          return [getAbsolutePath(p[0]), p[1]];
+          return [this.Utils.getAbsolutePath(p[0]), p[1]];
         } else {
           return p;
         }
@@ -192,7 +194,7 @@ export default class Jugg {
   private loadEnv() {
     const c = this.commander.parse(process.argv);
     const cName = c.args ? c.args[0] : '';
-    const basePath = getAbsolutePath('.env');
+    const basePath = this.Utils.getAbsolutePath('.env');
 
     try {
       loadEnv(basePath);

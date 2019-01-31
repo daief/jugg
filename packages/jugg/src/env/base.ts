@@ -4,7 +4,6 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import Webpackbar from 'webpackbar';
 import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
-import { getAbsolutePath } from '../utils';
 import setLoaders from './loaders';
 import { FilterCSSConflictingWarning } from './plugins';
 import { Jugg } from '..';
@@ -14,8 +13,9 @@ import { Entry, Plugin } from './chainCfgMap';
 
 export default (jugg: Jugg): Config => {
   const config = new Config();
-  const { JConfig } = jugg;
+  const { JConfig, Utils } = jugg;
   const { outputDir, html } = JConfig;
+  const { getAbsolutePath } = Utils;
 
   (config as any).mode(process.env.NODE_ENV);
 

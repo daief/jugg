@@ -1,6 +1,5 @@
 import Config from 'webpack-chain';
 import { existsSync } from 'fs';
-import { getAbsolutePath } from '../utils';
 import { Jugg } from '..';
 import { PluginCfgSchema } from '../interface';
 import { Rule, Plugin } from './chainCfgMap';
@@ -8,6 +7,7 @@ import { Rule, Plugin } from './chainCfgMap';
 export default (config: Config, jugg: Jugg) => {
   const isProd = jugg.IsProd;
   const { tsCustomTransformers } = jugg.JConfig;
+  const { getAbsolutePath } = jugg.Utils;
 
   const genUrlLoaderOptions = () => {
     return {
