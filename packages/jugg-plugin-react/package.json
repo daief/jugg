@@ -1,13 +1,11 @@
 {
   "name": "@axew/jugg-plugin-react",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "license": "MIT",
   "main": "./lib/index.js",
   "types": "./types",
-  "homepage":
-    "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-react",
-  "repository":
-    "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-react",
+  "homepage": "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-react",
+  "repository": "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-react",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
