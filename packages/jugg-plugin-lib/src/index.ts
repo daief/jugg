@@ -10,7 +10,6 @@ export default function(api: PluginAPI, opts: IOptions = {}) {
       {
         flags: '-E, --no-es',
         description: 'disable output es dir',
-        defaultValue: false,
       },
     ],
     action: arg => {
