@@ -48,62 +48,77 @@ export default (opts: IOptions, api: PluginAPI) => {
       ])
       .pipe(gulp.dest(TARGET_DIR));
 
-    const tsProject = ts.createProject(getAbsolutePath('tsconfig.json'), {
-      target: 'es5',
-      noUnusedParameters: true,
-      noUnusedLocals: true,
-      strictNullChecks: true,
-      moduleResolution: 'node',
-      allowSyntheticDefaultImports: true,
-      module: modules ? 'commonjs' : 'esnext',
+    const compileTS = (src: string[], tsOpts: any = {}) => {
+      const tsProject = ts.createProject(getAbsolutePath('tsconfig.json'), {
+        target: 'es5',
+        noUnusedParameters: true,
+        noUnusedLocals: true,
+        strictNullChecks: true,
+        moduleResolution: 'node',
+        allowSyntheticDefaultImports: true,
+        module: modules ? 'commonjs' : 'esnext',
+        ...tsOpts,
+      });
+
+      const tsDefaultReporter = ts.reporter.defaultReporter();
+      let errors = 0;
+      const rs = gulp.src(src).pipe(
+        tsProject({
+          error(e: any) {
+            tsDefaultReporter.error(e);
+            errors += 1;
+          },
+          finish: tsDefaultReporter.finish,
+        })
+      );
+
+      function check() {
+        if (errors) {
+          process.exit(1);
+        }
+      }
+
+      rs.on('finish', check);
+      rs.on('end', check);
+      return rs;
+    };
+
+    // use tsc compile ts, tsx, with declaration files
+    const tsResult = compileTS(['src/**/*.@(ts|tsx)'], {
+      allowJs: false,
+      declaration: true,
     });
 
-    const tsDefaultReporter = ts.reporter.defaultReporter();
-    let errors = 0;
-    const tsResult = gulp.src(['src/**/*.@(ts|tsx|js|jsx)']).pipe(
-      tsProject({
-        error(e: any) {
-          tsDefaultReporter.error(e);
-          errors += 1;
-        },
-        finish: tsDefaultReporter.finish,
-      })
-    );
+    // use tsc compile js, jsx, no declaration files
+    const tsJsResult = compileTS(['src/**/*.@(js|jsx)'], {
+      allowJs: true,
+      declaration: false,
+    });
 
-    function check() {
-      if (errors) {
-        process.exit(1);
+    const convertLessImport2CssStream = through2.obj(function z(file, encoding, next) {
+      this.push(file.clone());
+      if (file.path.match(/(\/|\\)style(\/|\\)index\.js/) && convertLessImport2Css === true) {
+        const content = file.contents.toString(encoding);
+        const cssInjection = (c: string) =>
+          c
+            .replace(/\/style\/?'/g, `/style/css'`)
+            .replace(/\/style\/?"/g, `/style/css"`)
+            .replace(/\.less/g, '.css');
+
+        file.contents = Buffer.from(cssInjection(content));
+        file.path = file.path.replace(/index\.js/, 'css.js');
+        this.push(file);
+        next();
+      } else {
+        next();
       }
-    }
-
-    tsResult.on('finish', check);
-    tsResult.on('end', check);
+    });
 
     return merge2([
       less,
-      tsResult.js
-        .pipe(
-          through2.obj(function z(file, encoding, next) {
-            this.push(file.clone());
-            if (file.path.match(/(\/|\\)style(\/|\\)index\.js/) && convertLessImport2Css === true) {
-              const content = file.contents.toString(encoding);
-              const cssInjection = (c: string) =>
-                c
-                  .replace(/\/style\/?'/g, `/style/css'`)
-                  .replace(/\/style\/?"/g, `/style/css"`)
-                  .replace(/\.less/g, '.css');
-
-              file.contents = Buffer.from(cssInjection(content));
-              file.path = file.path.replace(/index\.js/, 'css.js');
-              this.push(file);
-              next();
-            } else {
-              next();
-            }
-          })
-        )
-        .pipe(gulp.dest(TARGET_DIR)),
+      tsResult.js.pipe(convertLessImport2CssStream).pipe(gulp.dest(TARGET_DIR)),
       tsResult.dts.pipe(gulp.dest(TARGET_DIR)),
+      tsJsResult.js.pipe(convertLessImport2CssStream).pipe(gulp.dest(TARGET_DIR)),
       assets,
     ]);
   }

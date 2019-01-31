@@ -39,4 +39,4 @@ interface IOptions {
 
 ## notice
 
-- **All in TS** is recommended. But also can work with JS source, setting `"allowJs": true` & `"declaration": false` in `tsconfig.json`. In this way, you will get no declaration files.
+- **All in TS** is recommended. But also can work with JS source. But there will be no declaration files for js source.
