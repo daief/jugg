@@ -25,7 +25,7 @@ export default (jugg: Jugg): Config => {
     .use(cleanWebPackPlugin, [
       [outputDir],
       {
-        root: process.cwd(),
+        root: jugg.context,
       },
     ])
     .end()
@@ -39,6 +39,7 @@ export default (jugg: Jugg): Config => {
     .end();
 
   if (html !== false) {
+    // remove at base.ts
     config
       .plugin(Plugin.BASE_HTML_PLUGIN)
       .tap(c => [
@@ -56,13 +57,9 @@ export default (jugg: Jugg): Config => {
             minifyURLs: true,
           },
           ...c[0],
-          ...html,
         },
       ])
       .end();
-  } else {
-    // remove html plugin
-    config.plugins.delete(Plugin.BASE_HTML_PLUGIN);
   }
 
   config.optimization

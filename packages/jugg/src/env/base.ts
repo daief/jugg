@@ -9,14 +9,13 @@ import setLoaders from './loaders';
 import { FilterCSSConflictingWarning } from './plugins';
 import { Jugg } from '..';
 import fs from 'fs';
-import { logger } from '../utils/logger';
 import webpack from 'webpack';
 import { Entry, Plugin } from './chainCfgMap';
 
 export default (jugg: Jugg): Config => {
   const config = new Config();
   const { JConfig } = jugg;
-  const { outputDir } = JConfig;
+  const { outputDir, html } = JConfig;
 
   (config as any).mode(process.env.NODE_ENV);
 
@@ -37,14 +36,6 @@ export default (jugg: Jugg): Config => {
     .end();
 
   config
-    .plugin(Plugin.BASE_HTML_PLUGIN)
-    .use(HtmlWebpackPlugin, [
-      {
-        filename: 'index.html',
-        inject: true,
-      },
-    ])
-    .end()
     .plugin(Plugin.WEBPACKBAR_PLUGIN)
     .use(Webpackbar)
     .end()
@@ -77,16 +68,27 @@ export default (jugg: Jugg): Config => {
   setLoaders(config, jugg);
 
   // -------------------------------------- Modify the Config
-  const userTpl = getAbsolutePath('src', 'document.ejs');
-  if (fs.existsSync(userTpl)) {
-    config.plugin(Plugin.BASE_HTML_PLUGIN).tap(c => [
-      {
-        template: 'src/document.ejs',
-        ...c[0],
-      },
-    ]);
-  } else {
-    logger.warn('Cannot find document.ejs, use default template');
+  // webpack html plugin config
+  if (html !== false) {
+    const userTpl = getAbsolutePath('src', 'document.ejs');
+    const htmlOpt: any = {
+      filename: 'index.html',
+      inject: true,
+    };
+
+    if (fs.existsSync(userTpl)) {
+      htmlOpt.template = 'src/document.ejs';
+    }
+
+    config
+      .plugin(Plugin.BASE_HTML_PLUGIN)
+      .use(HtmlWebpackPlugin, [
+        {
+          ...htmlOpt,
+          ...html,
+        },
+      ])
+      .end();
   }
 
   // -------------------------------------- webpack-bundle-analyzer

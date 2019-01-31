@@ -56,10 +56,9 @@ export interface JuggConfig {
    */
   filename?: string;
   /**
-   * built-in base webpack html plugin config in production env.
+   * built-in base webpack html plugin config.
    * set false to rm plugin.
    */
-  // tslint:disable ban-types
   html?: false | KeyValuePair;
   // 添加索引签名
   [k: string]: any;
