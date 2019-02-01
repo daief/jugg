@@ -1,6 +1,6 @@
 {
   "name": "@axew/jugg",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "license": "MIT",
   "main": "./lib/index.js",
   "types": "./types",

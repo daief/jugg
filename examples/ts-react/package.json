@@ -1,6 +1,6 @@
 {
   "name": "ts-react",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -17,7 +17,7 @@
     "tslib": "^1.9.3"
   },
   "devDependencies": {
-    "@axew/jugg": "^0.0.16",
+    "@axew/jugg": "^0.0.17",
     "@axew/jugg-plugin-react": "^0.0.4",
     "@types/react": "^16.7.17",
     "@types/react-dom": "^16.0.11",
