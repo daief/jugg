@@ -24,7 +24,7 @@ export default new Router({
     // TODO 一般用于 404
     {
       path: '*',
-      component: () => import(/* webpackChunkName: "about" */ './views/Home.vue'),
+      component: Home,
     },
   ],
 });
