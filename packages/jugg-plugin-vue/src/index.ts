@@ -7,6 +7,7 @@ export enum VUE_CHAIN_CONFIG_MAP {
 
 export default (api: PluginAPI, vueLoaderOpts: any) => {
   const { CHAIN_CONFIG_MAP } = api.jugg.Utils;
+  const { plugin } = CHAIN_CONFIG_MAP;
 
   api.chainWebpack(({ config }) => {
     const cfgModule = config.module;
@@ -26,6 +27,16 @@ export default (api: PluginAPI, vueLoaderOpts: any) => {
 
     // vue-loader-plugin
     config.plugin(VUE_CHAIN_CONFIG_MAP.VUE_PLUGIN).use(require('vue-loader/lib/plugin'));
+
+    // modify fork-ts-checker-webpack-plugin config
+    if (config.plugins.has(plugin.FORK_TS_CHECKER_PLUGIN)) {
+      config.plugin(plugin.FORK_TS_CHECKER_PLUGIN).tap(c => [
+        {
+          ...c[0],
+          vue: true,
+        },
+      ]);
+    }
 
     if (api.resolve('tsconfig.json')) {
       // ts env
