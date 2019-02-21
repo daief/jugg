@@ -92,6 +92,8 @@ type PluginCfgSchema = string | [string, { [k: string]: any }?];
   - generate stats file while ANALYZE_DUMP exist
 - FORK_TS_CHECKER
   - set `none`, disbale fork-ts-checker-webpack-plugin
+- HARD_SOURCE
+  - set `none`, disbale hard-source-webpack-plugin
 
 # `TS` or `JS`
 

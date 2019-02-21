@@ -10,6 +10,7 @@ import { Jugg } from '..';
 import fs from 'fs';
 import webpack from 'webpack';
 import { Entry, Plugin } from './chainCfgMap';
+import { searchPlaces } from '../utils';
 
 export default (jugg: Jugg): Config => {
   const config = new Config();
@@ -105,6 +106,19 @@ export default (jugg: Jugg): Config => {
           statsFilename: process.env.ANALYZE_DUMP || 'stats.json',
         },
       ]);
+  }
+
+  // -------------------------------------- hard-source-webpack-plugin
+  if (process.env.HARD_SOURCE === 'none') {
+    config.plugin(Plugin.HARD_SOURCE_PLUGIN).use(require('hard-source-webpack-plugin'), [
+      {
+        environmentHash: {
+          root: jugg.context,
+          directories: ['config'],
+          files: ['package-lock.json', 'yarn.lock', ...searchPlaces('jugg')],
+        },
+      },
+    ]);
   }
 
   return config;

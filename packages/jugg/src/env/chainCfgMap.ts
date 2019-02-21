@@ -20,6 +20,7 @@ export enum Plugin {
   MINI_CSS_EXTRACT = 'mini-css-extract-plugin',
   CLEAN_WEBPACK_PLUGIN = 'clean-webpack-plugin',
   FORK_TS_CHECKER_PLUGIN = 'fork-ts-checker-webpack-plugin',
+  HARD_SOURCE_PLUGIN = 'hard-source-webpack-plugin',
 }
 
 export enum Rule {
