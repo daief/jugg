@@ -109,7 +109,7 @@ export default (jugg: Jugg): Config => {
   }
 
   // -------------------------------------- hard-source-webpack-plugin
-  if (process.env.HARD_SOURCE === 'none') {
+  if (process.env.HARD_SOURCE !== 'none') {
     config.plugin(Plugin.HARD_SOURCE_PLUGIN).use(require('hard-source-webpack-plugin'), [
       {
         environmentHash: {
