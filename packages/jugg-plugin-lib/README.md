@@ -33,6 +33,11 @@ interface IOptions {
    * convert less import in es/lib to css file path, default `true`
    */
   convertLessImport2Css?: boolean;
+  /**
+   * copy file to dest with this suffix, built-in `png|jpg|jpeg|gif|webp|svg|mp4|webm|ogg|mp3|wav|flac|aac|woff|woff2|eot|ttf|otf`
+   * @example `md|html`
+   */
+  copyFileSuffix?: string;
 }
 
 ```

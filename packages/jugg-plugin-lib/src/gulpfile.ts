@@ -10,10 +10,17 @@ export interface IOptions {
    * convert less import in es/lib to css file path, default `true`
    */
   convertLessImport2Css?: boolean;
+  /**
+   * copy file to dest with this suffix, built-in `png|jpg|jpeg|gif|webp|svg|mp4|webm|ogg|mp3|wav|flac|aac|woff|woff2|eot|ttf|otf`
+   * @example `md|html`
+   */
+  copyFileSuffix?: string;
 }
 
 export default (opts: IOptions, api: PluginAPI) => {
-  const { convertLessImport2Css = true } = opts;
+  const { convertLessImport2Css = true, copyFileSuffix = '' } = opts;
+
+  const appendSuffix = copyFileSuffix.replace(/^\|*/, '').replace(/\|*$/, '');
 
   const { getAbsolutePath, logger } = api.jugg.Utils;
   const LIB_DIR = getAbsolutePath('lib');
@@ -44,7 +51,9 @@ export default (opts: IOptions, api: PluginAPI) => {
     // copy files
     const assets = gulp
       .src([
-        'src/**/*.@(png|jpg|jpeg|gif|webp|svg|mp4|webm|ogg|mp3|wav|flac|aac|woff|woff2|eot|ttf|otf)',
+        `src/**/*.@(png|jpg|jpeg|gif|webp|svg|mp4|webm|ogg|mp3|wav|flac|aac|woff|woff2|eot|ttf|otf${
+          appendSuffix ? '|' + appendSuffix : ''
+        })`,
       ])
       .pipe(gulp.dest(TARGET_DIR));
 
