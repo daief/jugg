@@ -17,6 +17,8 @@ export function readConfig(): JuggConfig {
   return defaultsDeep(config, defaults());
 }
 
+export const extendConfig = (cfg: JuggConfig): JuggConfig => cfg;
+
 /**
  * project search file
  * @param name project name
