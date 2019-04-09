@@ -4,8 +4,10 @@
   "license": "MIT",
   "main": "./lib/index.js",
   "types": "./types",
-  "homepage": "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-lib",
-  "repository": "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-lib",
+  "homepage":
+    "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-lib",
+  "repository":
+    "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-lib",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
@@ -16,6 +18,7 @@
     "@axew/jugg": ">= 0.0.5"
   },
   "dependencies": {
+    "@vue/component-compiler": "^3.6.0",
     "autoprefixer": "^9.4.7",
     "gulp": "^4.0.0",
     "gulp-typescript": "^5.0.0",

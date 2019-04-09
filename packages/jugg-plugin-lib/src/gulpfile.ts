@@ -2,8 +2,10 @@ import gulp from 'gulp';
 import { PluginAPI } from '@axew/jugg/types/PluginAPI';
 import through2 from 'through2';
 import transformLess from './transformLess';
-import ts from 'gulp-typescript';
+import gulpTs from 'gulp-typescript';
 import merge2 from 'merge2';
+import gulpVue from './gulpVue';
+import { ScriptTarget, ModuleResolutionKind, ModuleKind } from 'typescript';
 
 export interface IOptions {
   /**
@@ -57,19 +59,35 @@ export default (opts: IOptions, api: PluginAPI) => {
       ])
       .pipe(gulp.dest(TARGET_DIR));
 
-    const compileTS = (src: string[], tsOpts: any = {}) => {
-      const tsProject = ts.createProject(getAbsolutePath('tsconfig.json'), {
-        target: 'es5',
+    const BASE_COMPILER_OPTIONS_FN = (isGulpTs = true): any => {
+      const COMMON_CFG = {
         noUnusedParameters: true,
         noUnusedLocals: true,
         strictNullChecks: true,
-        moduleResolution: 'node',
         allowSyntheticDefaultImports: true,
-        module: modules ? 'commonjs' : 'esnext',
+      };
+      return isGulpTs === true
+        ? {
+            ...COMMON_CFG,
+            target: 'es5',
+            moduleResolution: 'node',
+            module: modules ? 'commonjs' : 'esnext',
+          }
+        : {
+            ...COMMON_CFG,
+            target: ScriptTarget.ES5,
+            moduleResolution: ModuleResolutionKind.NodeJs,
+            module: modules ? ModuleKind.CommonJS : ModuleKind.ESNext,
+          };
+    };
+
+    const compileTS = (src: string[], tsOpts: any = {}) => {
+      const tsProject = gulpTs.createProject(getAbsolutePath('tsconfig.json'), {
+        ...BASE_COMPILER_OPTIONS_FN(),
         ...tsOpts,
       });
 
-      const tsDefaultReporter = ts.reporter.defaultReporter();
+      const tsDefaultReporter = gulpTs.reporter.defaultReporter();
       let errors = 0;
       const rs = gulp.src(src).pipe(
         tsProject({
@@ -104,6 +122,17 @@ export default (opts: IOptions, api: PluginAPI) => {
       declaration: false,
     });
 
+    const vueResult = gulp
+      .src('src/**/*.vue')
+      .pipe(
+        gulpVue({
+          tsCompilerOptions: {
+            ...BASE_COMPILER_OPTIONS_FN(false),
+          },
+        })
+      )
+      .pipe(gulp.dest(TARGET_DIR));
+
     const convertLessImport2CssStream = () =>
       through2.obj(function z(file, encoding, next) {
         this.push(file.clone());
@@ -130,6 +159,7 @@ export default (opts: IOptions, api: PluginAPI) => {
       tsResult.dts.pipe(gulp.dest(TARGET_DIR)),
       tsJsResult.js.pipe(convertLessImport2CssStream()).pipe(gulp.dest(TARGET_DIR)),
       assets,
+      vueResult,
     ]);
   }
 
