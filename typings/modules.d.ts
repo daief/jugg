@@ -16,5 +16,4 @@ declare module 'case-sensitive-paths-webpack-plugin';
 declare module 'through2' {
   export function obj(p: (file: any, code: string, next: any) => any): any;
 }
-declare module 'gulp-typescript';
 declare module 'merge2';

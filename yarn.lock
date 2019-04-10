@@ -1731,6 +1731,13 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
+"@types/gulp-typescript@^2.13.0":
+  version "2.13.0"
+  resolved "http://registry.npm.taobao.org/@types/gulp-typescript/download/@types/gulp-typescript-2.13.0.tgz#716ee26ce734d62ec5544b872ac073337a07202d"
+  integrity sha1-cW7ibOc01i7FVEuHKsBzM3oHIC0=
+  dependencies:
+    gulp-typescript "*"
+
 "@types/gulp@^4.0.5":
   version "4.0.5"
   resolved "http://registry.npm.taobao.org/@types/gulp/download/@types/gulp-4.0.5.tgz#f5f498d5bf9538364792de22490a12c0e6bc5eb4"
@@ -6505,6 +6512,18 @@ gulp-cli@^2.0.0:
     semver-greatest-satisfied-range "^1.1.0"
     v8flags "^3.0.1"
     yargs "^7.1.0"
+
+gulp-typescript@*:
+  version "5.0.1"
+  resolved "http://registry.npm.taobao.org/gulp-typescript/download/gulp-typescript-5.0.1.tgz#96c6565a6eb31e08c2aae1c857b1a079e6226d94"
+  integrity sha1-lsZWWm6zHgjCquHIV7GgeeYibZQ=
+  dependencies:
+    ansi-colors "^3.0.5"
+    plugin-error "^1.0.1"
+    source-map "^0.7.3"
+    through2 "^3.0.0"
+    vinyl "^2.1.0"
+    vinyl-fs "^3.0.3"
 
 gulp-typescript@^5.0.0:
   version "5.0.0"

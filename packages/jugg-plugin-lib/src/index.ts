@@ -19,3 +19,5 @@ export default function(api: PluginAPI, opts: IOptions = {}) {
     },
   });
 }
+
+export { default as tsConvertImportFrom } from './tsConvertImportFrom';

@@ -9,6 +9,7 @@ import {
 import through2 from 'through2';
 import * as ts from 'typescript';
 import path from 'path';
+import transformerFactory from './tsConvertImportFrom';
 
 export interface IOptions {
   compilerOptions?: {
@@ -37,10 +38,14 @@ export function gulpVue(opts: IOptions = {}) {
       ...assembleOptions,
     });
 
+    // TODO the part of ts maybe extracted
     // use Ts to compile
     const tsResult = ts.transpileModule(result.code, {
       compilerOptions: {
         ...tsCompilerOptions,
+      },
+      transformers: {
+        before: [transformerFactory()],
       },
     });
     const resultCode = tsResult.outputText;

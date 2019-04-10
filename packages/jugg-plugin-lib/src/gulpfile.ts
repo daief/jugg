@@ -6,6 +6,7 @@ import gulpTs from 'gulp-typescript';
 import merge2 from 'merge2';
 import gulpVue from './gulpVue';
 import { ScriptTarget, ModuleResolutionKind, ModuleKind } from 'typescript';
+import transformerFactory from './tsConvertImportFrom';
 
 export interface IOptions {
   /**
@@ -85,28 +86,13 @@ export default (opts: IOptions, api: PluginAPI) => {
       const tsProject = gulpTs.createProject(getAbsolutePath('tsconfig.json'), {
         ...BASE_COMPILER_OPTIONS_FN(),
         ...tsOpts,
+        getCustomTransformers: () => ({
+          before: [transformerFactory()],
+        }),
       });
 
-      const tsDefaultReporter = gulpTs.reporter.defaultReporter();
-      let errors = 0;
-      const rs = gulp.src(src).pipe(
-        tsProject({
-          error(e: any) {
-            tsDefaultReporter.error(e);
-            errors += 1;
-          },
-          finish: tsDefaultReporter.finish,
-        })
-      );
+      const rs = gulp.src(src).pipe(tsProject(gulpTs.reporter.fullReporter()));
 
-      function check() {
-        if (errors) {
-          process.exit(1);
-        }
-      }
-
-      rs.on('finish', check);
-      rs.on('end', check);
       return rs;
     };
 

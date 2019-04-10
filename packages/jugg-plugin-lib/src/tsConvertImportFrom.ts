@@ -1,5 +1,6 @@
 /**
  * adjust `import` and `require` statement, convert `match` to `target`
+ * can use `// jugg-lib-disable` to disable
  * @example
  *    opt = { match: /\.vue$/, target: '.js' }
  *
@@ -8,6 +9,9 @@
  *
  *    require('A.vue')
  *    require('A.js')
+ *
+ *    require('A.vue') // jugg-lib-disable
+ *    require('A.vue')
  */
 
 import * as ts from 'typescript';

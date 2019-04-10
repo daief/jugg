@@ -4,8 +4,10 @@
   "license": "MIT",
   "main": "./lib/index.js",
   "types": "./types",
-  "homepage": "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-lib",
-  "repository": "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-lib",
+  "homepage":
+    "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-lib",
+  "repository":
+    "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-lib",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
@@ -29,6 +31,7 @@
   },
   "devDependencies": {
     "@types/gulp": "^4.0.5",
+    "@types/gulp-typescript": "^2.13.0",
     "@types/jest": "^24.0.11",
     "jest": "^23.6.0",
     "rimraf": "^2.6.2",
