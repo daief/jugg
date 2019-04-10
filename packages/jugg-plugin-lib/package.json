@@ -4,15 +4,14 @@
   "license": "MIT",
   "main": "./lib/index.js",
   "types": "./types",
-  "homepage":
-    "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-lib",
-  "repository":
-    "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-lib",
+  "homepage": "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-lib",
+  "repository": "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-lib",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
     "prebuild": "rimraf lib/ types/",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "test": "jest"
   },
   "peerDependencies": {
     "@axew/jugg": ">= 0.0.5"
@@ -30,7 +29,10 @@
   },
   "devDependencies": {
     "@types/gulp": "^4.0.5",
+    "@types/jest": "^24.0.11",
+    "jest": "^23.6.0",
     "rimraf": "^2.6.2",
+    "ts-jest": "^23.10.5",
     "typescript": "^3.2.2"
   },
   "files": ["lib", "types"],

@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ts-convert-import-from convert-vue-2-js import, export, require 1`] = `
+"import A from \\"A/A.js\\";
+import B from \\"./A.js\\";
+import C from \\"A.js\\";
+export * from \\"../../A.js\\";
+export * from \\"./A.tsx\\";
+export { A };
+require(\\"A.js\\");
+require(\\"A.png\\");
+// not
+A.require('A.vue');
+;
+(A, B, C);
+"
+`;
+
+exports[`ts-convert-import-from convert-vue-2-js with-comment-disable-convert 1`] = `
+"import { C } from '../A.vue'; // jugg-lib-disable not converts
+export * from '../../A.vue'; // jugg-lib-disable
+//  jugg-lib-disable
+export * from \\"./B.js\\";
+export * from './C.vue'; // jugg-lib-disable
+require('A.vue'); // jugg-lib-disable
+// jugg-lib-disable
+require(\\"A.js\\");
+// jugg-lib-disable require('A.vue');
+require(\\"A.js\\"); /* jugg-lib-disable converts*/
+;
+(C);
+"
+`;

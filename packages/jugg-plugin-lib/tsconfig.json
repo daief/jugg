@@ -4,7 +4,7 @@
     "declarationDir": "types",
     "outDir": "lib",
     "strictNullChecks": true,
-    "types": ["node", "gulp"]
+    "types": ["node", "gulp", "jest"]
   },
   "include": ["src/*", "src/**/*", "../../typings"],
   "exclude": ["node_modules"]
