@@ -18,10 +18,19 @@ export interface IOptions {
    * @example `md|html`
    */
   copyFileSuffix?: string;
+  /**
+   * set source code dir, default contains `src`
+   */
+  sourceDir?: string | string[];
 }
 
 export default (opts: IOptions, api: PluginAPI) => {
-  const { convertLessImport2Css = true, copyFileSuffix = '' } = opts;
+  const { convertLessImport2Css = true, copyFileSuffix = '', sourceDir = '' } = opts;
+
+  const getSourceDirArray = (extensions: string): string[] =>
+    ['src', ...(Array.isArray(sourceDir) ? [...sourceDir] : [sourceDir])]
+      .filter((dir, idx, self) => !!dir && self.indexOf(dir) === idx)
+      .map(dir => `${dir}/**/*.${extensions}`);
 
   const appendSuffix = copyFileSuffix.replace(/^\|*/, '').replace(/\|*$/, '');
 
@@ -32,7 +41,7 @@ export default (opts: IOptions, api: PluginAPI) => {
   function compile(modules: boolean) {
     const TARGET_DIR = modules === false ? ES_DIR : LIB_DIR;
     const less = gulp
-      .src(['src/**/*.less'])
+      .src(getSourceDirArray('less'))
       .pipe(
         through2.obj(function(file, _2, next) {
           this.push(file.clone());
@@ -53,11 +62,13 @@ export default (opts: IOptions, api: PluginAPI) => {
 
     // copy files
     const assets = gulp
-      .src([
-        `src/**/*.@(png|jpg|jpeg|gif|webp|svg|mp4|webm|ogg|mp3|wav|flac|aac|woff|woff2|eot|ttf|otf${
-          appendSuffix ? '|' + appendSuffix : ''
-        })`,
-      ])
+      .src(
+        getSourceDirArray(
+          `@(png|jpg|jpeg|gif|webp|svg|mp4|webm|ogg|mp3|wav|flac|aac|woff|woff2|eot|ttf|otf${
+            appendSuffix ? '|' + appendSuffix : ''
+          })`
+        )
+      )
       .pipe(gulp.dest(TARGET_DIR));
 
     const BASE_COMPILER_OPTIONS_FN = (isGulpTs = true): any => {
@@ -97,19 +108,19 @@ export default (opts: IOptions, api: PluginAPI) => {
     };
 
     // use tsc compile ts, tsx, with declaration files
-    const tsResult = compileTS(['src/**/*.@(ts|tsx)'], {
+    const tsResult = compileTS(getSourceDirArray('@(ts|tsx)'), {
       allowJs: false,
       declaration: true,
     });
 
     // use tsc compile js, jsx, no declaration files
-    const tsJsResult = compileTS(['src/**/*.@(js|jsx)'], {
+    const tsJsResult = compileTS(getSourceDirArray('@(js|jsx)'), {
       allowJs: true,
       declaration: false,
     });
 
     const vueResult = gulp
-      .src('src/**/*.vue')
+      .src(getSourceDirArray('vue'))
       .pipe(
         gulpVue({
           tsCompilerOptions: {

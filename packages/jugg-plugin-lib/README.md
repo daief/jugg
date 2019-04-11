@@ -38,6 +38,10 @@ interface IOptions {
    * @example `md|html`
    */
   copyFileSuffix?: string;
+  /**
+   * set source code dir, default contains `src`
+   */
+  sourceDir?: string | string[];
 }
 
 ```
