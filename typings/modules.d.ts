@@ -17,3 +17,4 @@ declare module 'through2' {
   export function obj(p: (file: any, code: string, next: any) => any): any;
 }
 declare module 'merge2';
+declare module 'rimraf';

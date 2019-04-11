@@ -7,6 +7,7 @@ import merge2 from 'merge2';
 import gulpVue from './gulpVue';
 import { ScriptTarget, ModuleResolutionKind, ModuleKind } from 'typescript';
 import transformerFactory from './tsConvertImportFrom';
+import rimraf from 'rimraf';
 
 export interface IOptions {
   /**
@@ -38,8 +39,18 @@ export default (opts: IOptions, api: PluginAPI) => {
   const LIB_DIR = getAbsolutePath('lib');
   const ES_DIR = getAbsolutePath('es');
 
-  function compile(modules: boolean) {
+  async function compile(modules: boolean, callback: () => void) {
     const TARGET_DIR = modules === false ? ES_DIR : LIB_DIR;
+    // rm output dir
+    await new Promise(resolve => {
+      rimraf(TARGET_DIR, (err: any) => {
+        if (!err) {
+          logger.info(`Before start removed: ${TARGET_DIR}`);
+        }
+        resolve();
+      });
+    });
+
     const less = gulp
       .src(getSourceDirArray('less'))
       .pipe(
@@ -157,17 +168,17 @@ export default (opts: IOptions, api: PluginAPI) => {
       tsJsResult.js.pipe(convertLessImport2CssStream()).pipe(gulp.dest(TARGET_DIR)),
       assets,
       vueResult,
-    ]);
+    ]).on('finish', callback);
   }
 
   gulp.task('compile-with-es', done => {
     logger.info('[Parallel] Compile to es...');
-    compile(false).on('finish', done);
+    compile(false, done);
   });
 
   gulp.task('compile-with-lib', done => {
     logger.info('[Parallel] Compile to js...');
-    compile(true).on('finish', done);
+    compile(true, done);
   });
 
   gulp.task('compile', gulp.parallel('compile-with-es', 'compile-with-lib'));
