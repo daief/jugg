@@ -8,6 +8,7 @@ import gulpVue from './gulpVue';
 import { ScriptTarget, ModuleResolutionKind, ModuleKind } from 'typescript';
 import transformerFactory from './tsConvertImportFrom';
 import rimraf from 'rimraf';
+import filterTest from './filterTest';
 
 export interface IOptions {
   /**
@@ -26,7 +27,11 @@ export interface IOptions {
 }
 
 export default (opts: IOptions, api: PluginAPI) => {
-  const { convertLessImport2Css = true, copyFileSuffix = '', sourceDir = '' } = opts;
+  const {
+    convertLessImport2Css = true,
+    copyFileSuffix = '',
+    sourceDir = '',
+  } = opts;
 
   const getSourceDirArray = (extensions: string): string[] =>
     ['src', ...(Array.isArray(sourceDir) ? [...sourceDir] : [sourceDir])]
@@ -53,6 +58,7 @@ export default (opts: IOptions, api: PluginAPI) => {
 
     const less = gulp
       .src(getSourceDirArray('less'))
+      .pipe(filterTest())
       .pipe(
         through2.obj(function(file, _2, next) {
           this.push(file.clone());
@@ -67,7 +73,7 @@ export default (opts: IOptions, api: PluginAPI) => {
             .catch(e => {
               logger.error(e);
             });
-        })
+        }),
       )
       .pipe(gulp.dest(TARGET_DIR));
 
@@ -77,9 +83,10 @@ export default (opts: IOptions, api: PluginAPI) => {
         getSourceDirArray(
           `@(png|jpg|jpeg|gif|webp|svg|mp4|webm|ogg|mp3|wav|flac|aac|woff|woff2|eot|ttf|otf${
             appendSuffix ? '|' + appendSuffix : ''
-          })`
-        )
+          })`,
+        ),
       )
+      .pipe(filterTest())
       .pipe(gulp.dest(TARGET_DIR));
 
     const BASE_COMPILER_OPTIONS_FN = (isGulpTs = true): any => {
@@ -113,7 +120,10 @@ export default (opts: IOptions, api: PluginAPI) => {
         }),
       });
 
-      const rs = gulp.src(src).pipe(tsProject(gulpTs.reporter.fullReporter()));
+      const rs = gulp
+        .src(src)
+        .pipe(filterTest())
+        .pipe(tsProject(gulpTs.reporter.fullReporter()));
 
       return rs;
     };
@@ -132,19 +142,23 @@ export default (opts: IOptions, api: PluginAPI) => {
 
     const vueResult = gulp
       .src(getSourceDirArray('vue'))
+      .pipe(filterTest())
       .pipe(
         gulpVue({
           tsCompilerOptions: {
             ...BASE_COMPILER_OPTIONS_FN(false),
           },
-        })
+        }),
       )
       .pipe(gulp.dest(TARGET_DIR));
 
     const convertLessImport2CssStream = () =>
       through2.obj(function z(file, encoding, next) {
         this.push(file.clone());
-        if (file.path.match(/(\/|\\)style(\/|\\)index\.js/) && convertLessImport2Css === true) {
+        if (
+          file.path.match(/(\/|\\)style(\/|\\)index\.js/) &&
+          convertLessImport2Css === true
+        ) {
           const content = file.contents.toString(encoding);
           const cssInjection = (c: string) =>
             c
@@ -163,9 +177,13 @@ export default (opts: IOptions, api: PluginAPI) => {
 
     return merge2([
       less,
-      tsResult.js.pipe(convertLessImport2CssStream()).pipe(gulp.dest(TARGET_DIR)),
+      tsResult.js
+        .pipe(convertLessImport2CssStream())
+        .pipe(gulp.dest(TARGET_DIR)),
       tsResult.dts.pipe(gulp.dest(TARGET_DIR)),
-      tsJsResult.js.pipe(convertLessImport2CssStream()).pipe(gulp.dest(TARGET_DIR)),
+      tsJsResult.js
+        .pipe(convertLessImport2CssStream())
+        .pipe(gulp.dest(TARGET_DIR)),
       assets,
       vueResult,
     ]).on('finish', callback);
