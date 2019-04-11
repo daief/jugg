@@ -1,14 +1,14 @@
-import gulp from 'gulp';
 import { PluginAPI } from '@axew/jugg/types/PluginAPI';
-import through2 from 'through2';
-import transformLess from './transformLess';
+import gulp from 'gulp';
 import gulpTs from 'gulp-typescript';
 import merge2 from 'merge2';
-import gulpVue from './gulpVue';
-import { ScriptTarget, ModuleResolutionKind, ModuleKind } from 'typescript';
-import transformerFactory from './tsConvertImportFrom';
 import rimraf from 'rimraf';
+import through2 from 'through2';
+import { ModuleKind, ModuleResolutionKind, ScriptTarget } from 'typescript';
 import filterTest from './filterTest';
+import gulpVue from './gulpVue';
+import transformLess from './transformLess';
+import transformerFactory from './tsConvertImportFrom';
 
 export interface IOptions {
   /**

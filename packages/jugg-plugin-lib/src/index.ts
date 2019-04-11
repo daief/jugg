@@ -1,6 +1,6 @@
 import { PluginAPI } from '@axew/jugg/types/PluginAPI';
-import { runTask } from './runTask';
 import gulpfile, { IOptions } from './gulpfile';
+import { runTask } from './runTask';
 
 export default function(api: PluginAPI, opts: IOptions = {}) {
   api.registerCommand({

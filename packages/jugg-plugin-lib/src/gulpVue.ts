@@ -1,14 +1,14 @@
 import {
   assemble,
+  AssembleOptions,
   createDefaultCompiler,
   ScriptOptions,
   StyleOptions,
   TemplateOptions,
-  AssembleOptions,
 } from '@vue/component-compiler';
+import path from 'path';
 import through2 from 'through2';
 import * as ts from 'typescript';
-import path from 'path';
 import transformerFactory from './tsConvertImportFrom';
 
 export interface IOptions {
@@ -22,7 +22,11 @@ export interface IOptions {
 }
 
 export function gulpVue(opts: IOptions = {}) {
-  const { compilerOptions = {}, assembleOptions = {}, tsCompilerOptions = {} } = opts;
+  const {
+    compilerOptions = {},
+    assembleOptions = {},
+    tsCompilerOptions = {},
+  } = opts;
 
   return through2.obj((file, _, callback) => {
     const filename = path.basename(file.path);
