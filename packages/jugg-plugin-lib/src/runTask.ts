@@ -1,7 +1,6 @@
 import gulp from 'gulp';
 
-// ref: https://github.com/ant-design/antd-tools
-// antd-tools@6.5.0/lib/cli/run.js#L16
+// ref: https://github.com/ant-design/antd-tools/blob/b28fd3685406d06dabb8e0cc8ffe4603336aab69/lib/cli/run.js#L16
 export function runTask(toRun: string) {
   const metadata: any = { task: toRun };
   // Gulp >= 4.0.0 (doesn't support events)
