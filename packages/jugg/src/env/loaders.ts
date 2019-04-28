@@ -1,8 +1,8 @@
-import Config from 'webpack-chain';
 import { existsSync } from 'fs';
+import Config from 'webpack-chain';
 import { Jugg } from '..';
 import { PluginCfgSchema } from '../interface';
-import { Rule, Plugin } from './chainCfgMap';
+import { Plugin, Rule } from './chainCfgMap';
 
 export default (config: Config, jugg: Jugg) => {
   const isProd = jugg.IsProd;
@@ -119,13 +119,15 @@ export default (config: Config, jugg: Jugg) => {
     });
 
     if (process.env.FORK_TS_CHECKER !== 'none') {
-      config.plugin(Plugin.FORK_TS_CHECKER_PLUGIN).use(require('fork-ts-checker-webpack-plugin'), [
-        {
-          tsconfig: 'tsconfig.json',
-          checkSyntacticErrors: true,
-          formatter: 'codeframe',
-        },
-      ]);
+      config
+        .plugin(Plugin.FORK_TS_CHECKER_PLUGIN)
+        .use(require('fork-ts-checker-webpack-plugin'), [
+          {
+            tsconfig: 'tsconfig.json',
+            checkSyntacticErrors: true,
+            formatter: 'codeframe',
+          },
+        ]);
     }
   }
 
@@ -160,10 +162,13 @@ export default (config: Config, jugg: Jugg) => {
   }
 
   // --------------- set style
-  setStyleLoaders(config);
+  setStyleLoaders(config, jugg);
 };
 
-function setStyleLoaders(config: Config) {
+function setStyleLoaders(config: Config, jugg: Jugg) {
+  const { css } = jugg.JConfig;
+  const { postcss } = css.loaderOptions;
+
   function cssExclude(filePath: string) {
     if (/node_modules/.test(filePath)) {
       return true;
@@ -190,7 +195,7 @@ function setStyleLoaders(config: Config) {
     opts: {
       isModule?: boolean;
       less?: boolean;
-    }
+    },
   ) {
     const defaultOpts = {
       isModule: true,
@@ -203,7 +208,9 @@ function setStyleLoaders(config: Config) {
 
     // notice the order
     // remember to add plugin
-    rule.use('extract-css-loader').loader(require('mini-css-extract-plugin').loader);
+    rule
+      .use('extract-css-loader')
+      .loader(require('mini-css-extract-plugin').loader);
 
     rule
       .use('css-loader')
@@ -216,13 +223,23 @@ function setStyleLoaders(config: Config) {
       .use('postcss-loader')
       .loader(require.resolve('postcss-loader'))
       .options({
-        plugins: () => [
-          require('postcss-flexbugs-fixes'),
-          require('autoprefixer')({
-            browsers: ['>1%', 'last 4 versions', 'Firefox ESR', 'not ie < 9'],
-            flexbox: 'no-2009',
-          }),
-        ],
+        ...postcss,
+        plugins: Array.isArray(postcss.plugins)
+          ? () =>
+              [
+                require('postcss-flexbugs-fixes'),
+                require('autoprefixer')({
+                  browsers: [
+                    '>1%',
+                    'last 4 versions',
+                    'Firefox ESR',
+                    'not ie < 9',
+                  ],
+                  flexbox: 'no-2009',
+                }),
+                ...postcss.plugins,
+              ].filter(Boolean)
+          : postcss.plugins,
       });
 
     if (less === true) {
@@ -245,7 +262,7 @@ function setStyleLoaders(config: Config) {
     {
       isModule: true,
       less: false,
-    }
+    },
   );
 
   setCssLoaders(
@@ -257,7 +274,7 @@ function setStyleLoaders(config: Config) {
     {
       isModule: false,
       less: false,
-    }
+    },
   );
 
   setCssLoaders(
@@ -269,7 +286,7 @@ function setStyleLoaders(config: Config) {
     {
       isModule: false,
       less: false,
-    }
+    },
   );
 
   // --------------- less ---------------
@@ -282,7 +299,7 @@ function setStyleLoaders(config: Config) {
     {
       isModule: true,
       less: true,
-    }
+    },
   );
 
   setCssLoaders(
@@ -294,7 +311,7 @@ function setStyleLoaders(config: Config) {
     {
       isModule: false,
       less: true,
-    }
+    },
   );
 
   setCssLoaders(
@@ -306,6 +323,6 @@ function setStyleLoaders(config: Config) {
     {
       isModule: false,
       less: true,
-    }
+    },
   );
 }

@@ -70,6 +70,24 @@ interface JuggConfig {
    * set false to rm plugin.
    */
   html?: false | { [k: string]: any };
+  /**
+   * config of css, less, postcss...
+   */
+  css?: {
+    loaderOptions?: {
+      /**
+       * https://github.com/postcss/postcss-loader/tree/v3.0.0#options
+       */
+      postcss: {
+        config?: {
+          context?: any;
+          path?: any;
+        };
+        plugins?: any;
+        [k: string]: any;
+      };
+    };
+  };
 }
 
 type JuggWebpack = webpack.Configuration | (

@@ -1,9 +1,9 @@
-import { JuggConfig } from '../interface';
 import cosmiconfig from 'cosmiconfig';
-import TypeScriptLoader from './readTs';
-import { logger } from './logger';
 import { defaultsDeep } from 'lodash';
-import { validateConfig, defaults, PROP_COMPARE } from './jConfigSchema';
+import { JuggConfig } from '../interface';
+import { defaults, PROP_COMPARE, validateConfig } from './jConfigSchema';
+import { logger } from './logger';
+import TypeScriptLoader from './readTs';
 
 export function readConfig(): JuggConfig {
   const { config, filepath } = loadConfig<JuggConfig>('jugg');
@@ -40,7 +40,7 @@ export function searchPlaces(name: string) {
  * @param name
  */
 export function loadConfig<T = any>(
-  name: string
+  name: string,
 ): {
   config: T;
   filepath: string;

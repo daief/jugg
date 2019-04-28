@@ -1,10 +1,10 @@
 import Joi from 'joi';
-import { JuggConfig, JuggWebpack } from '../interface';
 import Config from 'webpack-chain';
+import { JuggConfig, JuggWebpack } from '../interface';
 
 const pluginSchemaArray = Joi.array().items(
   Joi.string(),
-  Joi.array().items(Joi.string().required(), Joi.object())
+  Joi.array().items(Joi.string().required(), Joi.object()),
 );
 
 /**
@@ -24,6 +24,18 @@ export const schema = Joi.object().keys({
   }),
   filename: Joi.string(),
   html: Joi.alternatives(false, Joi.object()),
+
+  // css
+  css: Joi.object({
+    // modules: Joi.boolean(),
+    // extract: Joi.alternatives().try(Joi.boolean(), Joi.object()),
+    // sourceMap: Joi.boolean(),
+    loaderOptions: Joi.object({
+      // css: Joi.object(),
+      // less: Joi.object(),
+      postcss: Joi.object(),
+    }),
+  }),
 });
 
 /**
@@ -49,6 +61,11 @@ export function defaults(): JuggConfig {
     tsCustomTransformers: {},
     filename: '[name].[chunkhash]',
     html: {},
+    css: {
+      loaderOptions: {
+        postcss: {},
+      },
+    },
   };
 }
 
@@ -65,12 +82,22 @@ export const PROP_COMPARE: {
     const rightCfg = new Config();
 
     if (typeof left === 'function' && typeof right === 'function') {
-      const leftObjectCfg = left({ config: leftCfg, webpack: leftCfg.toConfig() });
-      const rightObjectCfg = right({ config: rightCfg, webpack: rightCfg.toConfig() });
+      const leftObjectCfg = left({
+        config: leftCfg,
+        webpack: leftCfg.toConfig(),
+      });
+      const rightObjectCfg = right({
+        config: rightCfg,
+        webpack: rightCfg.toConfig(),
+      });
 
-      const chainCompareResult = (leftCfg as any).toString() === (rightCfg as any).toString();
+      const chainCompareResult =
+        (leftCfg as any).toString() === (rightCfg as any).toString();
 
-      return chainCompareResult && JSON.stringify(leftObjectCfg) === JSON.stringify(rightObjectCfg);
+      return (
+        chainCompareResult &&
+        JSON.stringify(leftObjectCfg) === JSON.stringify(rightObjectCfg)
+      );
     }
 
     return JSON.stringify(left) === JSON.stringify(right);
@@ -78,4 +105,5 @@ export const PROP_COMPARE: {
   define: stringifyEqual,
   tsCustomTransformers: stringifyEqual,
   html: stringifyEqual,
+  css: stringifyEqual,
 };
