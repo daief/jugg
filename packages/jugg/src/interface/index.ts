@@ -89,3 +89,10 @@ export type PluginCfgSchema = string | [string, { [k: string]: any }?];
 export interface KeyValuePair<T = any> {
   [k: string]: T;
 }
+
+export interface JuggGlobalCommandOpts {
+  /**
+   * specified configuration file path
+   */
+  config?: string;
+}

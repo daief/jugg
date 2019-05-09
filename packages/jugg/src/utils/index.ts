@@ -5,8 +5,8 @@ import { defaults, PROP_COMPARE, validateConfig } from './jConfigSchema';
 import { logger } from './logger';
 import TypeScriptLoader from './readTs';
 
-export function readConfig(): JuggConfig {
-  const { config, filepath } = loadConfig<JuggConfig>('jugg');
+export function readConfig(cfgPath?: string): JuggConfig {
+  const { config, filepath } = loadConfig<JuggConfig>('jugg', cfgPath);
 
   const info = validateConfig(config);
   if (info.error) {
@@ -41,12 +41,13 @@ export function searchPlaces(name: string) {
  */
 export function loadConfig<T = any>(
   name: string,
+  cfgPath?: string,
 ): {
   config: T;
   filepath: string;
 } {
   const explorer = cosmiconfig(name, {
-    searchPlaces: searchPlaces(name),
+    searchPlaces: cfgPath ? [cfgPath] : searchPlaces(name),
     cache: false,
     loaders: {
       '.ts': {
