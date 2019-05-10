@@ -1,6 +1,6 @@
 import webpack, { Stats } from 'webpack';
-import { formatStats } from './formatStats';
 import { PluginAPI } from '../../PluginAPI';
+import { formatStats } from './formatStats';
 
 export default function build(api: PluginAPI) {
   api.registerCommand({
@@ -16,7 +16,7 @@ export default function build(api: PluginAPI) {
         }
 
         api.jugg.Utils.logger.log(formatStats(stats, api.jugg));
-        api.jugg.exit();
+        api.jugg.clean(true);
       });
     },
   });

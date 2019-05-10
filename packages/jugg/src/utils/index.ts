@@ -73,12 +73,14 @@ export function loadConfig<T = any>(
  * 配置比较
  * @param config
  */
-export function isUserConfigChanged(config: JuggConfig): boolean {
+export function isUserConfigChanged(
+  config: JuggConfig,
+): false | keyof JuggConfig {
   const newCfg = readConfig();
 
   let result: false | string = false;
 
-  Object.keys(newCfg).forEach(key => {
+  Object.keys(newCfg).forEach((key: keyof JuggConfig) => {
     const doCompare = PROP_COMPARE[key];
 
     if (result) {
