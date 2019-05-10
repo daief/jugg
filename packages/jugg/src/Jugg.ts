@@ -70,7 +70,10 @@ export default class Jugg {
       readTs,
       CHAIN_CONFIG_MAP,
       getAbsolutePath: (...p: string[]) => {
-        return join(this.context, ...p);
+        return p.reduce((pre, next) => {
+          return resolve(pre, next);
+        }, this.context);
+        // return join(this.context, ...p);
       },
     };
   }
@@ -205,6 +208,7 @@ export default class Jugg {
 
   /**
    * some thing should be close before exit
+   * @deprecated
    */
   exit() {
     if (this.fsWatcher) {
@@ -212,7 +216,20 @@ export default class Jugg {
       this.fsWatcher.close();
       this.fsWatcher = null;
     }
-    // process.exit(0);
+  }
+
+  /**
+   * clean something
+   */
+  clean(isExit = true) {
+    if (this.fsWatcher) {
+      this.fsWatcher.removeAllListeners();
+      this.fsWatcher.close();
+      this.fsWatcher = null;
+    }
+    if (isExit) {
+      process.exit(0);
+    }
   }
 
   /**
