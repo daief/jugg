@@ -1,18 +1,25 @@
+import chokidar, { FSWatcher } from 'chokidar';
+import program, { CommanderStatic } from 'commander';
+import { resolve } from 'path';
+import resolveCwd from 'resolve-cwd';
+import { Configuration } from 'webpack';
 import Config from 'webpack-chain';
 import merge from 'webpack-merge';
-import resolveCwd from 'resolve-cwd';
-import { JuggConfig, Plugin, WebpackChainFun, CommandSchema } from './interface';
-import { readConfig, isUserConfigChanged, searchPlaces } from './utils';
-import { logger } from './utils/logger';
-import readTs from './utils/readTs';
+import { CHAIN_CONFIG_MAP } from './env/chainCfgMap';
+import {
+  CommandSchema,
+  JuggConfig,
+  JuggGlobalCommandOpts,
+  Plugin,
+  WebpackChainFun,
+} from './interface';
 import { PluginAPI } from './PluginAPI';
-import program, { CommanderStatic } from 'commander';
-import { Configuration } from 'webpack';
-import { resolve, join } from 'path';
-import chokidar, { FSWatcher } from 'chokidar';
+import { isUserConfigChanged, readConfig } from './utils';
 import EventBus, { Opts } from './utils/EventBus';
 import { loadEnv } from './utils/loadEnv';
-import { CHAIN_CONFIG_MAP } from './env/chainCfgMap';
+import { logger } from './utils/logger';
+import readTs from './utils/readTs';
+
 const packageJSON = require(resolve(__dirname, '../package.json'));
 
 const WATCH_CONFIG_CHANGE_EVENT = 'jugg/WATCH_CONFIG_CHANGE_EVENT';
@@ -30,9 +37,13 @@ export default class Jugg {
   private juggConfig: JuggConfig = {};
   private initialized = false;
 
+  private globalCommandOpts: JuggGlobalCommandOpts = {};
+
   constructor(context: string) {
     this.context = context;
     this.commander = program;
+
+    this.globalCommandOpts = this.resolveGlobalCommandOpts();
 
     this.eventBus = new EventBus();
 
@@ -59,9 +70,16 @@ export default class Jugg {
       readTs,
       CHAIN_CONFIG_MAP,
       getAbsolutePath: (...p: string[]) => {
-        return join(this.context, ...p);
+        return p.reduce((pre, next) => {
+          return resolve(pre, next);
+        }, this.context);
+        // return join(this.context, ...p);
       },
     };
+  }
+
+  get JGlobalCommandOpts(): JuggGlobalCommandOpts {
+    return this.globalCommandOpts;
   }
 
   /**
@@ -74,7 +92,9 @@ export default class Jugg {
 
     this.initialized = true;
 
-    this.juggConfig = readConfig();
+    const { config, configFilePath } = readConfig(this);
+    this.juggConfig = config;
+    this.globalCommandOpts.configFilePath = configFilePath;
 
     this.loadPlugins();
 
@@ -87,7 +107,9 @@ export default class Jugg {
   loadPlugins() {
     const { plugins } = this.JConfig;
 
-    const builtIn: string[] = ['./run/dev', './run/build'].map(p => resolve(__dirname, p));
+    const builtIn: string[] = ['./run/dev', './run/build'].map(p =>
+      resolve(__dirname, p),
+    );
 
     [...builtIn, ...(plugins || [])]
       .map(p => {
@@ -105,7 +127,8 @@ export default class Jugg {
       .map((p: [string, any]) => {
         const [moduleId, plOpt] = p;
         try {
-          const pluginFun: Plugin = require(moduleId).default || require(moduleId);
+          const pluginFun: Plugin =
+            require(moduleId).default || require(moduleId);
           return pluginFun(new PluginAPI(moduleId, this), plOpt);
         } catch (e) {
           logger.error(e, `Plugin \`${moduleId}\` error`);
@@ -126,7 +149,9 @@ export default class Jugg {
     //      chain cfg < object cfg
 
     // 1. get default cfg
-    const defaultCfg: Config = require(this.IsProd ? './env/prod' : './env/dev').default(this);
+    const defaultCfg: Config = require(this.IsProd
+      ? './env/prod'
+      : './env/dev').default(this);
 
     // 2. merge plugin chain-config to defaultCfg, get object cfg
     const pluginsWebpackObjectCfgList: Configuration[] = this.webpackChainFns
@@ -134,7 +159,9 @@ export default class Jugg {
       //  type predicate, ref: https://stackoverflow.com/a/46700791/10528190
       .filter((cfg): cfg is Configuration => !!cfg);
 
-    const mergedPluginsWebpackObjectCfg: Configuration = merge(...pluginsWebpackObjectCfgList);
+    const mergedPluginsWebpackObjectCfg: Configuration = merge(
+      ...pluginsWebpackObjectCfgList,
+    );
 
     // 3. handle user chain-config and object cfg
     const { webpack } = this.juggConfig;
@@ -144,7 +171,11 @@ export default class Jugg {
         : webpack;
 
     // 4. merge all
-    return merge(defaultCfg.toConfig(), mergedPluginsWebpackObjectCfg, userWebpackObjectCfg || {});
+    return merge(
+      defaultCfg.toConfig(),
+      mergedPluginsWebpackObjectCfg,
+      userWebpackObjectCfg || {},
+    );
   }
 
   /**
@@ -153,7 +184,7 @@ export default class Jugg {
    */
   onWatchConfigChange(callback: (p?: any) => void, opts?: Opts) {
     if (this.fsWatcher === null) {
-      this.fsWatcher = chokidar.watch(searchPlaces('jugg').map(name => join(this.context, name)));
+      this.fsWatcher = chokidar.watch([this.globalCommandOpts.configFilePath]);
       this.fsWatcher.on('change', p => this.handleConfigChange(p));
     }
     this.eventBus.on(WATCH_CONFIG_CHANGE_EVENT, callback, opts);
@@ -177,6 +208,7 @@ export default class Jugg {
 
   /**
    * some thing should be close before exit
+   * @deprecated
    */
   exit() {
     if (this.fsWatcher) {
@@ -184,7 +216,20 @@ export default class Jugg {
       this.fsWatcher.close();
       this.fsWatcher = null;
     }
-    // process.exit(0);
+  }
+
+  /**
+   * clean something
+   */
+  clean(isExit = true) {
+    if (this.fsWatcher) {
+      this.fsWatcher.removeAllListeners();
+      this.fsWatcher.close();
+      this.fsWatcher = null;
+    }
+    if (isExit) {
+      process.exit(0);
+    }
   }
 
   /**
@@ -257,8 +302,16 @@ export default class Jugg {
    * @param _ path
    */
   private handleConfigChange(_: string) {
-    const key = isUserConfigChanged(this.juggConfig);
+    const key = isUserConfigChanged(this);
 
     key && this.eventBus.dispatch(WATCH_CONFIG_CHANGE_EVENT, key);
+  }
+
+  private resolveGlobalCommandOpts(): JuggGlobalCommandOpts {
+    this.commander.option('-C, --config <path>', 'assign the config file');
+    const { config } = this.commander.parse(process.argv).opts();
+    return {
+      configFilePath: config || '',
+    };
   }
 }

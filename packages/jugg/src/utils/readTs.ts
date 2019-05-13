@@ -1,5 +1,10 @@
 // ref: https://github.com/EndemolShineGroup/cosmiconfig-typescript-loader
-import 'ts-node/register';
+import { register } from 'ts-node';
+
+register({
+  transpileOnly: true,
+  typeCheck: false,
+});
 
 /**
  * read a ts file
@@ -7,6 +12,8 @@ import 'ts-node/register';
  */
 export default function(filePath: string) {
   try {
+    // disbale config cache
+    delete require.cache[require.resolve(filePath)];
     const result = require(filePath);
     return result.default || result;
   } catch (error) {

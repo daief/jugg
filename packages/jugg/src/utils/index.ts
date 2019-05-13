@@ -1,12 +1,26 @@
 import cosmiconfig from 'cosmiconfig';
 import { defaultsDeep } from 'lodash';
+import { Jugg } from '..';
 import { JuggConfig } from '../interface';
 import { defaults, PROP_COMPARE, validateConfig } from './jConfigSchema';
 import { logger } from './logger';
 import TypeScriptLoader from './readTs';
 
-export function readConfig(): JuggConfig {
-  const { config, filepath } = loadConfig<JuggConfig>('jugg');
+export function readConfig(
+  jugg: Jugg,
+): {
+  config: JuggConfig;
+  configFilePath: string;
+} {
+  const { configFilePath } = jugg.JGlobalCommandOpts;
+  const absPath = jugg.Utils.getAbsolutePath(configFilePath);
+  const { config, filepath } = configFilePath
+    ? {
+        // use `TypeScriptLoader` to disable cache
+        config: TypeScriptLoader(absPath),
+        filepath: absPath,
+      }
+    : loadConfig<JuggConfig>('jugg');
 
   const info = validateConfig(config);
   if (info.error) {
@@ -14,7 +28,10 @@ export function readConfig(): JuggConfig {
     process.exit(1);
   }
 
-  return defaultsDeep(config, defaults());
+  return {
+    config: defaultsDeep(config, defaults()),
+    configFilePath: filepath,
+  };
 }
 
 export const extendConfig = (cfg: JuggConfig): JuggConfig => cfg;
@@ -25,18 +42,17 @@ export const extendConfig = (cfg: JuggConfig): JuggConfig => cfg;
  */
 export function searchPlaces(name: string) {
   return [
+    'package.json',
     `.${name}rc.js`,
     `${name}.config.js`,
     `.${name}rc.ts`,
     `.${name}rc`,
     `.${name}rc.json`,
-    `.${name}rc.yaml`,
-    `.${name}rc.yml`,
   ];
 }
 
 /**
- * load a config, sync
+ * load a default path config, sync
  * @param name
  */
 export function loadConfig<T = any>(
@@ -72,12 +88,13 @@ export function loadConfig<T = any>(
  * 配置比较
  * @param config
  */
-export function isUserConfigChanged(config: JuggConfig): boolean {
-  const newCfg = readConfig();
+export function isUserConfigChanged(jugg: Jugg): false | keyof JuggConfig {
+  const { JConfig: config } = jugg;
+  const { config: newCfg } = readConfig(jugg);
 
   let result: false | string = false;
 
-  Object.keys(newCfg).forEach(key => {
+  Object.keys(newCfg).forEach((key: keyof JuggConfig) => {
     const doCompare = PROP_COMPARE[key];
 
     if (result) {

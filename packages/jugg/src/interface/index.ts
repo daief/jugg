@@ -78,8 +78,6 @@ export interface JuggConfig {
       };
     };
   };
-  // 添加索引签名
-  [k: string]: any;
 }
 
 export type Plugin = (api: PluginAPI, opts: any) => void;
@@ -88,4 +86,11 @@ export type PluginCfgSchema = string | [string, { [k: string]: any }?];
 
 export interface KeyValuePair<T = any> {
   [k: string]: T;
+}
+
+export interface JuggGlobalCommandOpts {
+  /**
+   * specified configuration file path
+   */
+  configFilePath?: string;
 }

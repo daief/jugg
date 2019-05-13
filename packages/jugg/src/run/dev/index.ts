@@ -1,14 +1,16 @@
 /**
  * ref: @vue/cli-service@3.0.5/lib/commands/serve
  */
-import WebpackDevServer, { Configuration as DevConfiguration } from 'webpack-dev-server';
-import webpack, { Configuration } from 'webpack';
-import { logger } from '../../utils/logger';
-import portfinder from 'portfinder';
-import { prepareUrls } from './prepareURL';
-import url from 'url';
 import chalk from 'chalk';
+import portfinder from 'portfinder';
+import url from 'url';
+import webpack, { Configuration } from 'webpack';
+import WebpackDevServer, {
+  Configuration as DevConfiguration,
+} from 'webpack-dev-server';
 import { PluginAPI } from '../../PluginAPI';
+import { logger } from '../../utils/logger';
+import { prepareUrls } from './prepareURL';
 
 export default function dev(api: PluginAPI) {
   let server: WebpackDevServer = null;
@@ -58,7 +60,12 @@ async function startServer(api: PluginAPI, argv: ArgOpts) {
   const port = await portfinder.getPortPromise();
   const protocol = useDevServer.https ? 'https' : 'http';
 
-  const urls = prepareUrls(protocol, useDevServer.host, port + '', JConfig.publicPath);
+  const urls = prepareUrls(
+    protocol,
+    useDevServer.host,
+    port + '',
+    JConfig.publicPath,
+  );
 
   const devClients = [
     // dev server client
@@ -71,7 +78,9 @@ async function startServer(api: PluginAPI, argv: ArgOpts) {
       })}`,
     // hmr client
     require.resolve(
-      useDevServer.hotOnly === true ? 'webpack/hot/only-dev-server' : 'webpack/hot/dev-server'
+      useDevServer.hotOnly === true
+        ? 'webpack/hot/only-dev-server'
+        : 'webpack/hot/dev-server',
     ),
   ];
 
