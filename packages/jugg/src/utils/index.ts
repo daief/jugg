@@ -1,12 +1,26 @@
 import cosmiconfig from 'cosmiconfig';
 import { defaultsDeep } from 'lodash';
+import { Jugg } from '..';
 import { JuggConfig } from '../interface';
 import { defaults, PROP_COMPARE, validateConfig } from './jConfigSchema';
 import { logger } from './logger';
 import TypeScriptLoader from './readTs';
 
-export function readConfig(cfgPath?: string): JuggConfig {
-  const { config, filepath } = loadConfig<JuggConfig>('jugg', cfgPath);
+export function readConfig(
+  jugg: Jugg,
+): {
+  config: JuggConfig;
+  configFilePath: string;
+} {
+  const { configFilePath } = jugg.JGlobalCommandOpts;
+  const absPath = jugg.Utils.getAbsolutePath(configFilePath);
+  const { config, filepath } = configFilePath
+    ? {
+        // use `TypeScriptLoader` to disable cache
+        config: TypeScriptLoader(absPath),
+        filepath: absPath,
+      }
+    : loadConfig<JuggConfig>('jugg');
 
   const info = validateConfig(config);
   if (info.error) {
@@ -14,7 +28,10 @@ export function readConfig(cfgPath?: string): JuggConfig {
     process.exit(1);
   }
 
-  return defaultsDeep(config, defaults());
+  return {
+    config: defaultsDeep(config, defaults()),
+    configFilePath: filepath,
+  };
 }
 
 export const extendConfig = (cfg: JuggConfig): JuggConfig => cfg;
@@ -35,18 +52,17 @@ export function searchPlaces(name: string) {
 }
 
 /**
- * load a config, sync
+ * load a default path config, sync
  * @param name
  */
 export function loadConfig<T = any>(
   name: string,
-  cfgPath?: string,
 ): {
   config: T;
   filepath: string;
 } {
   const explorer = cosmiconfig(name, {
-    searchPlaces: cfgPath ? [cfgPath] : searchPlaces(name),
+    searchPlaces: searchPlaces(name),
     cache: false,
     loaders: {
       '.ts': {
@@ -72,10 +88,9 @@ export function loadConfig<T = any>(
  * 配置比较
  * @param config
  */
-export function isUserConfigChanged(
-  config: JuggConfig,
-): false | keyof JuggConfig {
-  const newCfg = readConfig();
+export function isUserConfigChanged(jugg: Jugg): false | keyof JuggConfig {
+  const { JConfig: config } = jugg;
+  const { config: newCfg } = readConfig(jugg);
 
   let result: false | string = false;
 

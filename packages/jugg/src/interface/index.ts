@@ -92,5 +92,5 @@ export interface JuggGlobalCommandOpts {
   /**
    * specified configuration file path
    */
-  config?: string;
+  configFilePath?: string;
 }

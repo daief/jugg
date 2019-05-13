@@ -1,6 +1,6 @@
 import chokidar, { FSWatcher } from 'chokidar';
 import program, { CommanderStatic } from 'commander';
-import { join, resolve } from 'path';
+import { resolve } from 'path';
 import resolveCwd from 'resolve-cwd';
 import { Configuration } from 'webpack';
 import Config from 'webpack-chain';
@@ -14,7 +14,7 @@ import {
   WebpackChainFun,
 } from './interface';
 import { PluginAPI } from './PluginAPI';
-import { isUserConfigChanged, readConfig, searchPlaces } from './utils';
+import { isUserConfigChanged, readConfig } from './utils';
 import EventBus, { Opts } from './utils/EventBus';
 import { loadEnv } from './utils/loadEnv';
 import { logger } from './utils/logger';
@@ -92,7 +92,9 @@ export default class Jugg {
 
     this.initialized = true;
 
-    this.juggConfig = readConfig(this.globalCommandOpts.config);
+    const { config, configFilePath } = readConfig(this);
+    this.juggConfig = config;
+    this.globalCommandOpts.configFilePath = configFilePath;
 
     this.loadPlugins();
 
@@ -182,9 +184,7 @@ export default class Jugg {
    */
   onWatchConfigChange(callback: (p?: any) => void, opts?: Opts) {
     if (this.fsWatcher === null) {
-      this.fsWatcher = chokidar.watch(
-        searchPlaces('jugg').map(name => join(this.context, name)),
-      );
+      this.fsWatcher = chokidar.watch([this.globalCommandOpts.configFilePath]);
       this.fsWatcher.on('change', p => this.handleConfigChange(p));
     }
     this.eventBus.on(WATCH_CONFIG_CHANGE_EVENT, callback, opts);
@@ -302,7 +302,7 @@ export default class Jugg {
    * @param _ path
    */
   private handleConfigChange(_: string) {
-    const key = isUserConfigChanged(this.juggConfig);
+    const key = isUserConfigChanged(this);
 
     key && this.eventBus.dispatch(WATCH_CONFIG_CHANGE_EVENT, key);
   }
@@ -311,7 +311,7 @@ export default class Jugg {
     this.commander.option('-C, --config <path>', 'assign the config file');
     const { config } = this.commander.parse(process.argv).opts();
     return {
-      config: config || '',
+      configFilePath: config || '',
     };
   }
 }
