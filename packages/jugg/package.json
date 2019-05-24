@@ -3,6 +3,7 @@
   "version": "0.0.21",
   "license": "MIT",
   "main": "./lib/index.js",
+  "module": "./es/index.js",
   "types": "./types",
   "bin": {
     "jugg": "lib/bin/index.js"
@@ -10,9 +11,9 @@
   "homepage": "https://github.com/daief/jugg/tree/master/packages/jugg",
   "repository": "https://github.com/daief/jugg/tree/master/packages/jugg",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && tsc --module esnext --moduleResolution node --outDir es",
     "watch": "tsc -w",
-    "prebuild": "rimraf lib/ types/",
+    "prebuild": "rimraf lib/ es/ types/",
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
@@ -71,7 +72,7 @@
     "rimraf": "^2.6.2",
     "typescript": "^3.2.2"
   },
-  "files": ["lib", "types"],
+  "files": ["lib", "es", "types"],
   "keywords": ["jugg", "cli", "webpack", "typescript"],
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
