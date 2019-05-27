@@ -16,7 +16,8 @@ export default function build(api: PluginAPI) {
         }
 
         api.jugg.Utils.logger.log(formatStats(stats, api.jugg));
-        api.jugg.clean(true);
+        // do not exit process manually becauseof something like `webpack-bundle-analyzer`
+        api.jugg.clean(false);
       });
     },
   });
