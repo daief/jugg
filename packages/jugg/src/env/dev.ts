@@ -1,14 +1,19 @@
+import MiniCss from 'mini-css-extract-plugin';
 import webpack from 'webpack';
 import Config from 'webpack-chain';
-import baseConfig from './base';
-import MiniCss from 'mini-css-extract-plugin';
 import { Jugg } from '..';
+import baseConfig from './base';
 import { Plugin } from './chainCfgMap';
 
 export default (jugg: Jugg): Config => {
   const config = baseConfig(jugg);
 
   config.devtool('cheap-module-source-map');
+
+  config.output
+    .filename('[name].js')
+    .chunkFilename('[name].js')
+    .end();
 
   // set in run/dev
   // config
