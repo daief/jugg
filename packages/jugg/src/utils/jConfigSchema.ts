@@ -33,7 +33,7 @@ export const schema = Joi.object().keys({
     loaderOptions: Joi.object({
       // css: Joi.object(),
       // less: Joi.object(),
-      postcss: Joi.object(),
+      postcss: Joi.alternatives(false, Joi.object()),
     }),
   }),
 });

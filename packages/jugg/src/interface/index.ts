@@ -67,15 +67,21 @@ export interface JuggConfig {
     loaderOptions?: {
       /**
        * https://github.com/postcss/postcss-loader/tree/v3.0.0#options
+       * when `false`, disable the `postcss`
        */
-      postcss: {
-        config?: {
-          context?: any;
-          path?: any;
-        };
-        plugins?: any;
-        [k: string]: any;
-      };
+      postcss:
+        | {
+            config?: {
+              context?: any;
+              path?: any;
+            };
+            /**
+             * when `false`, disable built-in plugins
+             */
+            plugins?: any;
+            [k: string]: any;
+          }
+        | false;
     };
   };
 }

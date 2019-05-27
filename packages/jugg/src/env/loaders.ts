@@ -219,28 +219,33 @@ function setStyleLoaders(config: Config, jugg: Jugg) {
         ...(isModule ? cssModulesConfig : {}),
       });
 
-    rule
-      .use('postcss-loader')
-      .loader(require.resolve('postcss-loader'))
-      .options({
-        ...postcss,
-        plugins: Array.isArray(postcss.plugins)
-          ? () =>
-              [
-                require('postcss-flexbugs-fixes'),
-                require('autoprefixer')({
-                  browsers: [
-                    '>1%',
-                    'last 4 versions',
-                    'Firefox ESR',
-                    'not ie < 9',
-                  ],
-                  flexbox: 'no-2009',
-                }),
-                ...postcss.plugins,
-              ].filter(Boolean)
-          : postcss.plugins,
-      });
+    if (postcss !== false) {
+      rule
+        .use('postcss-loader')
+        .loader(require.resolve('postcss-loader'))
+        .options({
+          ...postcss,
+          plugins:
+            Array.isArray(postcss.plugins) || !postcss.plugins
+              ? () =>
+                  postcss.plugins === false
+                    ? []
+                    : [
+                        require('postcss-flexbugs-fixes'),
+                        require('autoprefixer')({
+                          browsers: [
+                            '>1%',
+                            'last 4 versions',
+                            'Firefox ESR',
+                            'not ie < 9',
+                          ],
+                          flexbox: 'no-2009',
+                        }),
+                        ...(postcss.plugins || []),
+                      ].filter(Boolean)
+              : postcss.plugins,
+        });
+    }
 
     if (less === true) {
       rule
