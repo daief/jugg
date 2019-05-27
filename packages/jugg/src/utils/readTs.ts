@@ -4,6 +4,7 @@ import { register } from 'ts-node';
 register({
   transpileOnly: true,
   typeCheck: false,
+  skipProject: true,
 });
 
 /**
