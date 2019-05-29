@@ -1,13 +1,11 @@
 {
   "name": "@axew/jugg-plugin-lib",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "license": "MIT",
   "main": "./lib/index.js",
   "types": "./types",
-  "homepage":
-    "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-lib",
-  "repository":
-    "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-lib",
+  "homepage": "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-lib",
+  "repository": "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-lib",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
