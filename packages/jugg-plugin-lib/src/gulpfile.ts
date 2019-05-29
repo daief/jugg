@@ -144,11 +144,15 @@ export default (opts: IOptions, api: PluginAPI) => {
       .src(getSourceDirArray('vue'))
       .pipe(filterTest())
       .pipe(
-        gulpVue({
-          tsCompilerOptions: {
-            ...BASE_COMPILER_OPTIONS_FN(false),
+        gulpVue(
+          {
+            tsConfigFile: getAbsolutePath('tsconfig.json'),
+            tsCompilerOptions: {
+              ...BASE_COMPILER_OPTIONS_FN(false),
+            },
           },
-        }),
+          api,
+        ),
       )
       .pipe(gulp.dest(TARGET_DIR));
 
