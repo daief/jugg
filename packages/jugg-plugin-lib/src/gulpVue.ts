@@ -75,7 +75,7 @@ export function gulpVue(opts: IOptions = {}, _?: PluginAPI) {
 
     file.path = file.path.replace(/\.vue$/, '.js');
 
-    file.contents = new Buffer(result.code);
+    file.contents = Buffer.from(result.code);
 
     callback(null, file);
   });
