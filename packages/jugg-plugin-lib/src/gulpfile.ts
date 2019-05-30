@@ -43,7 +43,7 @@ export default (opts: IOptions, api: PluginAPI) => {
   const LIB_DIR = getAbsolutePath('lib');
   const ES_DIR = getAbsolutePath('es');
 
-  async function compile(modules: boolean, callback: () => void) {
+  async function compile(modules: boolean) {
     const TARGET_DIR = modules === false ? ES_DIR : LIB_DIR;
     // rm output dir
     await new Promise(resolve => {
@@ -170,28 +170,32 @@ export default (opts: IOptions, api: PluginAPI) => {
         }
       });
 
-    return merge2([
-      less,
-      tsResult.js
-        .pipe(convertLessImport2CssStream())
-        .pipe(gulp.dest(TARGET_DIR)),
-      tsResult.dts.pipe(gulp.dest(TARGET_DIR)),
-      tsJsResult.js
-        .pipe(convertLessImport2CssStream())
-        .pipe(gulp.dest(TARGET_DIR)),
-      assets,
-      vueResult,
-    ]).on('finish', callback);
+    return new Promise(resolve => {
+      merge2([
+        less,
+        tsResult.js
+          .pipe(convertLessImport2CssStream())
+          .pipe(gulp.dest(TARGET_DIR)),
+        tsResult.dts.pipe(gulp.dest(TARGET_DIR)),
+        tsJsResult.js
+          .pipe(convertLessImport2CssStream())
+          .pipe(gulp.dest(TARGET_DIR)),
+        assets,
+        vueResult,
+      ]).on('finish', () => {
+        resolve();
+      });
+    });
   }
 
-  gulp.task('compile-with-es', done => {
+  gulp.task('compile-with-es', () => {
     logger.info('[Parallel] Compile to es...');
-    compile(false, done);
+    return compile(false);
   });
 
-  gulp.task('compile-with-lib', done => {
+  gulp.task('compile-with-lib', () => {
     logger.info('[Parallel] Compile to js...');
-    compile(true, done);
+    return compile(true);
   });
 
   gulp.task('compile', gulp.parallel('compile-with-es', 'compile-with-lib'));
