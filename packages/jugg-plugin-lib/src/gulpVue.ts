@@ -7,10 +7,8 @@ import {
   StyleOptions,
   TemplateOptions,
 } from '@vue/component-compiler';
-import path, { dirname } from 'path';
+import path from 'path';
 import through2 from 'through2';
-import * as ts from 'typescript';
-import transformerFactory from './tsConvertImportFrom';
 
 export interface IOptions {
   compilerOptions?: {
@@ -19,19 +17,17 @@ export interface IOptions {
     template?: TemplateOptions | undefined;
   };
   assembleOptions?: AssembleOptions;
-  tsConfigFile?: string;
-  tsCompilerOptions?: ts.CompilerOptions;
 }
 
-export function gulpVue(opts: IOptions = {}, api: PluginAPI) {
-  const {
-    compilerOptions = {},
-    assembleOptions = {},
-    tsCompilerOptions = {},
-    tsConfigFile = '',
-  } = opts;
+/**
+ * convert signle `vue` to `js`
+ * @param opts
+ * @param api
+ */
+export function gulpVue(opts: IOptions = {}, _?: PluginAPI) {
+  const { compilerOptions = {}, assembleOptions = {} } = opts;
 
-  return through2.obj((file, _, callback) => {
+  return through2.obj((file, __, callback) => {
     const filename = path.basename(file.path);
 
     const contentStr = file.contents.toString();
@@ -45,41 +41,41 @@ export function gulpVue(opts: IOptions = {}, api: PluginAPI) {
       ...assembleOptions,
     });
 
-    // TODO the part of ts maybe extracted
-    // use Ts to compile
-    const tsConfig = ts.readConfigFile(tsConfigFile, ts.sys.readFile);
-    if (tsConfig.error) {
-      api.jugg.Utils.logger.error(`${tsConfig.error.messageText}`);
-    }
+    // // TODO the part of ts maybe extracted
+    // // use Ts to compile
+    // const tsConfig = ts.readConfigFile(tsConfigFile, ts.sys.readFile);
+    // if (tsConfig.error) {
+    //   api.jugg.Utils.logger.error(`${tsConfig.error.messageText}`);
+    // }
 
-    const parsed: ts.ParsedCommandLine = ts.parseJsonConfigFileContent(
-      tsConfig.config || {},
-      {
-        useCaseSensitiveFileNames: ts.sys.useCaseSensitiveFileNames,
-        readDirectory: () => [],
-        fileExists: ts.sys.fileExists,
-        readFile: ts.sys.readFile,
-      },
-      dirname(tsConfigFile),
-      tsCompilerOptions,
-    );
+    // const parsed: ts.ParsedCommandLine = ts.parseJsonConfigFileContent(
+    //   tsConfig.config || {},
+    //   {
+    //     useCaseSensitiveFileNames: ts.sys.useCaseSensitiveFileNames,
+    //     readDirectory: () => [],
+    //     fileExists: ts.sys.fileExists,
+    //     readFile: ts.sys.readFile,
+    //   },
+    //   dirname(tsConfigFile),
+    //   tsCompilerOptions,
+    // );
 
-    if (parsed.errors) {
-      // api.jugg.Utils.logger.error(`${parsed.errors}`);
-      // reportErrors(parsed.errors, typescript, [18003]);
-    }
+    // if (parsed.errors) {
+    //   // api.jugg.Utils.logger.error(`${parsed.errors}`);
+    //   // reportErrors(parsed.errors, typescript, [18003]);
+    // }
 
-    const tsResult = ts.transpileModule(result.code, {
-      compilerOptions: parsed.options,
-      transformers: {
-        before: [transformerFactory()],
-      },
-    });
-    const resultCode = tsResult.outputText;
+    // const tsResult = ts.transpileModule(result.code, {
+    //   compilerOptions: parsed.options,
+    //   transformers: {
+    //     before: [transformerFactory()],
+    //   },
+    // });
+    // const resultCode = tsResult.outputText;
 
     file.path = file.path.replace(/\.vue$/, '.js');
 
-    file.contents = new Buffer(resultCode);
+    file.contents = new Buffer(result.code);
 
     callback(null, file);
   });

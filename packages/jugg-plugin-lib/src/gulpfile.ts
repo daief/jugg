@@ -4,7 +4,6 @@ import gulpTs from 'gulp-typescript';
 import merge2 from 'merge2';
 import rimraf from 'rimraf';
 import through2 from 'through2';
-import { ModuleKind, ModuleResolutionKind, ScriptTarget } from 'typescript';
 import filterTest from './filterTest';
 import gulpVue from './gulpVue';
 import transformLess from './transformLess';
@@ -89,43 +88,35 @@ export default (opts: IOptions, api: PluginAPI) => {
       .pipe(filterTest())
       .pipe(gulp.dest(TARGET_DIR));
 
-    const BASE_COMPILER_OPTIONS_FN = (isGulpTs = true): any => {
-      const COMMON_CFG = {
+    const compileTS = (src?: string[], tsOpts: any = {}) => {
+      const tsProject = gulpTs.createProject(getAbsolutePath('tsconfig.json'), {
         noUnusedParameters: true,
         noUnusedLocals: true,
         strictNullChecks: true,
         allowSyntheticDefaultImports: true,
-      };
-      return isGulpTs === true
-        ? {
-            ...COMMON_CFG,
-            target: 'es5',
-            moduleResolution: 'node',
-            module: modules ? 'commonjs' : 'esnext',
-          }
-        : {
-            ...COMMON_CFG,
-            target: ScriptTarget.ES5,
-            moduleResolution: ModuleResolutionKind.NodeJs,
-            module: modules ? ModuleKind.CommonJS : ModuleKind.ESNext,
-          };
-    };
-
-    const compileTS = (src: string[], tsOpts: any = {}) => {
-      const tsProject = gulpTs.createProject(getAbsolutePath('tsconfig.json'), {
-        ...BASE_COMPILER_OPTIONS_FN(),
+        target: 'es5',
+        moduleResolution: 'node',
+        module: modules ? 'commonjs' : 'esnext',
         ...tsOpts,
         getCustomTransformers: () => ({
           before: [transformerFactory()],
         }),
       });
 
-      const rs = gulp
-        .src(src)
-        .pipe(filterTest())
-        .pipe(tsProject(gulpTs.reporter.fullReporter()));
+      if (src) {
+        const rs = gulp
+          .src(src)
+          .pipe(filterTest())
+          .pipe(tsProject(gulpTs.reporter.fullReporter(true)));
 
-      return rs;
+        return rs;
+      }
+
+      return through2
+        .obj((file, _, next) => {
+          next(null, file);
+        })
+        .pipe(tsProject(gulpTs.reporter.fullReporter(true)));
     };
 
     // use tsc compile ts, tsx, with declaration files
@@ -138,23 +129,23 @@ export default (opts: IOptions, api: PluginAPI) => {
     const tsJsResult = compileTS(getSourceDirArray('@(js|jsx)'), {
       allowJs: true,
       declaration: false,
+      // isolatedModules (boolean) - Compiles files seperately and doesn't check types,
+      // which causes a big speed increase. You have to use gulp-plumber and TypeScript 1.5+.
+      isolatedModules: true,
     });
 
     const vueResult = gulp
       .src(getSourceDirArray('vue'))
       .pipe(filterTest())
+      .pipe(gulpVue())
       .pipe(
-        gulpVue(
-          {
-            tsConfigFile: getAbsolutePath('tsconfig.json'),
-            tsCompilerOptions: {
-              ...BASE_COMPILER_OPTIONS_FN(false),
-            },
-          },
-          api,
-        ),
+        compileTS(undefined, {
+          allowJs: true,
+          declaration: false,
+          isolatedModules: true,
+        }),
       )
-      .pipe(gulp.dest(TARGET_DIR));
+      .js.pipe(gulp.dest(TARGET_DIR));
 
     const convertLessImport2CssStream = () =>
       through2.obj(function z(file, encoding, next) {
