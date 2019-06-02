@@ -35,8 +35,13 @@ export default function dev(api: PluginAPI) {
     description: 'start dev server',
     option: [
       {
-        flags: '-p, --port <port>',
+        flags: '-p, --port [port]',
         description: 'dev server port',
+      },
+      {
+        flags: '--noDevClients [noDevClients]',
+        defaultValue: false,
+        description: 'when set, do not add dev clients to webpack entry ',
       },
     ],
     action: async (args: ArgOpts) => {
@@ -84,7 +89,9 @@ async function startServer(api: PluginAPI, argv: ArgOpts) {
     ),
   ];
 
-  addDevClientToEntry(wbpCfg, devClients);
+  if (argv.noDevClients === false) {
+    addDevClientToEntry(wbpCfg, devClients);
+  }
 
   const serverConfig: WebpackDevServer.Configuration = {
     disableHostCheck: true,
@@ -143,4 +150,5 @@ function addDevClientToEntry(config: Configuration, devClient: string[]) {
 
 interface ArgOpts {
   port?: number;
+  noDevClients: boolean;
 }
