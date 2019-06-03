@@ -16,6 +16,36 @@ $ jugg dev
 $ jugg build
 ```
 
+## jugg dev
+
+```bash
+$ jugg dev -h
+Usage: dev [options]
+
+start dev server
+
+Options:
+  -p, --port [port]              dev server port
+  --noDevClients [noDevClients]  when set, do not add dev clients to webpack entry  (default: false)
+  -h, --help                     output usage information
+
+```
+
+> [Since webpack-dev-server v3.2.0](https://github.com/webpack/webpack-dev-server/releases/tag/v3.2.0), automatically add the HMR plugin when hot or hotOnly is enabled. Can set `noDevClients` to disable built-in config to entry.
+
+## jugg build
+
+```bash
+$ jugg build -h
+Usage: build [options]
+
+exec build
+
+Options:
+  -h, --help  output usage information
+```
+
+
 # directory
 
 Simple directory can be something like this, default entry can be `src/index.{tsx?|jsx?}`. `tsconfig.json` is necessary only when you use TypeScript.

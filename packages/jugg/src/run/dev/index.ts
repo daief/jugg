@@ -41,7 +41,7 @@ export default function dev(api: PluginAPI) {
       {
         flags: '--noDevClients [noDevClients]',
         defaultValue: false,
-        description: 'when set, do not add dev clients to webpack entry ',
+        description: 'when set, do not add dev clients to webpack entry',
       },
     ],
     action: async (args: ArgOpts) => {
