@@ -109,6 +109,7 @@ async function startServer(api: PluginAPI, argv: ArgOpts) {
     },
     historyApiFallback: false,
     overlay: true,
+    useLocalIp: true,
     ...useDevServer,
   };
 
