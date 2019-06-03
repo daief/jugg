@@ -56,9 +56,9 @@ async function startServer(api: PluginAPI, argv: ArgOpts) {
   const wbpCfg = api.jugg.mergeConfig();
   const { devServer = {} } = wbpCfg;
   const useDevServer: DevConfiguration = {
+    host: '0.0.0.0',
     ...devServer,
     port: argv.port || devServer.port || 3000,
-    host: '0.0.0.0',
   };
 
   portfinder.basePort = useDevServer.port;
@@ -72,24 +72,24 @@ async function startServer(api: PluginAPI, argv: ArgOpts) {
     JConfig.publicPath,
   );
 
-  const devClients = [
-    // dev server client
-    require.resolve(`webpack-dev-server/client`) +
-      `?${url.format({
-        protocol,
-        port,
-        hostname: urls.lanUrlForConfig || 'localhost',
-        pathname: '/sockjs-node',
-      })}`,
-    // hmr client
-    require.resolve(
-      useDevServer.hotOnly === true
-        ? 'webpack/hot/only-dev-server'
-        : 'webpack/hot/dev-server',
-    ),
-  ];
-
   if (argv.noDevClients === false) {
+    const devClients = [
+      // dev server client
+      require.resolve(`webpack-dev-server/client`) +
+        `?${url.format({
+          protocol,
+          port,
+          hostname: urls.lanUrlForConfig || 'localhost',
+          pathname: '/sockjs-node',
+        })}`,
+      // hmr client
+      require.resolve(
+        useDevServer.hotOnly === true
+          ? 'webpack/hot/only-dev-server'
+          : 'webpack/hot/dev-server',
+      ),
+    ];
+
     addDevClientToEntry(wbpCfg, devClients);
   }
 
