@@ -98,7 +98,7 @@ async function startServer(api: PluginAPI, argv: ArgOpts) {
     compress: true,
     clientLogLevel: 'none',
     hot: true,
-    quiet: true,
+    quiet: !process.env.NO_WEBPACKBAR,
     contentBase: JConfig.outputDir,
     headers: {
       'access-control-allow-origin': '*',

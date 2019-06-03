@@ -1,16 +1,16 @@
 // import webpack from 'webpack';
-import Config from 'webpack-chain';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import Webpackbar from 'webpackbar';
-import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
+import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
+import fs from 'fs';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import webpack from 'webpack';
+import Config from 'webpack-chain';
+import Webpackbar from 'webpackbar';
+import { Jugg } from '..';
+import { searchPlaces } from '../utils';
+import { Entry, Plugin } from './chainCfgMap';
 import setLoaders from './loaders';
 import { FilterCSSConflictingWarning } from './plugins';
-import { Jugg } from '..';
-import fs from 'fs';
-import webpack from 'webpack';
-import { Entry, Plugin } from './chainCfgMap';
-import { searchPlaces } from '../utils';
 
 export default (jugg: Jugg): Config => {
   const config = new Config();
@@ -37,9 +37,6 @@ export default (jugg: Jugg): Config => {
     .end();
 
   config
-    .plugin(Plugin.WEBPACKBAR_PLUGIN)
-    .use(Webpackbar)
-    .end()
     .plugin(Plugin.FILTER_CSS_CONFLICT_WARNING_PLUGIN)
     .use(FilterCSSConflictingWarning)
     .end()
@@ -110,15 +107,25 @@ export default (jugg: Jugg): Config => {
 
   // -------------------------------------- hard-source-webpack-plugin
   if (process.env.HARD_SOURCE !== 'none') {
-    config.plugin(Plugin.HARD_SOURCE_PLUGIN).use(require('hard-source-webpack-plugin'), [
-      {
-        environmentHash: {
-          root: jugg.context,
-          directories: ['config'],
-          files: ['package-lock.json', 'yarn.lock', ...searchPlaces('jugg')],
+    config
+      .plugin(Plugin.HARD_SOURCE_PLUGIN)
+      .use(require('hard-source-webpack-plugin'), [
+        {
+          environmentHash: {
+            root: jugg.context,
+            directories: ['config'],
+            files: ['package-lock.json', 'yarn.lock', ...searchPlaces('jugg')],
+          },
         },
-      },
-    ]);
+      ]);
+  }
+
+  // -------------------------------------- Webpackbar
+  if (!process.env.NO_WEBPACKBAR) {
+    config
+      .plugin(Plugin.WEBPACKBAR_PLUGIN)
+      .use(Webpackbar)
+      .end();
   }
 
   return config;

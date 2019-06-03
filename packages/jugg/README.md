@@ -142,6 +142,8 @@ type PluginCfgSchema = string | [string, { [k: string]: any }?];
   - set `none`, disbale fork-ts-checker-webpack-plugin
 - HARD_SOURCE
   - set `none`, disbale hard-source-webpack-plugin
+- NO_WEBPACKBAR
+  - when opened, remove webpackbar plugin
 
 # `TS` or `JS`
 
