@@ -217,6 +217,7 @@ function setStyleLoaders(config: Config, jugg: Jugg) {
       .loader(require.resolve('css-loader'))
       .options({
         ...(isModule ? cssModulesConfig : {}),
+        ...css.loaderOptions.css,
       });
 
     if (postcss !== false) {
@@ -253,6 +254,7 @@ function setStyleLoaders(config: Config, jugg: Jugg) {
         .loader(require.resolve('less-loader'))
         .options({
           javascriptEnabled: true,
+          ...css.loaderOptions.less,
         });
     }
   }

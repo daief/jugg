@@ -4,7 +4,7 @@ What is Jugg？
 
 ![](https://d1u5p3l4wpay3k.cloudfront.net/dota2_gamepedia/0/03/Juggernaut_icon.png?version=99b0ef7bad0a95b1a29110f536607f9e)
 
-A front-end scaffold 🛠️  work with Webpack.
+A front-end scaffold 🛠️ work with Webpack.
 
 # basic command
 
@@ -44,7 +44,6 @@ exec build
 Options:
   -h, --help  output usage information
 ```
-
 
 # directory
 
@@ -91,31 +90,45 @@ interface JuggConfig {
     after?: PluginCfgSchema[];
   };
   /**
-   * bundle file name, default `[name].[chunkhash]`.
-   * affect js, css
+   * set bundle file name in production env, default `[name].[chunkhash]`.
+   * affect js, css.
    */
   filename?: string;
   /**
    * built-in base webpack html plugin config.
    * set false to rm plugin.
    */
-  html?: false | { [k: string]: any };
+  html?: false | KeyValuePair;
   /**
    * config of css, less, postcss...
    */
   css?: {
     loaderOptions?: {
       /**
-       * https://github.com/postcss/postcss-loader/tree/v3.0.0#options
+       * https://github.com/webpack-contrib/css-loader#options
        */
-      postcss: {
-        config?: {
-          context?: any;
-          path?: any;
-        };
-        plugins?: any;
-        [k: string]: any;
-      };
+      css: any;
+      /**
+       * http://lesscss.org/usage/#command-line-usage-options
+       */
+      less: any;
+      /**
+       * https://github.com/postcss/postcss-loader/tree/v3.0.0#options
+       * when `false`, disable the `postcss`
+       */
+      postcss:
+        | {
+            config?: {
+              context?: any;
+              path?: any;
+            };
+            /**
+             * when `false`, disable built-in plugins
+             */
+            plugins?: any;
+            [k: string]: any;
+          }
+        | false;
     };
   };
 }
@@ -148,6 +161,7 @@ type PluginCfgSchema = string | [string, { [k: string]: any }?];
 # `TS` or `JS`
 
 Both `TS` and `JS` can be used together in a project with `jugg`. There are several situations with handleing TS and JS:
+
 - **Default & Recommended**: create a `tsconfig.json`, then jugg will open ts-loader and use it to compile ts, tsx, js, tsx. `babel` is needless here.
   - ts-loader: ts, tsx, js, jsx
   - babel: needless

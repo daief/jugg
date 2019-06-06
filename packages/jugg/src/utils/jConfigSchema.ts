@@ -31,8 +31,8 @@ export const schema = Joi.object().keys({
     // extract: Joi.alternatives().try(Joi.boolean(), Joi.object()),
     // sourceMap: Joi.boolean(),
     loaderOptions: Joi.object({
-      // css: Joi.object(),
-      // less: Joi.object(),
+      css: Joi.object(),
+      less: Joi.object(),
       postcss: Joi.alternatives(false, Joi.object()),
     }),
   }),
@@ -63,6 +63,8 @@ export function defaults(): JuggConfig {
     html: {},
     css: {
       loaderOptions: {
+        css: {},
+        less: {},
         postcss: {},
       },
     },
