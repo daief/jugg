@@ -1,0 +1,32 @@
+{
+  "name": "ts-lib",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "start": "jugg dev --noDevClients",
+    "dev": "jugg dev --noDevClients",
+    "build": "jugg lib"
+  },
+  "dependencies": {
+    "@types/node": "^10.12.12",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
+    "tslib": "^1.9.3",
+    "vue": "^2.5.21",
+    "vue-property-decorator": "^7.2.0",
+    "vue-router": "^3.0.2",
+    "vuex": "^3.1.0",
+    "vuex-class": "^0.3.1"
+  },
+  "devDependencies": {
+    "@axew/jugg": "^0.1.0-alpha.0",
+    "@axew/jugg-plugin-lib": "^0.0.10",
+    "@axew/jugg-plugin-vue": "^0.0.8",
+    "@types/react": "^16.7.17",
+    "@types/react-dom": "^16.0.11",
+    "react-hot-loader": "^4.6.3",
+    "typescript": "^3.2.2",
+    "vue-template-compiler": "^2.5.21"
+  }
+}
