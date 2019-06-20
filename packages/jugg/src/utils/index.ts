@@ -34,6 +34,10 @@ export function readConfig(
   };
 }
 
+/**
+ * only a helper to hint jugg config item
+ * @param cfg config of jugg
+ */
 export const extendConfig = (cfg: JuggConfig): JuggConfig => cfg;
 
 /**
