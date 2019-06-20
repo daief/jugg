@@ -107,16 +107,16 @@ interface JuggConfig {
       /**
        * https://github.com/webpack-contrib/css-loader#options
        */
-      css: any;
+      css?: any;
       /**
        * http://lesscss.org/usage/#command-line-usage-options
        */
-      less: any;
+      less?: any;
       /**
        * https://github.com/postcss/postcss-loader/tree/v3.0.0#options
        * when `false`, disable the `postcss`
        */
-      postcss:
+      postcss?:
         | {
             config?: {
               context?: any;
