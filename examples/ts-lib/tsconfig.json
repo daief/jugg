@@ -11,8 +11,8 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "noUnusedLocals": true,
+    "skipLibCheck": true,
     "baseUrl": ".",
-    "types": ["node"],
     "paths": {
       "@/*": ["src/*"]
     },
