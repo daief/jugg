@@ -11,15 +11,12 @@
     "dev": "jugg dev --noDevClients",
     "build": "jugg build && jugg lib"
   },
+  "peerDependencies": {
+    "react": "^16.0.0",
+    "vue": "^2.0.0"
+  },
   "dependencies": {
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0",
-    "tslib": "^1.9.3",
-    "vue": "^2.5.21",
-    "vue-property-decorator": "^7.2.0",
-    "vue-router": "^3.0.2",
-    "vuex": "^3.1.0",
-    "vuex-class": "^0.3.1"
+    "vue-runtime-helpers": "^1.0.0"
   },
   "devDependencies": {
     "@axew/jugg": "^0.1.0-alpha.0",
@@ -29,6 +26,14 @@
     "@types/react-dom": "^16.0.11",
     "react-hot-loader": "^4.6.3",
     "typescript": "^3.2.2",
-    "vue-template-compiler": "^2.5.21"
+    "vue-template-compiler": "^2.5.21",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
+    "tslib": "^1.9.3",
+    "vue": "^2.5.21",
+    "vue-property-decorator": "^7.2.0",
+    "vue-router": "^3.0.2",
+    "vuex": "^3.1.0",
+    "vuex-class": "^0.3.1"
   }
 }
