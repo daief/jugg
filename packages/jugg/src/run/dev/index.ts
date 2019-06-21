@@ -40,6 +40,7 @@ export default function dev(api: PluginAPI) {
       },
       {
         flags: '--noDevClients [noDevClients]',
+        // TODO set default `true`
         defaultValue: false,
         description: 'when set, do not add dev clients to webpack entry',
       },
