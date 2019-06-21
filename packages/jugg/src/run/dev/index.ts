@@ -63,6 +63,7 @@ async function startServer(api: PluginAPI, argv: ArgOpts) {
 
   portfinder.basePort = useDevServer.port;
   const port = await portfinder.getPortPromise();
+  useDevServer.port = port;
   const protocol = useDevServer.https ? 'https' : 'http';
 
   const urls = prepareUrls(
