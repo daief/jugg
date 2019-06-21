@@ -7,7 +7,7 @@ import VueButton from './vue-components/Button';
 export { VueButton };
 
 export default {
-  use(vue: any) {
+  install(vue: any) {
     // @ts-ignore
     VueButton.install(vue);
   },

@@ -13,7 +13,7 @@ import { render } from 'react-dom';
 import Vue from 'vue';
 import VueApp from './VueApp.vue';
 
-LIB.use(Vue);
+Vue.use(LIB);
 
 /**
  * use function from lib
