@@ -14,7 +14,7 @@
     "test": "jest"
   },
   "peerDependencies": {
-    "@axew/jugg": ">= 0.0.5"
+    "@axew/jugg": ">= 0.1.0"
   },
   "dependencies": {
     "@vue/component-compiler": "^3.6.0",

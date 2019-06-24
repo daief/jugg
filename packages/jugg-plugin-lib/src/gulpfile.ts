@@ -1,4 +1,3 @@
-import { PluginCfgSchema } from '@axew/jugg/types';
 import { PluginAPI } from '@axew/jugg/types/PluginAPI';
 import gulp from 'gulp';
 import gulpTs from 'gulp-typescript';
@@ -42,7 +41,7 @@ export default (opts: IOptions, api: PluginAPI) => {
 
   const appendSuffix = copyFileSuffix.replace(/^\|*/, '').replace(/\|*$/, '');
 
-  const { getAbsolutePath, logger } = api.jugg.Utils;
+  const { getAbsolutePath, logger, resolvePlugin } = api.jugg.Utils;
   const LIB_DIR = getAbsolutePath('lib');
   const ES_DIR = getAbsolutePath('es');
 
@@ -92,15 +91,6 @@ export default (opts: IOptions, api: PluginAPI) => {
       .pipe(gulp.dest(TARGET_DIR));
 
     const compileTS = (src?: string[], tsOpts: any = {}) => {
-      const handleTsTransformer = (t: PluginCfgSchema) => {
-        if (typeof t === 'string') {
-          return (require(t).default || require(t))();
-        } else {
-          const [tpath, _ = {}] = t;
-          return (require(tpath).default || require(tpath))(_);
-        }
-      };
-
       const tsProject = gulpTs.createProject(getAbsolutePath('tsconfig.json'), {
         noUnusedParameters: true,
         noUnusedLocals: true,
@@ -111,8 +101,8 @@ export default (opts: IOptions, api: PluginAPI) => {
         module: modules ? 'commonjs' : 'esnext',
         ...tsOpts,
         getCustomTransformers: () => ({
-          before: [transformerFactory(), ...before.map(handleTsTransformer)],
-          after: after.map(handleTsTransformer),
+          before: [transformerFactory(), ...before.map(resolvePlugin)],
+          after: after.map(resolvePlugin),
         }),
       });
 
