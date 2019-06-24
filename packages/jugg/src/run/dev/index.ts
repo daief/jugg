@@ -3,8 +3,7 @@
  */
 import chalk from 'chalk';
 import portfinder from 'portfinder';
-import url from 'url';
-import webpack, { Configuration } from 'webpack';
+import webpack from 'webpack';
 import WebpackDevServer, {
   Configuration as DevConfiguration,
 } from 'webpack-dev-server';
@@ -38,12 +37,6 @@ export default function dev(api: PluginAPI) {
         flags: '-p, --port [port]',
         description: 'dev server port',
       },
-      {
-        flags: '--noDevClients [noDevClients]',
-        // TODO set default `true`
-        defaultValue: false,
-        description: 'when set, do not add dev clients to webpack entry',
-      },
     ],
     action: async (args: ArgOpts) => {
       addFileWatch();
@@ -74,26 +67,26 @@ async function startServer(api: PluginAPI, argv: ArgOpts) {
     JConfig.publicPath,
   );
 
-  if (argv.noDevClients === false) {
-    const devClients = [
-      // dev server client
-      require.resolve(`webpack-dev-server/client`) +
-        `?${url.format({
-          protocol,
-          port,
-          hostname: urls.lanUrlForConfig || 'localhost',
-          pathname: '/sockjs-node',
-        })}`,
-      // hmr client
-      require.resolve(
-        useDevServer.hotOnly === true
-          ? 'webpack/hot/only-dev-server'
-          : 'webpack/hot/dev-server',
-      ),
-    ];
+  // if (argv.noDevClients === false) {
+  //   const devClients = [
+  //     // dev server client
+  //     require.resolve(`webpack-dev-server/client`) +
+  //       `?${url.format({
+  //         protocol,
+  //         port,
+  //         hostname: urls.lanUrlForConfig || 'localhost',
+  //         pathname: '/sockjs-node',
+  //       })}`,
+  //     // hmr client
+  //     require.resolve(
+  //       useDevServer.hotOnly === true
+  //         ? 'webpack/hot/only-dev-server'
+  //         : 'webpack/hot/dev-server',
+  //     ),
+  //   ];
 
-    addDevClientToEntry(wbpCfg, devClients);
-  }
+  //   addDevClientToEntry(wbpCfg, devClients);
+  // }
 
   const serverConfig: WebpackDevServer.Configuration = {
     disableHostCheck: true,
@@ -138,20 +131,24 @@ async function startServer(api: PluginAPI, argv: ArgOpts) {
   return server;
 }
 
-function addDevClientToEntry(config: Configuration, devClient: string[]) {
-  const { entry } = config;
-  if (typeof entry === 'object' && !Array.isArray(entry)) {
-    Object.keys(entry).forEach(key => {
-      entry[key] = devClient.concat(entry[key]);
-    });
-  } else if (typeof entry === 'function') {
-    config.entry = (entry as any)(devClient);
-  } else {
-    config.entry = devClient.concat(entry);
-  }
-}
+// function addDevClientToEntry(config: Configuration, devClient: string[]) {
+//   const { entry } = config;
+//   if (typeof entry === 'object' && !Array.isArray(entry)) {
+//     Object.keys(entry).forEach(key => {
+//       entry[key] = devClient.concat(entry[key]);
+//     });
+//   } else if (typeof entry === 'function') {
+//     config.entry = (entry as any)(devClient);
+//   } else {
+//     config.entry = devClient.concat(entry);
+//   }
+// }
 
 interface ArgOpts {
   port?: number;
+  /**
+   * update webpack-dev-server >= 3.2.0, this is unnecessary
+   * @deprecated
+   */
   noDevClients: boolean;
 }
