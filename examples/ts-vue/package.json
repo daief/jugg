@@ -23,5 +23,13 @@
     "react-hot-loader": "^4.6.3",
     "typescript": "^3.2.2",
     "vue-template-compiler": "^2.5.21"
-  }
+  },
+  "browserslist": [
+    "last 2 versions",
+    "Firefox ESR",
+    "> 1%",
+    "ie >= 9",
+    "iOS >= 8",
+    "Android >= 4"
+  ]
 }

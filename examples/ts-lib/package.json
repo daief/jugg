@@ -7,8 +7,8 @@
   "module": "es/index.js",
   "umd:main": "dist/index.js",
   "scripts": {
-    "start": "jugg dev --noDevClients",
-    "dev": "jugg dev --noDevClients",
+    "start": "jugg dev",
+    "dev": "jugg dev",
     "build": "jugg build && jugg lib"
   },
   "peerDependencies": {
@@ -35,5 +35,13 @@
     "vue-template-compiler": "^2.5.21",
     "vuex": "^3.1.0",
     "vuex-class": "^0.3.1"
-  }
+  },
+  "browserslist": [
+    "last 2 versions",
+    "Firefox ESR",
+    "> 1%",
+    "ie >= 9",
+    "iOS >= 8",
+    "Android >= 4"
+  ]
 }
