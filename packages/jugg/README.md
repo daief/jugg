@@ -175,3 +175,17 @@ Both `TS` and `JS` can be used together in a project with `jugg`. There are seve
 # Notice
 
 - `import()` works with `"module": "esnext"` in `tsconfig.json`, [detail](https://github.com/webpack/webpack/issues/5703#issuecomment-357512412).
+- - Use `.browserslistrc` config or `browserslist` key in package.json to share target browsers with Babel, ESLint and Stylelint. See [Browserslist docs](https://github.com/browserslist/browserslist#queries) for available queries and default value.
+  ```json
+  {
+    // previous built-in config
+    "browserslist": [
+      "last 2 versions",
+      "Firefox ESR",
+      "> 1%",
+      "ie >= 9",
+      "iOS >= 8",
+      "Android >= 4"
+    ]
+  }
+  ```

@@ -1,13 +1,12 @@
 import { existsSync } from 'fs';
 import Config from 'webpack-chain';
 import { Jugg } from '..';
-import { PluginCfgSchema } from '../interface';
 import { Plugin, Rule } from './chainCfgMap';
 
 export default (config: Config, jugg: Jugg) => {
   const isProd = jugg.IsProd;
   const { tsCustomTransformers } = jugg.JConfig;
-  const { getAbsolutePath } = jugg.Utils;
+  const { getAbsolutePath, resolvePlugin } = jugg.Utils;
 
   const genUrlLoaderOptions = () => {
     return {
@@ -60,18 +59,8 @@ export default (config: Config, jugg: Jugg) => {
   // ts project
   if (existsSync(getAbsolutePath('tsconfig.json'))) {
     const { before = [], after = [] } = tsCustomTransformers;
-
-    const handlePlugin = (t: PluginCfgSchema) => {
-      if (typeof t === 'string') {
-        return (require(t).default || require(t))();
-      } else {
-        const [tpath, opts = {}] = t;
-        return (require(tpath).default || require(tpath))(opts);
-      }
-    };
-
-    const beforeTransformers = before.map(handlePlugin);
-    const afterTransformers = after.map(handlePlugin);
+    const beforeTransformers = before.map(resolvePlugin);
+    const afterTransformers = after.map(resolvePlugin);
 
     const tsOpts = {
       transpileOnly: true,
@@ -234,13 +223,6 @@ function setStyleLoaders(config: Config, jugg: Jugg) {
                     : [
                         require('postcss-flexbugs-fixes'),
                         require('autoprefixer')({
-                          // TODO
-                          browsers: [
-                            '>1%',
-                            'last 4 versions',
-                            'Firefox ESR',
-                            'not ie < 9',
-                          ],
                           flexbox: 'no-2009',
                         }),
                         ...(postcss.plugins || []),

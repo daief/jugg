@@ -50,7 +50,7 @@ interface IOptions {
   ```json
   {
     // previous built-in config
-    "browsers": [
+    "browserslist": [
       "last 2 versions",
       "Firefox ESR",
       "> 1%",
