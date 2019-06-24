@@ -11,6 +11,7 @@ import {
   JuggConfig,
   JuggGlobalCommandOpts,
   Plugin,
+  PluginCfgSchema,
   WebpackChainFun,
 } from './interface';
 import { PluginAPI } from './PluginAPI';
@@ -65,15 +66,17 @@ export default class Jugg {
 
   get Utils() {
     return {
-      resolveCwd,
-      logger,
-      readTs,
       CHAIN_CONFIG_MAP,
       getAbsolutePath: (...p: string[]) => {
-        return p.reduce((pre, next) => {
-          return resolve(pre, next);
-        }, this.context);
-        // return join(this.context, ...p);
+        return resolve(this.context, ...p);
+      },
+      logger,
+      readTs,
+      resolveCwd,
+      resolvePlugin: (p: PluginCfgSchema) => {
+        const [_, option = {}] = typeof p === 'string' ? [p, {}] : p;
+        const name = /^\./.test(_) ? this.Utils.getAbsolutePath(_) : _;
+        return (require(name).default || require(name))(option);
       },
     };
   }
