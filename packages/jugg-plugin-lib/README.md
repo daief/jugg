@@ -11,10 +11,8 @@ Most of here reference [antd-tools](http://github.com/ant-design/antd-tools).
 
 ```js
 module.exports = {
-  plugins: [
-    '@axew/jugg-plugin-lib'
-  ]
-}
+  plugins: ['@axew/jugg-plugin-lib'],
+};
 ```
 
 then you can use `lib` commond:
@@ -43,9 +41,22 @@ interface IOptions {
    */
   sourceDir?: string | string[];
 }
-
 ```
 
 ## notice
 
 - **All in TS** is recommended. But also can work with JS source. But there will be no declaration files for js source.
+- Use `.browserslistrc` config or `browserslist` key in package.json to share target browsers with Babel, ESLint and Stylelint. See [Browserslist docs](https://github.com/browserslist/browserslist#queries) for available queries and default value.
+  ```json
+  {
+    // previous built-in config
+    "browsers": [
+      "last 2 versions",
+      "Firefox ESR",
+      "> 1%",
+      "ie >= 9",
+      "iOS >= 8",
+      "Android >= 4"
+    ]
+  }
+  ```

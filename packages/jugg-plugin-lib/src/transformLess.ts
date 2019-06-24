@@ -6,7 +6,11 @@ const NpmImportPlugin = require('less-plugin-npm-import');
 const rucksack = require('rucksack-css');
 const autoprefixer = require('autoprefixer');
 
-export default function transformLess(lessFile: string, config: any = {}): Promise<any> {
+// TODO read config from cfg file
+export default function transformLess(
+  lessFile: string,
+  config: any = {},
+): Promise<any> {
   const { cwd = process.cwd() } = config;
   const resolvedLessFile = path.resolve(cwd, lessFile);
 
@@ -28,16 +32,16 @@ export default function transformLess(lessFile: string, config: any = {}): Promi
         postcss([
           rucksack(),
           autoprefixer({
-            browsers: [
-              'last 2 versions',
-              'Firefox ESR',
-              '> 1%',
-              'ie >= 9',
-              'iOS >= 8',
-              'Android >= 4',
-            ],
+            // browsers: [
+            //   'last 2 versions',
+            //   'Firefox ESR',
+            //   '> 1%',
+            //   'ie >= 9',
+            //   'iOS >= 8',
+            //   'Android >= 4',
+            // ],
           }),
-        ]).process(result.css, { from: undefined })
+        ]).process(result.css, { from: undefined }),
       )
       // @ts-ignore
       .then(r => r.css)

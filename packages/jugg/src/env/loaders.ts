@@ -234,6 +234,7 @@ function setStyleLoaders(config: Config, jugg: Jugg) {
                     : [
                         require('postcss-flexbugs-fixes'),
                         require('autoprefixer')({
+                          // TODO
                           browsers: [
                             '>1%',
                             'last 4 versions',
