@@ -92,6 +92,11 @@ export default (api: PluginAPI, opts: Option) => {
             require.resolve('@babel/preset-typescript'),
           ],
         });
+
+      // rm fork-ts-checker-webpack-plugin
+      if (config.plugins.has(CHAIN_CONFIG_MAP.plugin.FORK_TS_CHECKER_PLUGIN)) {
+        config.plugins.delete(CHAIN_CONFIG_MAP.plugin.FORK_TS_CHECKER_PLUGIN);
+      }
     }
   });
 };
