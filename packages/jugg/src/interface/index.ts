@@ -94,6 +94,7 @@ export interface JuggConfig {
   };
   /**
    * add dependencies to compile by ts-loader or babel
+   * if item is string, it will be convert a regex such as `join('node_modules', item, '/')`
    * @since 0.1.1
    */
   transpileDependencies?: Array<string | RegExp> | ((pth: string) => boolean);

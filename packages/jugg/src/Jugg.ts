@@ -19,6 +19,7 @@ import { isUserConfigChanged, readConfig } from './utils';
 import EventBus, { Opts } from './utils/EventBus';
 import { loadEnv } from './utils/loadEnv';
 import { logger } from './utils/logger';
+import { matchTranspileDependencies } from './utils/matchTranspileDependencies';
 import readTs from './utils/readTs';
 
 const packageJSON = require(resolve(__dirname, '../package.json'));
@@ -71,6 +72,7 @@ export default class Jugg {
         return resolve(this.context, ...p);
       },
       logger,
+      matchTranspileDependencies,
       readTs,
       resolveCwd,
       resolvePlugin: (p: PluginCfgSchema) => {

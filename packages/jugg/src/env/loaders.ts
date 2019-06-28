@@ -1,11 +1,12 @@
 import { existsSync } from 'fs';
 import Config from 'webpack-chain';
 import { Jugg } from '..';
+import { matchTranspileDependencies } from '../utils/matchTranspileDependencies';
 import { Plugin, Rule } from './chainCfgMap';
 
 export default (config: Config, jugg: Jugg) => {
   const isProd = jugg.IsProd;
-  const { tsCustomTransformers } = jugg.JConfig;
+  const { tsCustomTransformers, transpileDependencies } = jugg.JConfig;
   const { getAbsolutePath, resolvePlugin } = jugg.Utils;
 
   const genUrlLoaderOptions = () => {
@@ -76,7 +77,12 @@ export default (config: Config, jugg: Jugg) => {
       config.module
         .rule(rule)
         .test(test)
-        .exclude.add((path: string) => /node_modules/.test(path))
+        .exclude.add((path: string) => {
+          if (matchTranspileDependencies(transpileDependencies, path)) {
+            return false;
+          }
+          return /node_modules/.test(path);
+        })
         .end()
         .use('ts-loader')
         .loader(require.resolve('ts-loader'))
