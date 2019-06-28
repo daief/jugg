@@ -11,7 +11,7 @@
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
-    "@axew/jugg": ">= 0.0.5"
+    "@axew/jugg": ">= 0.1.1"
   },
   "dependencies": {
     "@babel/core": "^7.2.2",

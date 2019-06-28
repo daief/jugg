@@ -1,6 +1,6 @@
+import { PluginCfgSchema } from '@axew/jugg/types';
 import { PluginAPI } from '@axew/jugg/types/PluginAPI';
 import { IJuggPreset } from './preset';
-import { PluginCfgSchema } from '@axew/jugg/types';
 
 export interface Option {
   cache?: boolean;
@@ -28,7 +28,10 @@ export default (api: PluginAPI, opts: Option) => {
     juggPreset: {},
   };
 
-  const { cache, babelrc, presets, plugins, compileTs, juggPreset } = { ...dCfg, ...opts };
+  const { cache, babelrc, presets, plugins, compileTs, juggPreset } = {
+    ...dCfg,
+    ...opts,
+  };
 
   const babelOpts = {
     // default true
@@ -40,8 +43,16 @@ export default (api: PluginAPI, opts: Option) => {
   };
 
   api.chainWebpack(({ config }) => {
-    const { CHAIN_CONFIG_MAP } = api.jugg.Utils;
+    const { CHAIN_CONFIG_MAP, matchTranspileDependencies } = api.jugg.Utils;
+    const { transpileDependencies } = api.jugg.JConfig;
     const cfgModule = config.module;
+
+    const excludeFunc = (p: string) => {
+      if (matchTranspileDependencies(transpileDependencies, p)) {
+        return false;
+      }
+      return /node_modules/.test(p);
+    };
 
     // rm ts-loader for js, jsx
     // check if user does not have a tsconfig.json
@@ -54,7 +65,7 @@ export default (api: PluginAPI, opts: Option) => {
     cfgModule
       .rule(BABEL_CHAIN_CONFIG_MAP.BABEL_JS_RULE)
       .test(/\.jsx?$/)
-      .exclude.add(filepath => /node_modules/.test(filepath))
+      .exclude.add(excludeFunc)
       .end()
       .use('babel-loader')
       .loader(require.resolve('babel-loader'))
@@ -70,13 +81,16 @@ export default (api: PluginAPI, opts: Option) => {
       cfgModule
         .rule(BABEL_CHAIN_CONFIG_MAP.BABEL_TS_RULE)
         .test(/\.tsx?$/)
-        .exclude.add(filepath => /node_modules/.test(filepath))
+        .exclude.add(excludeFunc)
         .end()
         .use('babel-loader')
         .loader(require.resolve('babel-loader'))
         .options({
           ...babelOpts,
-          presets: [...babelOpts.presets, require.resolve('@babel/preset-typescript')],
+          presets: [
+            ...babelOpts.presets,
+            require.resolve('@babel/preset-typescript'),
+          ],
         });
     }
   });
