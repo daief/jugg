@@ -74,6 +74,7 @@
   },
   "files": ["lib", "es", "types"],
   "keywords": ["jugg", "cli", "webpack", "typescript"],
+  "description": "A front-end scaffold 🛠️ work with Webpack.",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"

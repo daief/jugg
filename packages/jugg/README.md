@@ -2,8 +2,6 @@
 
 What is Jugg？
 
-![](https://d1u5p3l4wpay3k.cloudfront.net/dota2_gamepedia/0/03/Juggernaut_icon.png?version=99b0ef7bad0a95b1a29110f536607f9e)
-
 A front-end scaffold 🛠️ work with Webpack.
 
 # basic command
@@ -131,6 +129,12 @@ interface JuggConfig {
         | false;
     };
   };
+  /**
+   * add dependencies to compile by ts-loader or babel
+   * if item is string, it will be convert a regex such as `join('node_modules', item, '/')`
+   * @since 0.1.1
+   */
+  transpileDependencies?: Array<string | RegExp> | ((pth: string) => boolean);
 }
 
 type JuggWebpack = webpack.Configuration | (
