@@ -195,7 +195,6 @@ export default class Jugg {
 
   /**
    * 清空、重新加载
-   * TODO 是否需要重新加载 env
    */
   reload() {
     this.commands = [];

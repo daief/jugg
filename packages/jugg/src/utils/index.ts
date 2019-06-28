@@ -45,14 +45,7 @@ export const extendConfig = (cfg: JuggConfig): JuggConfig => cfg;
  * @param name project name
  */
 export function searchPlaces(name: string) {
-  return [
-    'package.json',
-    `.${name}rc.js`,
-    `${name}.config.js`,
-    `.${name}rc.ts`,
-    `.${name}rc`,
-    `.${name}rc.json`,
-  ];
+  return [`.${name}rc.js`, `${name}.config.js`, `.${name}rc.ts`, `.${name}rc`];
 }
 
 /**
