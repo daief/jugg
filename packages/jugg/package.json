@@ -20,6 +20,7 @@
     "typescript": "^3"
   },
   "dependencies": {
+    "@hapi/joi": "^15.1.0",
     "@types/webpack": "^4.4.21",
     "@types/webpack-chain": "^5.0.0",
     "@types/webpack-dev-server": "^3.1.1",
@@ -41,7 +42,6 @@
     "hard-source-webpack-plugin": "0.13.1",
     "html-webpack-plugin": "^3.2.0",
     "image-webpack-loader": "^4.6.0",
-    "joi": "^14.3.0",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "lodash": "^4.17.11",
@@ -67,7 +67,7 @@
   },
   "devDependencies": {
     "@types/chokidar": "^1.7.5",
-    "@types/joi": "^14.0.1",
+    "@types/hapi__joi": "^15.0.2",
     "@types/lodash": "^4.14.119",
     "rimraf": "^2.6.2",
     "typescript": "^3.2.2"

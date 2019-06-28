@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import Joi from '@hapi/joi';
 import Config from 'webpack-chain';
 import { JuggConfig, JuggWebpack } from '../interface';
 
@@ -36,6 +36,11 @@ export const schema = Joi.object().keys({
       postcss: Joi.alternatives(false, Joi.object()),
     }),
   }),
+
+  transpileDependencies: Joi.alternatives(
+    Joi.array().items(Joi.string(), Joi.object().type(RegExp)),
+    Joi.func(),
+  ),
 });
 
 /**
@@ -68,11 +73,16 @@ export function defaults(): JuggConfig {
         postcss: {},
       },
     },
+    transpileDependencies: [],
   };
 }
 
 export function stringifyEqual(left: any, right: any) {
   return JSON.stringify(left) === JSON.stringify(right);
+}
+
+export function toStringEqual(left: any, right: any) {
+  return left.toString() === right.toString();
 }
 
 export const PROP_COMPARE: {
@@ -108,4 +118,5 @@ export const PROP_COMPARE: {
   tsCustomTransformers: stringifyEqual,
   html: stringifyEqual,
   css: stringifyEqual,
+  transpileDependencies: toStringEqual,
 };

@@ -92,6 +92,11 @@ export interface JuggConfig {
         | false;
     };
   };
+  /**
+   * add dependencies to compile by ts-loader or babel
+   * @since 0.1.1
+   */
+  transpileDependencies?: Array<string | RegExp> | ((pth: string) => boolean);
 }
 
 export type Plugin = (api: PluginAPI, opts: any) => void;
