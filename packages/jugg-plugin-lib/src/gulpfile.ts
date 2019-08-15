@@ -1,3 +1,9 @@
+/*
+ * @Author: daief
+ * @LastEditors: daief
+ * @Date: 2019-08-15 23:37:21
+ * @Description:
+ */
 import { PluginAPI } from '@axew/jugg/types/PluginAPI';
 import gulp from 'gulp';
 import gulpTs from 'gulp-typescript';
@@ -140,7 +146,7 @@ export default (opts: IOptions, api: PluginAPI) => {
     const vueResult = gulp
       .src(getSourceDirArray('vue'))
       .pipe(filterTest())
-      .pipe(gulpVue())
+      .pipe(gulpVue(api))
       .pipe(
         compileTS(undefined, {
           allowJs: true,
