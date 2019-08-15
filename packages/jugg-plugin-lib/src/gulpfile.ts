@@ -1,3 +1,9 @@
+/*
+ * @Author: daief
+ * @LastEditors: daief
+ * @Date: 2019-08-15 23:37:21
+ * @Description:
+ */
 import { PluginAPI } from '@axew/jugg/types/PluginAPI';
 import gulp from 'gulp';
 import gulpTs from 'gulp-typescript';
@@ -20,7 +26,8 @@ export interface IOptions {
    */
   copyFileSuffix?: string;
   /**
-   * set source code dir, default contains `src`
+   * set source code dir
+   * @default `src`
    */
   sourceDir?: string | string[];
 }
@@ -34,10 +41,22 @@ export default (opts: IOptions, api: PluginAPI) => {
 
   const { before = [], after = [] } = api.jugg.JConfig.tsCustomTransformers!;
 
-  const getSourceDirArray = (extensions: string): string[] =>
-    ['src', ...(Array.isArray(sourceDir) ? [...sourceDir] : [sourceDir])]
-      .filter((dir, idx, self) => !!dir && self.indexOf(dir) === idx)
-      .map(dir => `${dir}/**/*.${extensions}`);
+  const getSourceDirArray = (): string[] => {
+    const arr = (Array.isArray(sourceDir)
+      ? [...sourceDir]
+      : [sourceDir]
+    ).filter((dir, idx, self) => !!dir && self.indexOf(dir) === idx);
+    if (arr.length) {
+      return arr;
+    }
+    return ['src'];
+  };
+
+  const SOURCE_DIR_ARR = getSourceDirArray();
+
+  const getSourceFilesArray = (extensions: string): string[] =>
+    // ['src', ...(Array.isArray(sourceDir) ? [...sourceDir] : [sourceDir])]
+    SOURCE_DIR_ARR.map(dir => `${dir}/**/*.${extensions}`);
 
   const appendSuffix = copyFileSuffix.replace(/^\|*/, '').replace(/\|*$/, '');
 
@@ -58,7 +77,7 @@ export default (opts: IOptions, api: PluginAPI) => {
     });
 
     const less = gulp
-      .src(getSourceDirArray('less'))
+      .src(getSourceFilesArray('less'))
       .pipe(filterTest())
       .pipe(
         through2.obj(function(file, _2, next) {
@@ -81,7 +100,7 @@ export default (opts: IOptions, api: PluginAPI) => {
     // copy files
     const assets = gulp
       .src(
-        getSourceDirArray(
+        getSourceFilesArray(
           `@(png|jpg|jpeg|gif|webp|svg|mp4|webm|ogg|mp3|wav|flac|aac|woff|woff2|eot|ttf|otf${
             appendSuffix ? '|' + appendSuffix : ''
           })`,
@@ -123,13 +142,13 @@ export default (opts: IOptions, api: PluginAPI) => {
     };
 
     // use tsc compile ts, tsx, with declaration files
-    const tsResult = compileTS(getSourceDirArray('@(ts|tsx)'), {
+    const tsResult = compileTS(getSourceFilesArray('@(ts|tsx)'), {
       allowJs: false,
       declaration: true,
     });
 
     // use tsc compile js, jsx, no declaration files
-    const tsJsResult = compileTS(getSourceDirArray('@(js|jsx)'), {
+    const tsJsResult = compileTS(getSourceFilesArray('@(js|jsx)'), {
       allowJs: true,
       declaration: false,
       // isolatedModules (boolean) - Compiles files seperately and doesn't check types,
@@ -138,9 +157,9 @@ export default (opts: IOptions, api: PluginAPI) => {
     });
 
     const vueResult = gulp
-      .src(getSourceDirArray('vue'))
+      .src(getSourceFilesArray('vue'))
       .pipe(filterTest())
-      .pipe(gulpVue())
+      .pipe(gulpVue(api))
       .pipe(
         compileTS(undefined, {
           allowJs: true,
@@ -192,16 +211,36 @@ export default (opts: IOptions, api: PluginAPI) => {
   }
 
   gulp.task('compile-with-es', () => {
-    logger.info('[Parallel] Compile to es...');
+    logger.info('Compile to es...', '[Parallel]');
     return compile(false);
   });
 
   gulp.task('compile-with-lib', () => {
-    logger.info('[Parallel] Compile to js...');
+    logger.info('Compile to lib...', '[Parallel]');
     return compile(true);
   });
 
   gulp.task('compile', gulp.parallel('compile-with-es', 'compile-with-lib'));
+
+  gulp.task('watch-to-lib', () => {
+    logger.info(
+      `Now start watching: [${SOURCE_DIR_ARR.join(', ')}]`,
+      '[Watch]',
+    );
+    gulp.watch(
+      SOURCE_DIR_ARR.map(_ => `${_}/**/*`),
+      gulp.series('compile-with-lib'),
+    );
+  });
+
+  gulp.task('watch-to-es', () => {
+    gulp.watch(
+      SOURCE_DIR_ARR.map(_ => `${_}/**/*`),
+      gulp.series('compile-with-es'),
+    );
+  });
+
+  gulp.task('watch', gulp.parallel('watch-to-lib', 'watch-to-es'));
 
   return gulp;
 };

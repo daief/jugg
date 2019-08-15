@@ -37,7 +37,8 @@
     "typescript": "^3.2.2"
   },
   "files": ["lib", "types"],
-  "keywords": ["jugg", "jugg-plugin-lib", "typescript"],
+  "keywords": ["jugg", "jugg-plugin-lib", "typescript", "npm library"],
+  "description": "Help to build npm library.",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
