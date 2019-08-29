@@ -66,6 +66,7 @@ export default (opts: IOptions, api: PluginAPI) => {
 
   async function compile(modules: boolean) {
     const TARGET_DIR = modules === false ? ES_DIR : LIB_DIR;
+    const errors: any[] = [];
     // rm output dir
     await new Promise(resolve => {
       rimraf(TARGET_DIR, (err: any) => {
@@ -90,9 +91,7 @@ export default (opts: IOptions, api: PluginAPI) => {
               this.push(file);
               next();
             })
-            .catch(e => {
-              logger.error(e);
-            });
+            .catch(errors.push);
         }),
       )
       .pipe(gulp.dest(TARGET_DIR));
@@ -129,7 +128,9 @@ export default (opts: IOptions, api: PluginAPI) => {
         const rs = gulp
           .src(src)
           .pipe(filterTest())
-          .pipe(tsProject(gulpTs.reporter.fullReporter(true)));
+          .pipe(tsProject(gulpTs.reporter.fullReporter(true)))
+          // https://github.com/ivogabe/gulp-typescript/issues/295
+          .on('error', errors.push);
 
         return rs;
       }
@@ -138,7 +139,8 @@ export default (opts: IOptions, api: PluginAPI) => {
         .obj((file, _, next) => {
           next(null, file);
         })
-        .pipe(tsProject(gulpTs.reporter.fullReporter(true)));
+        .pipe(tsProject(gulpTs.reporter.fullReporter(true)))
+        .on('error', errors.push);
     };
 
     // use tsc compile ts, tsx, with declaration files
@@ -161,7 +163,7 @@ export default (opts: IOptions, api: PluginAPI) => {
       .pipe(filterTest())
       .pipe(gulpVue(api))
       .pipe(
-        compileTS(undefined, {
+        compileTS(void 0, {
           allowJs: true,
           declaration: false,
           isolatedModules: true,
@@ -192,7 +194,7 @@ export default (opts: IOptions, api: PluginAPI) => {
         }
       });
 
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       merge2([
         less,
         tsResult.js
@@ -205,6 +207,9 @@ export default (opts: IOptions, api: PluginAPI) => {
         assets,
         vueResult,
       ]).on('finish', () => {
+        if (errors.length) {
+          return reject(errors);
+        }
         resolve();
       });
     });
