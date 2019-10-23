@@ -10,7 +10,7 @@
     "build": "tsc",
     "watch": "tsc -w",
     "prebuild": "rimraf lib/ types/",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "yarn test && npm run build",
     "test": "jest"
   },
   "peerDependencies": {

@@ -5,7 +5,7 @@ exports[`ts-convert-import-from convert-vue-2-js import, export, require 1`] = `
 import B from \\"./A.js\\";
 import C from \\"A.js\\";
 export * from \\"../../A.js\\";
-export * from \\"./A.tsx\\";
+export * from './A.tsx';
 export { A };
 require(\\"A.js\\");
 require(\\"A.png\\");
