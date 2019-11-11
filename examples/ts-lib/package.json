@@ -1,6 +1,6 @@
 {
   "name": "ts-lib",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "private": true,
   "license": "MIT",
   "main": "lib/index.js",
@@ -19,8 +19,8 @@
     "vue-runtime-helpers": "^1.0.0"
   },
   "devDependencies": {
-    "@axew/jugg": "^0.1.2",
-    "@axew/jugg-plugin-lib": "^0.1.3",
+    "@axew/jugg": "^0.2.0",
+    "@axew/jugg-plugin-lib": "^0.2.0",
     "@axew/jugg-plugin-vue": "^0.0.8",
     "@types/react": "^16.7.17",
     "@types/react-dom": "^16.0.11",
@@ -28,8 +28,8 @@
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-hot-loader": "^4.6.3",
-    "tslib": "^1.9.3",
     "ts-import-plugin": "^1.6.1",
+    "tslib": "^1.9.3",
     "typescript": "^3.2.2",
     "vue": "^2.5.21",
     "vue-property-decorator": "^7.2.0",
