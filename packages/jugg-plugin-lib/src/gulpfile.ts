@@ -4,6 +4,7 @@
  * @Date: 2019-08-15 23:37:21
  * @Description:
  */
+import { TYPES } from '@axew/jugg';
 import { PluginAPI } from '@axew/jugg/types/PluginAPI';
 import gulp from 'gulp';
 import gulpTs from 'gulp-typescript';
@@ -30,6 +31,20 @@ export interface IOptions {
    * @default `src`
    */
   sourceDir?: string | string[];
+  /**
+   * 插件的 `tsCustomTransformers`
+   */
+  tsCustomTransformers?: (
+    opts: {
+      /**
+       * 是否构建 ES Module
+       */
+      isEsModule: boolean;
+    },
+  ) => {
+    before?: TYPES.PluginCfgSchema[];
+    after?: TYPES.PluginCfgSchema[];
+  };
 }
 
 export default (opts: IOptions, api: PluginAPI) => {
@@ -37,9 +52,8 @@ export default (opts: IOptions, api: PluginAPI) => {
     convertLessImport2Css = true,
     copyFileSuffix = '',
     sourceDir = '',
+    tsCustomTransformers,
   } = opts;
-
-  const { before = [], after = [] } = api.jugg.JConfig.tsCustomTransformers!;
 
   const getSourceDirArray = (): string[] => {
     const arr = (Array.isArray(sourceDir)
@@ -64,8 +78,8 @@ export default (opts: IOptions, api: PluginAPI) => {
   const LIB_DIR = getAbsolutePath('lib');
   const ES_DIR = getAbsolutePath('es');
 
-  async function compile(modules: boolean) {
-    const TARGET_DIR = modules === false ? ES_DIR : LIB_DIR;
+  async function compile(isEsModule: boolean) {
+    const TARGET_DIR = isEsModule ? ES_DIR : LIB_DIR;
     const errors: any[] = [];
     // rm output dir
     await new Promise(resolve => {
@@ -109,6 +123,11 @@ export default (opts: IOptions, api: PluginAPI) => {
       .pipe(gulp.dest(TARGET_DIR));
 
     const compileTS = (src?: string[], tsOpts: any = {}) => {
+      // 读取配置
+      const { before = [], after = [] } = tsCustomTransformers
+        ? tsCustomTransformers({ isEsModule })
+        : api.jugg.JConfig.tsCustomTransformers!;
+
       const tsProject = gulpTs.createProject(getAbsolutePath('tsconfig.json'), {
         noUnusedParameters: true,
         noUnusedLocals: true,
@@ -116,7 +135,7 @@ export default (opts: IOptions, api: PluginAPI) => {
         allowSyntheticDefaultImports: true,
         target: 'es5',
         moduleResolution: 'node',
-        module: modules ? 'commonjs' : 'esnext',
+        module: isEsModule ? 'esnext' : 'commonjs',
         ...tsOpts,
         getCustomTransformers: () => ({
           before: [transformerFactory(), ...before.map(resolvePlugin)],
@@ -217,12 +236,12 @@ export default (opts: IOptions, api: PluginAPI) => {
 
   gulp.task('compile-with-es', () => {
     logger.info('Compile to es...', '[Parallel]');
-    return compile(false);
+    return compile(true);
   });
 
   gulp.task('compile-with-lib', () => {
     logger.info('Compile to lib...', '[Parallel]');
-    return compile(true);
+    return compile(false);
   });
 
   gulp.task('compile', gulp.parallel('compile-with-es', 'compile-with-lib'));
