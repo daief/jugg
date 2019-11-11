@@ -161,6 +161,8 @@ type PluginCfgSchema = string | [string, { [k: string]: any }?];
   - set `none`, disbale hard-source-webpack-plugin
 - NO_WEBPACKBAR
   - when opened, remove webpackbar plugin
+- JUGG_TS_PROJECT
+  - set a value to assign a specific tsconfig.json
 
 # `TS` or `JS`
 

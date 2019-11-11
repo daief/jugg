@@ -1,13 +1,13 @@
 // import webpack from 'webpack';
-import Config from 'webpack-chain';
 import cleanWebPackPlugin from 'clean-webpack-plugin';
 import MiniCss from 'mini-css-extract-plugin';
-import UglifyjsPlugin from 'uglifyjs-webpack-plugin';
 import OptimizeCss from 'optimize-css-assets-webpack-plugin';
-import baseConfig from './base';
-import uglifyjsOpt from './uglifyjsOpt';
+import UglifyjsPlugin from 'uglifyjs-webpack-plugin';
+import Config from 'webpack-chain';
 import { Jugg } from '..';
-import { Plugin, Minimizer } from './chainCfgMap';
+import baseConfig from './base';
+import { Minimizer, Plugin } from './chainCfgMap';
+import uglifyjsOpt from './uglifyjsOpt';
 
 export default (jugg: Jugg): Config => {
   const { JConfig } = jugg;
