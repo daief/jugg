@@ -128,7 +128,11 @@ export default (opts: IOptions, api: PluginAPI) => {
         ? tsCustomTransformers({ isEsModule })
         : api.jugg.JConfig.tsCustomTransformers!;
 
-      const tsProject = gulpTs.createProject(getAbsolutePath('tsconfig.json'), {
+      const TS_CONFIG_FILE = getAbsolutePath(
+        process.env.JUGG_TS_PROJECT || 'tsconfig.json',
+      );
+
+      const tsProject = gulpTs.createProject(TS_CONFIG_FILE, {
         noUnusedParameters: true,
         noUnusedLocals: true,
         strictNullChecks: true,
