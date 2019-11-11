@@ -6,6 +6,9 @@
 
 <script lang="js">
 import Vue from 'vue'
+import { Input } from 'antd'  // just for testing tsCustomTransformers
+
+console.log(Input)
 
 export default {
   name: 'VueButton',

@@ -3,7 +3,29 @@ import { extendConfig } from '@axew/jugg';
 const isProd = process.env.NODE_ENV === 'production';
 
 export default extendConfig({
-  plugins: ['@axew/jugg-plugin-vue', '@axew/jugg-plugin-lib'],
+  plugins: [
+    '@axew/jugg-plugin-vue',
+    [
+      '@axew/jugg-plugin-lib',
+      {
+        // used by `@axew/jugg-plugin-lib`
+        tsCustomTransformers: ({ isEsModule }) => {
+          return {
+            before: [
+              [
+                'ts-import-plugin',
+                {
+                  libraryName: 'antd',
+                  libraryDirectory: isEsModule ? 'es' : 'lib',
+                  style: true,
+                },
+              ],
+            ],
+          };
+        },
+      },
+    ],
+  ],
   tsCustomTransformers: {
     before: ['@axew/jugg-plugin-react/lib/ts-rhl-transformer'],
   },
@@ -21,6 +43,7 @@ export default extendConfig({
         .externals({
           vue: 'vue',
           react: 'react',
+          antd: 'antd',
         })
         .end();
     }
