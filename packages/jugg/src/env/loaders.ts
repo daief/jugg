@@ -1,4 +1,4 @@
-import { existsSync } from 'fs';
+import { existsSync, lstatSync } from 'fs';
 import Config from 'webpack-chain';
 import { Jugg } from '..';
 import { matchTranspileDependencies } from '../utils/matchTranspileDependencies';
@@ -58,7 +58,10 @@ export default (config: Config, jugg: Jugg) => {
 
   // TODO 考虑抽离 TS 部分
   // ts project
-  if (existsSync(getAbsolutePath('tsconfig.json'))) {
+  const TS_CONFIG_FILE = getAbsolutePath(
+    process.env.JUGG_TS_PROJECT || 'tsconfig.json',
+  );
+  if (existsSync(TS_CONFIG_FILE) && lstatSync(TS_CONFIG_FILE).isFile()) {
     const { before = [], after = [] } = tsCustomTransformers;
     const beforeTransformers = before.map(resolvePlugin);
     const afterTransformers = after.map(resolvePlugin);
@@ -66,6 +69,7 @@ export default (config: Config, jugg: Jugg) => {
     const tsOpts = {
       transpileOnly: true,
       happyPackMode: true,
+      configFile: TS_CONFIG_FILE,
       getCustomTransformers: () => ({
         before: beforeTransformers,
         after: afterTransformers,
@@ -118,7 +122,7 @@ export default (config: Config, jugg: Jugg) => {
         .plugin(Plugin.FORK_TS_CHECKER_PLUGIN)
         .use(require('fork-ts-checker-webpack-plugin'), [
           {
-            tsconfig: 'tsconfig.json',
+            tsconfig: TS_CONFIG_FILE,
             checkSyntacticErrors: true,
             formatter: 'codeframe',
           },
