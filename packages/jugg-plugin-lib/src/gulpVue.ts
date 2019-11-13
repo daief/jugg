@@ -28,7 +28,7 @@ export interface IOptions {
 }
 
 /**
- * convert signle `vue` to `js`
+ * convert signle `vue` to `tsx`
  * @param opts
  * @param api
  */
@@ -64,7 +64,7 @@ export function gulpVue(api: PluginAPI, opts: IOptions = {}) {
       ...assembleOptions,
     });
 
-    file.path = file.path.replace(/\.vue$/, '.js');
+    file.path = file.path.replace(/\.vue$/, '.tsx');
 
     file.contents = Buffer.from(result.code);
 
