@@ -2,14 +2,19 @@
 
 exports[`compile-vue-file compile [a.vue] 1`] = `
 "/* script */
-
-
-
-
-
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === \\"object\\" && typeof Reflect.decorate === \\"function\\") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 import { Component, Vue } from 'vue-property-decorator';
-@Component
-const __vue_script__ = class A extends Vue {}
+let A = class A extends Vue {
+};
+A = __decorate([
+    Component
+], A);
+const __vue_script__ = A;
 
 /* template */
 var __vue_render__ = function() {
@@ -51,20 +56,25 @@ __vue_render__._withStripped = true
 
 exports[`compile-vue-file compile [b.vue] 1`] = `
 "/* script */
-
-
-
-
-
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === \\"object\\" && typeof Reflect.decorate === \\"function\\") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 import { Component, Vue } from 'vue-property-decorator';
 // @ts-ignore
 import Custom from 'xx-lib/Custom.vue';
-@Component({
-  components: {
-    Custom,
-  },
-})
-const __vue_script__ = class extends Vue {}
+let default_1 = class extends Vue {
+};
+default_1 = __decorate([
+    Component({
+        components: {
+            Custom,
+        },
+    })
+], default_1);
+const __vue_script__ = default_1;
 
 /* template */
 var __vue_render__ = function() {

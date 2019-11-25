@@ -77,6 +77,9 @@ export default (opts: IOptions, api: PluginAPI) => {
   const { getAbsolutePath, logger, resolvePlugin } = api.jugg.Utils;
   const LIB_DIR = getAbsolutePath('lib');
   const ES_DIR = getAbsolutePath('es');
+  const TS_CONFIG_FILE = getAbsolutePath(
+    process.env.JUGG_TS_PROJECT || 'tsconfig.json',
+  );
 
   async function compile(isEsModule: boolean) {
     const TARGET_DIR = isEsModule ? ES_DIR : LIB_DIR;
@@ -120,50 +123,6 @@ export default (opts: IOptions, api: PluginAPI) => {
       )
       .pipe(filterTest());
 
-    // const compileTS = (src?: string[], tsOpts: any = {}) => {
-    //   // 读取配置
-    //   const { before = [], after = [] } = tsCustomTransformers
-    //     ? tsCustomTransformers({ isEsModule })
-    //     : api.jugg.JConfig.tsCustomTransformers!;
-
-    //   const TS_CONFIG_FILE = getAbsolutePath(
-    //     process.env.JUGG_TS_PROJECT || 'tsconfig.json',
-    //   );
-
-    //   const tsProject = gulpTs.createProject(TS_CONFIG_FILE, {
-    //     noUnusedParameters: true,
-    //     noUnusedLocals: true,
-    //     strictNullChecks: true,
-    //     allowSyntheticDefaultImports: true,
-    //     target: 'es5',
-    //     moduleResolution: 'node',
-    //     module: isEsModule ? 'esnext' : 'commonjs',
-    //     ...tsOpts,
-    //     getCustomTransformers: () => ({
-    //       before: [transformerFactory(), ...before.map(resolvePlugin)],
-    //       after: after.map(resolvePlugin),
-    //     }),
-    //   });
-
-    //   if (src) {
-    //     const rs = gulp
-    //       .src(src)
-    //       .pipe(filterTest())
-    //       .pipe(tsProject(gulpTs.reporter.fullReporter(true)))
-    //       // https://github.com/ivogabe/gulp-typescript/issues/295
-    //       .on('error', errors.push);
-
-    //     return rs;
-    //   }
-
-    //   return through2
-    //     .obj((file, _, next) => {
-    //       next(null, file);
-    //     })
-    //     .pipe(tsProject(gulpTs.reporter.fullReporter(true)))
-    //     .on('error', errors.push);
-    // };
-
     const convertLessImport2CssStream = () =>
       through2.obj(function z(file, encoding, next) {
         this.push(file.clone());
@@ -198,10 +157,6 @@ export default (opts: IOptions, api: PluginAPI) => {
       const { before = [], after = [] } = tsCustomTransformers
         ? tsCustomTransformers({ isEsModule })
         : api.jugg.JConfig.tsCustomTransformers!;
-
-      const TS_CONFIG_FILE = getAbsolutePath(
-        process.env.JUGG_TS_PROJECT || 'tsconfig.json',
-      );
 
       const tsProject = gulpTs.createProject(TS_CONFIG_FILE, {
         noUnusedParameters: true,
@@ -250,7 +205,7 @@ export default (opts: IOptions, api: PluginAPI) => {
       const vueResult = gulp
         .src(getSourceFilesArray('vue'))
         .pipe(filterTest())
-        .pipe(gulpVue(api))
+        .pipe(gulpVue(api, { tsconfig: TS_CONFIG_FILE }))
         .pipe(
           compileTSPipe({
             allowJs: true,
@@ -304,7 +259,7 @@ export default (opts: IOptions, api: PluginAPI) => {
       const vueResult = gulp
         .src(getSourceFilesArray('vue'))
         .pipe(filterTest())
-        .pipe(gulpVue(api))
+        .pipe(gulpVue(api, { tsconfig: TS_CONFIG_FILE }))
         .pipe(
           compileTSPipe({
             allowJs: true,

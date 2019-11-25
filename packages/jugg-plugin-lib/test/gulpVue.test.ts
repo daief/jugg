@@ -11,6 +11,9 @@ describe('compile-vue-file', () => {
       const result = compileVueFile(
         fs.readFileSync(fullpath, 'utf-8'),
         filename,
+        {
+          tsconfig: path.resolve(process.cwd(), 'tsconfig.json'),
+        },
       );
       expect(result).toMatchSnapshot();
     });

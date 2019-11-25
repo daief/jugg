@@ -15,6 +15,7 @@ import {
 } from '@vue/component-compiler';
 import path from 'path';
 import through2 from 'through2';
+import * as ts from 'typescript';
 
 let isWarned = false;
 
@@ -25,6 +26,8 @@ export interface IOptions {
     template?: TemplateOptions | undefined;
   };
   assembleOptions?: AssembleOptions;
+  // config file
+  tsconfig?: string;
 }
 
 export function compileVueFile(
@@ -32,15 +35,39 @@ export function compileVueFile(
   filename: string,
   opts: IOptions = {},
 ) {
-  const { compilerOptions, assembleOptions } = opts;
+  const {
+    compilerOptions,
+    assembleOptions,
+    // tsconfig = ''
+  } = opts;
   const {
     assemble,
     createDefaultCompiler,
   } = require('@vue/component-compiler');
 
+  // const { parse } = require('@vue/component-compiler-utils');
+  // const templateCompiler = require('vue-template-compiler');
+  // const _descriptor = parse({
+  //   source: content,
+  //   filename,
+  //   needMap: true,
+  //   compiler: templateCompiler,
+  // });
+
   const compiler = createDefaultCompiler(compilerOptions);
   const descriptor = compiler.compileToDescriptor(filename, content);
 
+  // TS to js
+  descriptor.script.code = ts.transpile(
+    descriptor.script.code,
+    {
+      // TODO 合并 ts 配置
+      target: ts.ScriptTarget.ES2015, // stay es module
+    },
+    filename,
+  );
+
+  // 这里只能处理 js
   const result = assemble(compiler, filename, descriptor, {
     normalizer: '~' + 'vue-runtime-helpers/dist/normalize-component.js',
     styleInjector: '~' + 'vue-runtime-helpers/dist/inject-style/browser.js',
