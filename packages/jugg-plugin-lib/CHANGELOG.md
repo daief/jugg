@@ -2,6 +2,11 @@
 
 - [ ] fix: 使用 `tsConvertImportFrom` 替换 import 模块的路径后，相应生成的类型文件不更新
   - 如（见 ts-lib/src/vue-components/Button/index）：`import Button from './button.vue'` => `import Button from './button.js'`，类型文件中依旧是引用的 `.vue`
+- [ ] fix: 当 `vue` 文件中使用 `vue-property-decorator` 时，编译结果会有依赖丢失的现象
+
+## 0.2.2
+
+- refactor: `.vue` 编译后的后缀改为 `ts`
 
 ## 0.2.1 - 2019-11-13
 
