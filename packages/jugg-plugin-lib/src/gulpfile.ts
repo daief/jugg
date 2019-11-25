@@ -205,7 +205,7 @@ export default (opts: IOptions, api: PluginAPI) => {
       const vueResult = gulp
         .src(getSourceFilesArray('vue'))
         .pipe(filterTest())
-        .pipe(gulpVue(api, { tsconfig: TS_CONFIG_FILE }))
+        .pipe(gulpVue(api, { tsconfig: TS_CONFIG_FILE, cwd: api.jugg.context }))
         .pipe(
           compileTSPipe({
             allowJs: true,
@@ -259,7 +259,7 @@ export default (opts: IOptions, api: PluginAPI) => {
       const vueResult = gulp
         .src(getSourceFilesArray('vue'))
         .pipe(filterTest())
-        .pipe(gulpVue(api, { tsconfig: TS_CONFIG_FILE }))
+        .pipe(gulpVue(api, { tsconfig: TS_CONFIG_FILE, cwd: api.jugg.context }))
         .pipe(
           compileTSPipe({
             allowJs: true,

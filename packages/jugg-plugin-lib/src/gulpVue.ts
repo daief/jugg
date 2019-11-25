@@ -28,6 +28,7 @@ export interface IOptions {
   assembleOptions?: AssembleOptions;
   // config file
   tsconfig?: string;
+  cwd?: string;
 }
 
 export function compileVueFile(
@@ -38,7 +39,8 @@ export function compileVueFile(
   const {
     compilerOptions,
     assembleOptions,
-    // tsconfig = ''
+    tsconfig = '',
+    cwd = process.cwd(),
   } = opts;
   const {
     assemble,
@@ -57,12 +59,27 @@ export function compileVueFile(
   const compiler = createDefaultCompiler(compilerOptions);
   const descriptor = compiler.compileToDescriptor(filename, content);
 
+  // read tsconfig
+  const parseConfigHost: ts.ParseConfigHost = {
+    fileExists: ts.sys.fileExists,
+    readFile: ts.sys.readFile,
+    readDirectory: ts.sys.readDirectory,
+    useCaseSensitiveFileNames: true,
+  };
+  const configFile = ts.readConfigFile(tsconfig, ts.sys.readFile);
+  const compilerOptionsResult = ts.parseJsonConfigFileContent(
+    configFile.config,
+    parseConfigHost,
+    cwd,
+  );
   // TS to js
   descriptor.script.code = ts.transpile(
     descriptor.script.code,
     {
-      // TODO 合并 ts 配置
-      target: ts.ScriptTarget.ES2015, // stay es module
+      ...compilerOptionsResult.options,
+      // stay es module
+      target: ts.ScriptTarget.ES2015,
+      module: ts.ModuleKind.ESNext,
     },
     filename,
   );
@@ -79,7 +96,7 @@ export function compileVueFile(
 }
 
 /**
- * convert signle `vue` to `ts`
+ * convert signle `vue` to `js`
  * @param opts
  * @param api
  */
@@ -99,7 +116,7 @@ export function gulpVue(api: PluginAPI, opts: IOptions = {}) {
 
     const contentStr = file.contents.toString();
 
-    file.path = file.path.replace(/\.vue$/, '.ts');
+    file.path = file.path.replace(/\.vue$/, '.js');
 
     file.contents = Buffer.from(compileVueFile(contentStr, filename, opts));
 
