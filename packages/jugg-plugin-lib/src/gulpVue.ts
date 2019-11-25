@@ -27,14 +27,36 @@ export interface IOptions {
   assembleOptions?: AssembleOptions;
 }
 
+export function compileVueFile(
+  content: string,
+  filename: string,
+  opts: IOptions = {},
+) {
+  const { compilerOptions, assembleOptions } = opts;
+  const {
+    assemble,
+    createDefaultCompiler,
+  } = require('@vue/component-compiler');
+
+  const compiler = createDefaultCompiler(compilerOptions);
+  const descriptor = compiler.compileToDescriptor(filename, content);
+
+  const result = assemble(compiler, filename, descriptor, {
+    normalizer: '~' + 'vue-runtime-helpers/dist/normalize-component.js',
+    styleInjector: '~' + 'vue-runtime-helpers/dist/inject-style/browser.js',
+    styleInjectorSSR: '~' + 'vue-runtime-helpers/dist/inject-style/server.js',
+    ...assembleOptions,
+  });
+
+  return result.code;
+}
+
 /**
- * convert signle `vue` to `tsx`
+ * convert signle `vue` to `ts`
  * @param opts
  * @param api
  */
 export function gulpVue(api: PluginAPI, opts: IOptions = {}) {
-  const { compilerOptions = {}, assembleOptions = {} } = opts;
-
   if (!api.jugg.Utils.resolveCwd.silent('vue-template-compiler')) {
     !isWarned &&
       api.jugg.Utils.logger.warn(
@@ -45,28 +67,14 @@ export function gulpVue(api: PluginAPI, opts: IOptions = {}) {
     return through2.obj((file, __, callback) => callback(file));
   }
 
-  const {
-    assemble,
-    createDefaultCompiler,
-  } = require('@vue/component-compiler');
-
   return through2.obj((file, __, callback) => {
     const filename = path.basename(file.path);
 
     const contentStr = file.contents.toString();
-    const compiler = createDefaultCompiler(compilerOptions);
-    const descriptor = compiler.compileToDescriptor(filename, contentStr);
 
-    const result = assemble(compiler, filename, descriptor, {
-      normalizer: '~' + 'vue-runtime-helpers/dist/normalize-component.js',
-      styleInjector: '~' + 'vue-runtime-helpers/dist/inject-style/browser.js',
-      styleInjectorSSR: '~' + 'vue-runtime-helpers/dist/inject-style/server.js',
-      ...assembleOptions,
-    });
+    file.path = file.path.replace(/\.vue$/, '.ts');
 
-    file.path = file.path.replace(/\.vue$/, '.tsx');
-
-    file.contents = Buffer.from(result.code);
+    file.contents = Buffer.from(compileVueFile(contentStr, filename, opts));
 
     callback(null, file);
   });
