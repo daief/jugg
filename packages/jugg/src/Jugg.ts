@@ -6,6 +6,7 @@ import { Configuration } from 'webpack';
 import Config from 'webpack-chain';
 import merge from 'webpack-merge';
 import { CHAIN_CONFIG_MAP } from './env/chainCfgMap';
+import { WebpackOptionsManager } from './env/options';
 import {
   CommandSchema,
   JuggConfig,
@@ -31,6 +32,7 @@ export default class Jugg {
   commands: CommandSchema[] = [];
   webpackChainFns: WebpackChainFun[] = [];
 
+  private webpackOptionsManager: WebpackOptionsManager;
   private fsWatcher: FSWatcher = null;
   private eventBus: EventBus = null;
 
@@ -44,6 +46,7 @@ export default class Jugg {
   constructor(context: string) {
     this.context = context;
     this.commander = program;
+    this.webpackOptionsManager = new WebpackOptionsManager({ jugg: this });
 
     this.globalCommandOpts = this.resolveGlobalCommandOpts();
 
@@ -63,6 +66,10 @@ export default class Jugg {
 
   get IsProd() {
     return process.env.NODE_ENV === 'production';
+  }
+
+  get WebpackOptionsManager() {
+    return this.webpackOptionsManager;
   }
 
   get Utils() {
@@ -206,6 +213,7 @@ export default class Jugg {
     this.initialized = false;
 
     this.eventBus.clear(WATCH_CONFIG_CHANGE_EVENT);
+    this.webpackOptionsManager = new WebpackOptionsManager({ jugg: this });
 
     this.init();
   }

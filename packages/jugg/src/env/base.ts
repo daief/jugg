@@ -14,7 +14,7 @@ import { FilterCSSConflictingWarning } from './plugins';
 
 export default (jugg: Jugg): Config => {
   const config = new Config();
-  const { JConfig, Utils } = jugg;
+  const { JConfig, Utils, WebpackOptionsManager } = jugg;
   const { outputDir, html } = JConfig;
   const { getAbsolutePath } = Utils;
 
@@ -24,7 +24,7 @@ export default (jugg: Jugg): Config => {
 
   config
     .entry(Entry.INDEX)
-    .add('./src/index')
+    .add(WebpackOptionsManager.findOpts(Entry.INDEX))
     .end()
     .output.path(getAbsolutePath(outputDir))
     .filename('[name].[hash].js')
