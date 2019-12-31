@@ -1,0 +1,35 @@
+{
+  "name": "@axew/jugg-plugin-doc",
+  "version": "0.0.1-alpha.0",
+  "license": "MIT",
+  "main": "./lib/index.js",
+  "types": "./types",
+  "homepage": "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-doc",
+  "repository": "https://github.com/daief/jugg/tree/master/packages/jugg-plugin-doc",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "prebuild": "rimraf lib/ types/",
+    "prepublishOnly": "yarn test && npm run build",
+    "test": "# jest"
+  },
+  "peerDependencies": {
+    "@axew/jugg": ">= 0.1.0"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "files": ["lib", "types"],
+  "keywords": [
+    "jugg",
+    "jugg-plugin-doc",
+    "typescript",
+    "npm library",
+    "documents",
+    "doc"
+  ],
+  "description": "Help to build document site.",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  }
+}
