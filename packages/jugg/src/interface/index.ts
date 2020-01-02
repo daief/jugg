@@ -14,12 +14,10 @@ export interface CommandSchema {
   action?: (args: any) => void;
 }
 
-export type WebpackChainFun = (
-  param: {
-    config: Config;
-    webpack: Configuration;
-  },
-) => void | Configuration;
+export type WebpackChainFun = (param: {
+  config: Config;
+  webpack: Configuration;
+}) => void | Configuration;
 
 export type JuggWebpack = Configuration | WebpackChainFun;
 
@@ -113,4 +111,8 @@ export interface JuggGlobalCommandOpts {
    * specified configuration file path
    */
   configFilePath?: string;
+  /**
+   * run mode type
+   */
+  mode: string;
 }

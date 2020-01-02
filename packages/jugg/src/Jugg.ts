@@ -41,7 +41,9 @@ export default class Jugg {
   private juggConfig: JuggConfig = {};
   private initialized = false;
 
-  private globalCommandOpts: JuggGlobalCommandOpts = {};
+  private globalCommandOpts: JuggGlobalCommandOpts = {
+    mode: '',
+  };
 
   constructor(context: string) {
     this.context = context;
@@ -76,7 +78,7 @@ export default class Jugg {
     return {
       CHAIN_CONFIG_MAP,
       getAbsolutePath: (...p: string[]) => {
-        return resolve(this.context, ...p);
+        return resolve(this.context, ...p.filter(Boolean));
       },
       logger,
       matchTranspileDependencies,
@@ -119,9 +121,11 @@ export default class Jugg {
   loadPlugins() {
     const { plugins } = this.JConfig;
 
-    const builtIn: string[] = ['./run/dev', './run/build', './run/inspect'].map(
-      p => resolve(__dirname, p),
-    );
+    const builtIn: string[] = [
+      './run/dev',
+      './run/build',
+      './run/inspect',
+    ].map(p => resolve(__dirname, p));
 
     [...builtIn, ...(plugins || [])]
       .map(p => {
@@ -262,6 +266,9 @@ export default class Jugg {
       }
     }
 
+    process.env.NODE_ENV = this.globalCommandOpts.mode;
+
+    // ❗️ 特殊的，强制覆盖
     if (cName === 'dev') {
       process.env.NODE_ENV = 'development';
     } else if (cName === 'build') {
@@ -320,10 +327,16 @@ export default class Jugg {
   }
 
   private resolveGlobalCommandOpts(): JuggGlobalCommandOpts {
-    this.commander.option('-C, --config <path>', 'assign the config file');
-    const { config } = this.commander.parse(process.argv).opts();
+    this.commander
+      .option('-C, --config <path>', 'assign the config file')
+      .option(
+        '-M, --mode <development|production>',
+        'assign the process.env.NODE_ENV. default: development',
+      );
+    const { config, mode } = this.commander.parse(process.argv).opts();
     return {
       configFilePath: config || '',
+      mode: mode || 'development',
     };
   }
 }

@@ -10,7 +10,7 @@ export default function build(api: PluginAPI) {
     description: 'inspect webpack config',
     option: [
       {
-        flags: '-p, --path <path>',
+        flags: '-P, --path [path]',
         description: 'a path file to write result',
       },
     ],
