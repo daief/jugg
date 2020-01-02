@@ -1,6 +1,6 @@
 {
   "name": "ts-lib",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "private": true,
   "license": "MIT",
   "main": "lib/index.js",
@@ -19,7 +19,7 @@
     "vue-runtime-helpers": "^1.0.0"
   },
   "devDependencies": {
-    "@axew/jugg": "^0.2.0",
+    "@axew/jugg": "^0.2.1-alpha.0",
     "@axew/jugg-plugin-lib": "^0.2.2-alpha.0",
     "@axew/jugg-plugin-vue": "^0.0.8",
     "@types/react": "^16.7.17",
