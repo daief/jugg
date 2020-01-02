@@ -250,7 +250,6 @@ export default class Jugg {
 
   /**
    * load env
-   * TODO load mode .env file
    */
   private loadEnv() {
     const c = this.commander.parse(process.argv);
@@ -259,6 +258,9 @@ export default class Jugg {
 
     try {
       loadEnv(basePath);
+      loadEnv(
+        this.Utils.getAbsolutePath(`.${this.globalCommandOpts.mode}.env`),
+      );
     } catch (err) {
       // only ignore error if file is not found
       if (err.toString().indexOf('ENOENT') < 0) {
