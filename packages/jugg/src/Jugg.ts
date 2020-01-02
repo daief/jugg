@@ -119,8 +119,8 @@ export default class Jugg {
   loadPlugins() {
     const { plugins } = this.JConfig;
 
-    const builtIn: string[] = ['./run/dev', './run/build'].map(p =>
-      resolve(__dirname, p),
+    const builtIn: string[] = ['./run/dev', './run/build', './run/inspect'].map(
+      p => resolve(__dirname, p),
     );
 
     [...builtIn, ...(plugins || [])]
