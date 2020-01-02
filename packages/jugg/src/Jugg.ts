@@ -6,7 +6,6 @@ import { Configuration } from 'webpack';
 import Config from 'webpack-chain';
 import merge from 'webpack-merge';
 import { CHAIN_CONFIG_MAP } from './env/chainCfgMap';
-import { WebpackOptionsManager } from './env/options';
 import {
   CommandSchema,
   JuggConfig,
@@ -22,6 +21,7 @@ import { loadEnv } from './utils/loadEnv';
 import { logger } from './utils/logger';
 import { matchTranspileDependencies } from './utils/matchTranspileDependencies';
 import readTs from './utils/readTs';
+import { WebpackOptionsManager } from './webpack/options';
 
 const packageJSON = require(resolve(__dirname, '../package.json'));
 

@@ -44,6 +44,11 @@ export enum Rule {
 export enum Minimizer {
   OPTIMIZE_CSS_ASSETS = 'optimize-css-assets-webpack-plugin',
   UGLIFYJS_WEBPACK = 'uglifyjs-webpack-plugin',
+  SPLIT_CHUNKS = 'splitChunks',
+}
+
+export enum Other {
+  OUTPUT = 'output',
 }
 
 export const CHAIN_CONFIG_MAP = {
@@ -51,4 +56,5 @@ export const CHAIN_CONFIG_MAP = {
   plugin: Plugin,
   rule: Rule,
   minimizer: Minimizer,
+  other: Other,
 };
