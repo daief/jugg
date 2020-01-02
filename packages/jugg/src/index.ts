@@ -1,5 +1,5 @@
-import Jugg from './Jugg';
 import * as TYPES from './interface';
+import Jugg from './Jugg';
 /**
  * @deprecated
  */

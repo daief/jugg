@@ -7,6 +7,7 @@
 - feat: 命令行支持 `mode=` 以配置 `NODE_ENV`，默认 `development`
   - 但当运行 `dev`、`build` 时，`NODE_ENV` 总是为 `development` 和 `production`
 - feat: 除了自动载入 `.env` 环境变量文件，还会根据 `mode` 载入 `.mode.env` 文件
+- refactor: webpack 回调中注入 `jugg`
 
 ## 0.2.0 - 2019-11-11
 

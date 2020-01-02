@@ -1,5 +1,6 @@
 import Joi from '@hapi/joi';
 import Config from 'webpack-chain';
+import { Jugg } from '..';
 import { JuggConfig, JuggWebpack } from '../interface';
 
 const pluginSchemaArray = Joi.array().items(
@@ -86,10 +87,11 @@ export function toStringEqual(left: any, right: any) {
 }
 
 export const PROP_COMPARE: {
-  [k: string]: (left: any, right: any) => boolean;
+  // prettier-ignore
+  [k: string]: (left: any, right: any, jugg: Jugg) => boolean;
 } = {
   plugins: stringifyEqual,
-  webpack: (left: JuggWebpack, right: JuggWebpack) => {
+  webpack: (left: JuggWebpack, right: JuggWebpack, jugg: Jugg) => {
     const leftCfg = new Config();
     const rightCfg = new Config();
 
@@ -97,10 +99,12 @@ export const PROP_COMPARE: {
       const leftObjectCfg = left({
         config: leftCfg,
         webpack: leftCfg.toConfig(),
+        jugg,
       });
       const rightObjectCfg = right({
         config: rightCfg,
         webpack: rightCfg.toConfig(),
+        jugg,
       });
 
       const chainCompareResult =

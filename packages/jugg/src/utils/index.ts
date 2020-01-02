@@ -102,7 +102,7 @@ export function isUserConfigChanged(jugg: Jugg): false | keyof JuggConfig {
     result =
       (doCompare === undefined
         ? newCfg[key] !== config[key]
-        : !doCompare(newCfg[key], config[key])) && key;
+        : !doCompare(newCfg[key], config[key], jugg)) && key;
   });
 
   return result;

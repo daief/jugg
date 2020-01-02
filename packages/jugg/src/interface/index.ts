@@ -1,5 +1,6 @@
 import { Configuration } from 'webpack';
 import Config from 'webpack-chain';
+import Jugg from '../Jugg';
 import { PluginAPI } from '../PluginAPI';
 
 export interface CommandSchema {
@@ -17,6 +18,7 @@ export interface CommandSchema {
 export type WebpackChainFun = (param: {
   config: Config;
   webpack: Configuration;
+  jugg: Jugg;
 }) => void | Configuration;
 
 export type JuggWebpack = Configuration | WebpackChainFun;

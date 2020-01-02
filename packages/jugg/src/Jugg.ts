@@ -165,13 +165,22 @@ export default class Jugg {
     //      chain cfg < object cfg
 
     // 1. get default cfg
+    // const defaultCfg: Config = require(this.IsProd
+    //   ? './env/prod'
+    //   : './env/dev').default(this);
     const defaultCfg: Config = require(this.IsProd
-      ? './env/prod'
-      : './env/dev').default(this);
+      ? './webpack/prod'
+      : './webpack/dev').default(this);
 
     // 2. merge plugin chain-config to defaultCfg, get object cfg
     const pluginsWebpackObjectCfgList: Configuration[] = this.webpackChainFns
-      .map(fn => fn({ config: defaultCfg, webpack: defaultCfg.toConfig() }))
+      .map(fn =>
+        fn({
+          config: defaultCfg,
+          webpack: defaultCfg.toConfig(),
+          jugg: this,
+        }),
+      )
       //  type predicate, ref: https://stackoverflow.com/a/46700791/10528190
       .filter((cfg): cfg is Configuration => !!cfg);
 
@@ -183,7 +192,11 @@ export default class Jugg {
     const { webpack } = this.juggConfig;
     const userWebpackObjectCfg: Configuration | void =
       typeof webpack === 'function'
-        ? webpack({ config: defaultCfg, webpack: defaultCfg.toConfig() })
+        ? webpack({
+            config: defaultCfg,
+            webpack: defaultCfg.toConfig(),
+            jugg: this,
+          })
         : webpack;
 
     // 4. merge all
