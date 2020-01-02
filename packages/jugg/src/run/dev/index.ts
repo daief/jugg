@@ -40,12 +40,12 @@ export default function dev(api: PluginAPI) {
     ],
     action: async (args: ArgOpts) => {
       addFileWatch();
-      server = await startServer(api, args);
+      server = await excute(api, args);
     },
   });
 }
 
-async function startServer(api: PluginAPI, argv: ArgOpts) {
+export async function excute(api: PluginAPI, argv: ArgOpts) {
   const { JConfig } = api.jugg;
   const wbpCfg = api.jugg.mergeConfig();
   const { devServer = {} } = wbpCfg;

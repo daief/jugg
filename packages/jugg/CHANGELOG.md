@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.2.1-alpha.1 - 2020-01-02
+
+- refactor: 方法整理，并导出内置方法
+
 ## 0.2.1-alpha.0 - 2020-01-02
 
 - refactor: 集中式管理 webpack 插件、loader 等等的配置项，并对外提供获取、修改的途径
