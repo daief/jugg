@@ -9,6 +9,7 @@ import { CHAIN_CONFIG_MAP } from './env/chainCfgMap';
 import {
   CommandSchema,
   JuggConfig,
+  JuggConfigChainFun,
   JuggGlobalCommandOpts,
   Plugin,
   PluginCfgSchema,
@@ -31,6 +32,8 @@ export default class Jugg {
   context: string = '';
   commands: CommandSchema[] = [];
   webpackChainFns: WebpackChainFun[] = [];
+
+  juggConfigChainFns: JuggConfigChainFun[] = [];
 
   private webpackOptionsManager: WebpackOptionsManager;
   private fsWatcher: FSWatcher = null;
@@ -62,8 +65,8 @@ export default class Jugg {
   /**
    * user config
    */
-  get JConfig() {
-    return this.juggConfig;
+  get JConfig(): Readonly<JuggConfig> {
+    return Object.freeze({ ...this.juggConfig });
   }
 
   get IsProd() {
@@ -111,7 +114,7 @@ export default class Jugg {
     this.globalCommandOpts.configFilePath = configFilePath;
 
     this.loadPlugins();
-
+    this.resolveJuggConfigs();
     this.registerCommands();
   }
 
@@ -225,6 +228,7 @@ export default class Jugg {
   reload() {
     this.commands = [];
     this.webpackChainFns = [];
+    this.juggConfigChainFns = [];
 
     this.juggConfig = {};
     this.initialized = false;
@@ -329,6 +333,12 @@ export default class Jugg {
       // default show help
       this.commander.help();
     }
+  }
+
+  private resolveJuggConfigs() {
+    this.juggConfig = this.juggConfigChainFns.reduce((c, func) => {
+      return func(c);
+    }, this.juggConfig);
   }
 
   /**

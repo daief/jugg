@@ -3,7 +3,11 @@
  */
 import { resolve } from 'path';
 import { Jugg } from '.';
-import { CommandSchema, WebpackChainFun } from './interface';
+import {
+  CommandSchema,
+  JuggConfigChainFun,
+  WebpackChainFun,
+} from './interface';
 
 export class PluginAPI {
   id: string;
@@ -53,5 +57,13 @@ export class PluginAPI {
    */
   chainWebpack(chainFun: WebpackChainFun) {
     this.jugg.webpackChainFns.push(chainFun);
+  }
+
+  /**
+   * 添加一个方法，用于扩展 JuggConfig
+   * @param chainFun
+   */
+  chainJuggConfig(chainFun: JuggConfigChainFun) {
+    this.jugg.juggConfigChainFns.push(chainFun);
   }
 }
