@@ -18,3 +18,4 @@ declare module 'through2' {
 }
 declare module 'merge2';
 declare module 'rimraf';
+declare module 'memory-fs';

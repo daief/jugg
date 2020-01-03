@@ -12,7 +12,7 @@
     "watch": "tsc -w",
     "prebuild": "rimraf lib/ types/",
     "prepublishOnly": "yarn test && npm run build",
-    "test": "# jest"
+    "test": "cross-env JUGG_PLUGIN_DOC_IN_TEST=TEST jest"
   },
   "peerDependencies": {
     "@axew/jugg": ">= 0.1.0",
@@ -46,5 +46,10 @@
     "react-dom": "16.8.0",
     "react-router-dom": "^5.0.0",
     "ts-import-plugin": "^1.6.0"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "verbose": true
   }
 }

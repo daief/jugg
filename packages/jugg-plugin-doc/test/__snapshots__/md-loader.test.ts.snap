@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test loader changelog.md: ./fixture/changelog.md 1`] = `
+"
+    // metadata
+    export const metadata = {\\"order\\":1,\\"title\\":\\"changelog\\"};
+    // 尝试解析代码块后剩余的 html 部分
+    export const extra = \\"<p><a href=\\\\\\"https://gist.github.com/parmentf/035de27d6ed1dce0b36a\\\\\\">Emoji 参考</a>。</p>\\\\n<h2 id=\\\\\\"1.1.0\\\\\\">1.1.0<a name=\\\\\\"1.1.0\\\\\\" class=\\\\\\"anchor\\\\\\" href=\\\\\\"#1.1.0\\\\\\"></a></h2><ul>\\\\n<li><input disabled=\\\\\\"\\\\\\" type=\\\\\\"checkbox\\\\\\"> feat: xxx feat</li>\\\\n</ul>\\\\n<h2 id=\\\\\\"1.0.0 - 2019-11-05\\\\\\">1.0.0 - 2019-11-05<a name=\\\\\\"1.0.0 - 2019-11-05\\\\\\" class=\\\\\\"anchor\\\\\\" href=\\\\\\"#1.0.0 - 2019-11-05\\\\\\"></a></h2><ul>\\\\n<li>🔨 refactor: xxx refactor</li>\\\\n</ul>\\\\n<h2 id=\\\\\\"1.0.0-alpha.0 - 2019-11-05\\\\\\">1.0.0-alpha.0 - 2019-11-05<a name=\\\\\\"1.0.0-alpha.0 - 2019-11-05\\\\\\" class=\\\\\\"anchor\\\\\\" href=\\\\\\"#1.0.0-alpha.0 - 2019-11-05\\\\\\"></a></h2><ul>\\\\n<li>✨ feat: feat111</li>\\\\n</ul>\\\\n\\";
+    // 整个 markdown 对应的 html，未经处理
+    export const html = \\"<p><a href=\\\\\\"https://gist.github.com/parmentf/035de27d6ed1dce0b36a\\\\\\">Emoji 参考</a>。</p>\\\\n<h2 id=\\\\\\"1.1.0\\\\\\">1.1.0<a name=\\\\\\"1.1.0\\\\\\" class=\\\\\\"anchor\\\\\\" href=\\\\\\"#1.1.0\\\\\\"></a></h2><ul>\\\\n<li><input disabled=\\\\\\"\\\\\\" type=\\\\\\"checkbox\\\\\\"> feat: xxx feat</li>\\\\n</ul>\\\\n<h2 id=\\\\\\"1.0.0 - 2019-11-05\\\\\\">1.0.0 - 2019-11-05<a name=\\\\\\"1.0.0 - 2019-11-05\\\\\\" class=\\\\\\"anchor\\\\\\" href=\\\\\\"#1.0.0 - 2019-11-05\\\\\\"></a></h2><ul>\\\\n<li>🔨 refactor: xxx refactor</li>\\\\n</ul>\\\\n<h2 id=\\\\\\"1.0.0-alpha.0 - 2019-11-05\\\\\\">1.0.0-alpha.0 - 2019-11-05<a name=\\\\\\"1.0.0-alpha.0 - 2019-11-05\\\\\\" class=\\\\\\"anchor\\\\\\" href=\\\\\\"#1.0.0-alpha.0 - 2019-11-05\\\\\\"></a></h2><ul>\\\\n<li>✨ feat: feat111</li>\\\\n</ul>\\\\n\\";
+    // 代码块转化成列表作为默认导出
+    export default [
+      
+    ];
+  "
+`;
+
+exports[`Test loader ignore.md: ./fixture/ignore.md 1`] = `
+"
+    // metadata
+    export const metadata = {\\"title\\":\\"ignore\\"};
+    // 尝试解析代码块后剩余的 html 部分
+    export const extra = \\"<h2 id=\\\\\\"title - bash\\\\\\">title - bash<a name=\\\\\\"title - bash\\\\\\" class=\\\\\\"anchor\\\\\\" href=\\\\\\"#title - bash\\\\\\"></a></h2><p>这一段会被忽略。</p>\\\\n<pre class=\\\\\\"language-bash\\\\\\"><code>$ yarn install</code></pre><h2 id=\\\\\\"title - bash\\\\\\">title - bash<a name=\\\\\\"title - bash\\\\\\" class=\\\\\\"anchor\\\\\\" href=\\\\\\"#title - bash\\\\\\"></a></h2><p>这一段会被忽略。</p>\\\\n<pre class=\\\\\\"language-bash\\\\\\"><code>$ yarn install</code></pre><h2 id=\\\\\\"title - bash\\\\\\">title - bash<a name=\\\\\\"title - bash\\\\\\" class=\\\\\\"anchor\\\\\\" href=\\\\\\"#title - bash\\\\\\"></a></h2><p>这一段会被忽略。</p>\\\\n<pre class=\\\\\\"language-bash\\\\\\"><code>$ yarn install</code></pre><p>所以，全部输出成 extra。</p>\\\\n\\";
+    // 整个 markdown 对应的 html，未经处理
+    export const html = \\"<h2 id=\\\\\\"title - bash\\\\\\">title - bash<a name=\\\\\\"title - bash\\\\\\" class=\\\\\\"anchor\\\\\\" href=\\\\\\"#title - bash\\\\\\"></a></h2><p>这一段会被忽略。</p>\\\\n<pre class=\\\\\\"language-bash\\\\\\"><code>$ yarn install</code></pre><h2 id=\\\\\\"title - bash\\\\\\">title - bash<a name=\\\\\\"title - bash\\\\\\" class=\\\\\\"anchor\\\\\\" href=\\\\\\"#title - bash\\\\\\"></a></h2><p>这一段会被忽略。</p>\\\\n<pre class=\\\\\\"language-bash\\\\\\"><code>$ yarn install</code></pre><h2 id=\\\\\\"title - bash\\\\\\">title - bash<a name=\\\\\\"title - bash\\\\\\" class=\\\\\\"anchor\\\\\\" href=\\\\\\"#title - bash\\\\\\"></a></h2><p>这一段会被忽略。</p>\\\\n<pre class=\\\\\\"language-bash\\\\\\"><code>$ yarn install</code></pre><p>所以，全部输出成 extra。</p>\\\\n\\";
+    // 代码块转化成列表作为默认导出
+    export default [
+      
+    ];
+  "
+`;
+
+exports[`Test loader notitle.md: ./fixture/notitle.md 1`] = `
+"
+    // metadata
+    export const metadata = {\\"title\\":\\"notitle\\"};
+    // 尝试解析代码块后剩余的 html 部分
+    export const extra = \\"\\\\n\\\\n<p>no title this md.</p>\\\\n\\";
+    // 整个 markdown 对应的 html，未经处理
+    export const html = \\"\\\\n\\\\n<p>no title this md.</p>\\\\n\\";
+    // 代码块转化成列表作为默认导出
+    export default [
+      
+    ];
+  "
+`;
+
+exports[`Test loader test.md: ./.cache/jugg-md-loader/cbdb9e6261f7c33d2177b118d37086f2.tsx 1`] = `"export default \\"import { Button } from 'antd';\\\\n\\\\nexport default <Button>btn</Button>;\\""`;
+
+exports[`Test loader test.md: ./fixture/test.md 1`] = `
+"
+    // metadata
+    export const metadata = {\\"title\\":\\"这是 metadata\\"};
+    // 尝试解析代码块后剩余的 html 部分
+    export const extra = \\"\\";
+    // 整个 markdown 对应的 html，未经处理
+    export const html = \\"<h2 id=\\\\\\"title1 - tsx\\\\\\">title1 - tsx<a name=\\\\\\"title1 - tsx\\\\\\" class=\\\\\\"anchor\\\\\\" href=\\\\\\"#title1 - tsx\\\\\\"></a></h2><p>描述 1，这一段会被解析。</p>\\\\n<pre class=\\\\\\"language-tsx\\\\\\"><code><span class=\\\\\\"token keyword\\\\\\">import</span> <span class=\\\\\\"token punctuation\\\\\\">{</span> Button <span class=\\\\\\"token punctuation\\\\\\">}</span> <span class=\\\\\\"token keyword\\\\\\">from</span> <span class=\\\\\\"token string\\\\\\">'antd'</span><span class=\\\\\\"token punctuation\\\\\\">;</span>\\\\n\\\\n<span class=\\\\\\"token keyword\\\\\\">export</span> <span class=\\\\\\"token keyword\\\\\\">default</span> <span class=\\\\\\"token tag\\\\\\"><span class=\\\\\\"token tag\\\\\\"><span class=\\\\\\"token punctuation\\\\\\">&lt;</span><span class=\\\\\\"token class-name\\\\\\">Button</span></span><span class=\\\\\\"token punctuation\\\\\\">></span></span>btn<span class=\\\\\\"token tag\\\\\\"><span class=\\\\\\"token tag\\\\\\"><span class=\\\\\\"token punctuation\\\\\\">&lt;/</span><span class=\\\\\\"token class-name\\\\\\">Button</span></span><span class=\\\\\\"token punctuation\\\\\\">></span></span><span class=\\\\\\"token punctuation\\\\\\">;</span></code></pre><h1 id=\\\\\\"title2\\\\\\">title2<a name=\\\\\\"title2\\\\\\" class=\\\\\\"anchor\\\\\\" href=\\\\\\"#title2\\\\\\"></a></h1><p>这里会被忽略</p>\\\\n<pre class=\\\\\\"language-js\\\\\\"><code><span class=\\\\\\"token keyword\\\\\\">import</span> <span class=\\\\\\"token punctuation\\\\\\">{</span> Button <span class=\\\\\\"token punctuation\\\\\\">}</span> <span class=\\\\\\"token keyword\\\\\\">from</span> <span class=\\\\\\"token string\\\\\\">'antd'</span><span class=\\\\\\"token punctuation\\\\\\">;</span>\\\\n\\\\n<span class=\\\\\\"token keyword\\\\\\">export</span> <span class=\\\\\\"token keyword\\\\\\">default</span> <span class=\\\\\\"token operator\\\\\\">&lt;</span>Button<span class=\\\\\\"token operator\\\\\\">></span>btn<span class=\\\\\\"token operator\\\\\\">&lt;</span><span class=\\\\\\"token operator\\\\\\">/</span>Button<span class=\\\\\\"token operator\\\\\\">></span><span class=\\\\\\"token punctuation\\\\\\">;</span></code></pre><h2 id=\\\\\\"title - js\\\\\\">title - js<a name=\\\\\\"title - js\\\\\\" class=\\\\\\"anchor\\\\\\" href=\\\\\\"#title - js\\\\\\"></a></h2><p>这一段会被解析。</p>\\\\n<pre class=\\\\\\"language-js\\\\\\"><code><span class=\\\\\\"token keyword\\\\\\">import</span> <span class=\\\\\\"token punctuation\\\\\\">{</span> Button <span class=\\\\\\"token punctuation\\\\\\">}</span> <span class=\\\\\\"token keyword\\\\\\">from</span> <span class=\\\\\\"token string\\\\\\">'antd'</span><span class=\\\\\\"token punctuation\\\\\\">;</span>\\\\n\\\\n<span class=\\\\\\"token keyword\\\\\\">export</span> <span class=\\\\\\"token keyword\\\\\\">default</span> <span class=\\\\\\"token operator\\\\\\">&lt;</span>Button<span class=\\\\\\"token operator\\\\\\">></span>btn<span class=\\\\\\"token operator\\\\\\">&lt;</span><span class=\\\\\\"token operator\\\\\\">/</span>Button<span class=\\\\\\"token operator\\\\\\">></span><span class=\\\\\\"token punctuation\\\\\\">;</span></code></pre><h2 id=\\\\\\"title - bash\\\\\\">title - bash<a name=\\\\\\"title - bash\\\\\\" class=\\\\\\"anchor\\\\\\" href=\\\\\\"#title - bash\\\\\\"></a></h2><p>这一段会被忽略。</p>\\\\n<pre class=\\\\\\"language-bash\\\\\\"><code>$ yarn install</code></pre>\\";
+    // 代码块转化成列表作为默认导出
+    export default [
+      {
+            title: \\"title1 - tsx\\",
+            code: \\"import { Button } from 'antd';\\\\n\\\\nexport default <Button>btn</Button>;\\",
+            codeHtml: \\"<pre class=\\\\\\"language-tsx\\\\\\"><code><span class=\\\\\\"token keyword\\\\\\">import</span> <span class=\\\\\\"token punctuation\\\\\\">{</span> Button <span class=\\\\\\"token punctuation\\\\\\">}</span> <span class=\\\\\\"token keyword\\\\\\">from</span> <span class=\\\\\\"token string\\\\\\">&apos;antd&apos;</span><span class=\\\\\\"token punctuation\\\\\\">;</span>\\\\n\\\\n<span class=\\\\\\"token keyword\\\\\\">export</span> <span class=\\\\\\"token keyword\\\\\\">default</span> <span class=\\\\\\"token tag\\\\\\"><span class=\\\\\\"token tag\\\\\\"><span class=\\\\\\"token punctuation\\\\\\">&lt;</span><span class=\\\\\\"token class-name\\\\\\">Button</span></span><span class=\\\\\\"token punctuation\\\\\\">&gt;</span></span>btn<span class=\\\\\\"token tag\\\\\\"><span class=\\\\\\"token tag\\\\\\"><span class=\\\\\\"token punctuation\\\\\\">&lt;/</span><span class=\\\\\\"token class-name\\\\\\">Button</span></span><span class=\\\\\\"token punctuation\\\\\\">&gt;</span></span><span class=\\\\\\"token punctuation\\\\\\">;</span></code></pre>\\",
+            description: \\"<p>&#x63CF;&#x8FF0; 1&#xFF0C;&#x8FD9;&#x4E00;&#x6BB5;&#x4F1A;&#x88AB;&#x89E3;&#x6790;&#x3002;</p>\\",
+            module: require(\\"../.cache/jugg-md-loader/cbdb9e6261f7c33d2177b118d37086f2.tsx\\"),
+          },{
+            title: \\"title - js\\",
+            code: \\"import { Button } from 'antd';\\\\n\\\\nexport default <Button>btn</Button>;\\",
+            codeHtml: \\"<pre class=\\\\\\"language-js\\\\\\"><code><span class=\\\\\\"token keyword\\\\\\">import</span> <span class=\\\\\\"token punctuation\\\\\\">{</span> Button <span class=\\\\\\"token punctuation\\\\\\">}</span> <span class=\\\\\\"token keyword\\\\\\">from</span> <span class=\\\\\\"token string\\\\\\">&apos;antd&apos;</span><span class=\\\\\\"token punctuation\\\\\\">;</span>\\\\n\\\\n<span class=\\\\\\"token keyword\\\\\\">export</span> <span class=\\\\\\"token keyword\\\\\\">default</span> <span class=\\\\\\"token operator\\\\\\">&lt;</span>Button<span class=\\\\\\"token operator\\\\\\">&gt;</span>btn<span class=\\\\\\"token operator\\\\\\">&lt;</span><span class=\\\\\\"token operator\\\\\\">/</span>Button<span class=\\\\\\"token operator\\\\\\">&gt;</span><span class=\\\\\\"token punctuation\\\\\\">;</span></code></pre>\\",
+            description: \\"<p>&#x8FD9;&#x4E00;&#x6BB5;&#x4F1A;&#x88AB;&#x89E3;&#x6790;&#x3002;</p>\\",
+            module: require(\\"../.cache/jugg-md-loader/cbdb9e6261f7c33d2177b118d37086f2.tsx\\"),
+          },
+    ];
+  "
+`;
