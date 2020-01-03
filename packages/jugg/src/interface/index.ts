@@ -23,6 +23,8 @@ export type WebpackChainFun = (param: {
 
 export type JuggWebpack = Configuration | WebpackChainFun;
 
+export type JuggConfigChainFun = (config: JuggConfig) => JuggConfig;
+
 export interface JuggConfig {
   /**
    * publicPath of webpack, default '/'
