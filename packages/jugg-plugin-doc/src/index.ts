@@ -11,12 +11,14 @@ import * as path from 'path';
 export default function(api: PluginAPI, _ = {}) {
   const { jugg } = api;
   jugg.WebpackOptionsManager.addFilter((id, pre) => {
-    if (id === CHAIN_CONFIG_MAP.plugin.BASE_HTML_PLUGIN) {
-      pre[0].template = path.resolve(__dirname, '../site/index.ejs');
-      return pre;
+    switch (id) {
+      case CHAIN_CONFIG_MAP.plugin.BASE_HTML_PLUGIN: {
+        pre[0].template = path.resolve(__dirname, '../site/index.ejs');
+        return pre;
+      }
+      default:
+        return pre;
     }
-
-    return pre;
   });
 
   jugg.JConfig!.tsCustomTransformers!.before =
@@ -33,14 +35,19 @@ export default function(api: PluginAPI, _ = {}) {
       {
         flags: '-D, --dev',
         description: 'start development server',
+        defaultValue: true,
+      },
+      {
+        flags: '-B, --build',
+        description: 'build document site',
         defaultValue: false,
       },
     ],
     action: (args: IArgOpts) => {
       if (args.dev) {
-        // tslint:disable-next-line: no-console
-        console.log('Doc dev');
         commands.dev(api, { noDevClients: false });
+      } else if (args.build) {
+        commands.build(api);
       }
     },
   });
@@ -57,4 +64,5 @@ export default function(api: PluginAPI, _ = {}) {
 
 export interface IArgOpts {
   dev: boolean;
+  build: boolean;
 }
