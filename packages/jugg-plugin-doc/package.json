@@ -15,7 +15,8 @@
     "test": "# jest"
   },
   "peerDependencies": {
-    "@axew/jugg": ">= 0.1.0"
+    "@axew/jugg": ">= 0.1.0",
+    "typescript": "^3.7.0"
   },
   "files": ["lib", "types"],
   "keywords": [
@@ -43,6 +44,7 @@
     "react-copy-to-clipboard": "^5.0.0",
     "react-document-title": "^2.0.0",
     "react-dom": "16.8.0",
-    "react-router-dom": "^5.0.0"
+    "react-router-dom": "^5.0.0",
+    "ts-import-plugin": "^1.6.0"
   }
 }

@@ -2,14 +2,11 @@
  * @Author: daief
  * @LastEditors: daief
  * @Date: 2019-10-18 15:00:59
- * @LastEditTime: 2020-01-02 17:55:31
+ * @LastEditTime: 2020-01-03 11:05:44
  * @Description:
  */
-import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { render } from 'react-dom';
-// @ts-ignore
-import { match, RouterContext } from 'react-router';
 // @ts-ignore
 import { BrowserRouter, HashRouter, Route, Switch } from 'react-router-dom';
 import { MdWrap, useMdCtx } from './store/md';
@@ -21,6 +18,9 @@ import NotFound from './theme/template/NotFound';
 import { mountReactGlobal } from './theme/template/utils';
 
 mountReactGlobal();
+
+// prettier-ignore
+declare var THEME_CONFIG: Record<string, any>;
 
 const Router = THEME_CONFIG.mode === 'browser' ? BrowserRouter : HashRouter;
 

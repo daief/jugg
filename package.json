@@ -6,7 +6,7 @@
   "author": "daief <1437931235@qq.com>",
   "license": "MIT",
   "scripts": {
-    "doc:dev": "jugg doc --dev --config=.juggrc.doc.ts",
+    "doc:dev": "HARD_SOURCE=none JUGG_TS_PROJECT=tsconfig.doc.json jugg doc --dev --config=.juggrc.doc.ts",
     "cm": "git-cz"
   },
   "dependencies": {
