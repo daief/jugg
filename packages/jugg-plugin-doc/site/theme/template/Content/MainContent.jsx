@@ -10,6 +10,7 @@ import { useMdCtx } from '../../../store/md';
 import { MenuContent } from '../../../store/menu';
 import useScrollTop from '../hooks/useScrollTop';
 import NotFound from '../NotFound';
+import Footer from '../Layout/Footer'
 
 const { useState, useMemo } = React;
 
@@ -136,9 +137,11 @@ export default withRouter(function MainContent(props) {
           md={24}
           sm={24}
           xs={24}
-          className={mainContainerClass}
         >
-          {Content}
+          <section className={mainContainerClass}>
+            {Content}
+          </section>
+          <Footer />
         </Col>
       </Row>
     </div>

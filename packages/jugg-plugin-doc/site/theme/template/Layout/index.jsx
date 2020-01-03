@@ -1,7 +1,7 @@
 import React from 'react';
 import 'moment/locale/zh-cn';
 import Header from './Header';
-import Footer from './Footer';
+// import Footer from './Footer';
 
 export default class Layout extends React.Component {
   constructor(props) {
@@ -18,7 +18,7 @@ export default class Layout extends React.Component {
       <div className="page-wrapper">
         <Header />
         {children}
-        <Footer />
+        {/* <Footer /> */}
       </div>
     );
   }

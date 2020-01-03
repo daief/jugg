@@ -1,7 +1,8 @@
 import React from 'react';
 import DocumentTitle from 'react-document-title';
-import PropTypes from 'prop-types';
 import Banner from './Banner';
+import Footer from '../Layout/Footer'
+
 // import Page1 from './Page1';
 // import Page2 from './Page2';
 // import Page3 from './Page3';
@@ -61,13 +62,16 @@ class Home extends React.Component {
     const childProps = { ...this.props, isMobile };
     return (
       <DocumentTitle title={THEME_CONFIG.title}>
-        <div className="main-wrapper">
-          <style dangerouslySetInnerHTML={{ __html: getStyle() }} />
-          <Banner {...childProps} />
-          {/* <Page1 {...childProps} /> */}
-          {/* <Page2 {...childProps} /> */}
-          {/* <Page3 {...childProps} /> */}
-        </div>
+        <>
+          <div className="main-wrapper">
+            <style dangerouslySetInnerHTML={{ __html: getStyle() }} />
+            <Banner {...childProps} />
+            {/* <Page1 {...childProps} /> */}
+            {/* <Page2 {...childProps} /> */}
+            {/* <Page3 {...childProps} /> */}
+          </div>
+          <Footer />
+        </>
       </DocumentTitle>
     );
   }
