@@ -74,6 +74,12 @@ export default function(api: PluginAPI, _ = {}) {
       .clear()
       .add(path.resolve(__dirname, '../site/index'));
 
+    config.module
+      .rule('md-rule')
+      .test(/\.md/)
+      .use('jugg-md-loader')
+      .loader(path.resolve(__dirname, './loader/md'));
+
     config.resolve.alias.set('site', path.resolve(__dirname, '../site'));
   });
 }

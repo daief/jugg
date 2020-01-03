@@ -43,7 +43,7 @@ function useCheckIsArticleAndTimeline(md, pathname) {
 
     if (
       layout === 'article' ||
-      ['README', 'CHANGELOG'].includes(title.toUpperCase())
+      (!layout && ['README', 'CHANGELOG'].includes(title.toUpperCase()))
     ) {
       return {
         isArticle: true,
