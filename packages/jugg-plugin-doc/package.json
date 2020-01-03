@@ -30,5 +30,19 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
+  },
+  "dependencies": {
+    "antd": "^3.0.0",
+    "cheerio": "^1.0.0-rc.3",
+    "front-matter": "^3.0.0",
+    "glob": "^7.0.0",
+    "loader-utils": "^1.0.0",
+    "marked": "^0.7.0",
+    "prismjs": "^1.17.0",
+    "react": "^16.8.0",
+    "react-copy-to-clipboard": "^5.0.0",
+    "react-document-title": "^2.0.0",
+    "react-dom": "16.8.0",
+    "react-router-dom": "^5.0.0"
   }
 }

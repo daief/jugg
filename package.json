@@ -6,7 +6,7 @@
   "author": "daief <1437931235@qq.com>",
   "license": "MIT",
   "scripts": {
-    "leran": "lerna",
+    "doc:dev": "jugg doc --dev --config=.juggrc.doc.ts",
     "cm": "git-cz"
   },
   "dependencies": {
