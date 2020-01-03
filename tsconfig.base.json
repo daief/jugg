@@ -11,7 +11,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "importHelpers": true,
-    "declaration": true
+    "declaration": true,
+    "downlevelIteration": true
   },
   "exclude": ["node_modules"]
 }

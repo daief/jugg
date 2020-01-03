@@ -6,9 +6,13 @@
  */
 import { CHAIN_CONFIG_MAP, commands } from '@axew/jugg';
 import { PluginAPI } from '@axew/jugg/types/PluginAPI';
+import { fork } from 'child_process';
 import * as path from 'path';
+import { IArgOpts, IOptions } from './interface';
+import { guardOptions } from './utils';
 
-export default function(api: PluginAPI, _ = {}) {
+export default function(api: PluginAPI, arg2: IOptions = {}) {
+  const options = guardOptions(arg2);
   const { jugg } = api;
 
   jugg.WebpackOptionsManager.addFilter((id, pre) => {
@@ -61,7 +65,17 @@ export default function(api: PluginAPI, _ = {}) {
     ],
     action: (args: IArgOpts) => {
       if (args.dev) {
-        commands.dev(api, { noDevClients: false });
+        commands.dev(api, { noDevClients: false }).then(() => {
+          const child = fork(
+            path.resolve(__dirname, './fork/watch'),
+            process.argv,
+          );
+          child.send({
+            type: 'INIT_WATCH',
+            // TODO 赋值 MDS_MODULE_NAME
+            data: { cwd: jugg.context, ...options, MDS_MODULE_NAME: '' },
+          });
+        });
       } else if (args.build) {
         commands.build(api);
       }
@@ -82,9 +96,4 @@ export default function(api: PluginAPI, _ = {}) {
 
     config.resolve.alias.set('site', path.resolve(__dirname, '../site'));
   });
-}
-
-export interface IArgOpts {
-  dev: boolean;
-  build: boolean;
 }
