@@ -10,6 +10,7 @@ import * as path from 'path';
 
 export default function(api: PluginAPI, _ = {}) {
   const { jugg } = api;
+
   jugg.WebpackOptionsManager.addFilter((id, pre) => {
     switch (id) {
       case CHAIN_CONFIG_MAP.plugin.BASE_HTML_PLUGIN: {
@@ -21,12 +22,27 @@ export default function(api: PluginAPI, _ = {}) {
     }
   });
 
-  jugg.JConfig!.tsCustomTransformers!.before =
-    jugg.JConfig!.tsCustomTransformers!.before || [];
-  jugg.JConfig!.tsCustomTransformers!.before!.push([
-    'ts-import-plugin',
-    { libraryName: 'antd', libraryDirectory: 'lib', style: true },
-  ]);
+  api.chainJuggConfig((config: any) => {
+    const { tsCustomTransformers, define } = config;
+    tsCustomTransformers.before = tsCustomTransformers.before || [];
+    tsCustomTransformers.before.push([
+      'ts-import-plugin',
+      { libraryName: 'antd', libraryDirectory: 'lib', style: true },
+    ]);
+    return {
+      ...config,
+      outputDir: 'siteDist',
+      tsCustomTransformers,
+      define: {
+        ...define,
+        THEME_CONFIG: {
+          title: 'Document site title',
+          description: 'Document site description',
+          ...define.THEME_CONFIG,
+        },
+      },
+    };
+  });
 
   api.registerCommand({
     command: 'doc',
