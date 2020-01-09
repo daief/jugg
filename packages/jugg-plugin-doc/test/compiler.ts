@@ -2,7 +2,7 @@
  * @Author: daief
  * @LastEditors  : daief
  * @Date: 2019-10-28 10:31:15
- * @LastEditTime : 2020-01-03 15:44:09
+ * @LastEditTime : 2020-01-09 20:08:13
  * @Description:
  */
 import memoryfs from 'memory-fs';
@@ -35,7 +35,7 @@ export default (fixture: string) => {
           },
         },
         {
-          test: /\.tsx?$/,
+          test: /\.(tsx|vue)?$/,
           use: {
             loader: path.resolve(__dirname, './tsx.loader.js'),
           },

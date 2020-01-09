@@ -39,3 +39,17 @@ export default <Button>btn</Button>;
 ```bash
 $ yarn install
 ```
+
+## title - vue
+
+解析成 Vue。
+
+```ts
+export default {};
+```
+
+```html
+<template>
+  <div>vue</div>
+</template>
+```

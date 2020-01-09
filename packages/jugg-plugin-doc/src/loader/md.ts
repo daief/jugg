@@ -54,10 +54,12 @@ function loader(source: string) {
   mkdirp.sync(BASE_PATH);
 
   // 根据文件内容生成文件全路径
-  const genFilePath = (fileContent: string) =>
+  const genFilePath = (fileContent: string, suffix = '') =>
     path.resolve(
       BASE_PATH,
-      utils.interpolateName(this, '[hash].tsx', { content: fileContent }),
+      utils.interpolateName(this, `[hash].${suffix.toLowerCase()}`, {
+        content: fileContent,
+      }),
     );
 
   // 解析出 markdown 的 metadata 和 body
@@ -119,6 +121,7 @@ function loader(source: string) {
             code: ${JSON.stringify(_.code)},
             codeHtml: ${JSON.stringify(_.codeHtml)},
             description: ${JSON.stringify(_.description)},
+            demoType: ${JSON.stringify(_.demoType)},
             module: require(${utils.stringifyRequest(this, _.module)}),
           },`;
         })
@@ -153,6 +156,10 @@ function parseCodeList(
    * 代码块对应的文件
    */
   module: string;
+  /**
+   * demo 类型
+   */
+  demoType: 'TSX' | 'VUE';
 }> {
   return $('h2')
     .map(function() {
@@ -160,14 +167,37 @@ function parseCodeList(
       const $nexts = $title.nextUntil('pre');
       const $code = ($nexts.length ? $nexts : $title).next('pre');
 
-      // 只会执行 js、ts 类型的代码，其他的直接忽略
+      // 未找到代码块
+      if (!$code.length) {
+        return null;
+      }
+
+      // 第一块不是脚本则直接忽略
       if (!scriptLngList.some(_ => _.test($code.attr('class')))) {
         return null;
       }
 
-      // 不符合条件的组合也忽略
-      if (!$code.length) {
-        return null;
+      // ! 要相连
+      // 第二个代码块
+      const $secondCode = $code.next('pre');
+
+      let demoType = 'TSX';
+      let code = $code.text();
+      let codeHtml = $.html($code);
+
+      // 第二块要是 html，则组合成 vue
+      if ($secondCode.length && /html/i.test($secondCode.attr('class'))) {
+        demoType = 'VUE';
+
+        code = `<script lang="ts">
+${code}
+</script>
+${$secondCode.text()}`;
+
+        codeHtml = `<pre class="language-html"><code>${prism.highlight(
+          code,
+          prism.languages.html,
+        )}</code></pre>`;
       }
 
       return {
@@ -180,19 +210,23 @@ function parseCodeList(
           .get()
           .filter(Boolean)
           .reduce((pre: string, next: string) => pre + next, ''),
-        code: $code.text(),
-        codeHtml: $.html($code),
+        // code: $code.text(),
+        // codeHtml: $.html($code),
+        code,
+        codeHtml,
+        demoType,
       };
     })
     .get()
     .filter(Boolean)
-    .map(({ title, code, ...rest }: any) => {
-      const codeFile = genFilePath(code);
+    .map(({ title, code, demoType, ...rest }: any) => {
+      const codeFile = genFilePath(code, demoType);
       fs.writeFileSync(codeFile, code);
       return {
         ...rest,
         title,
         code,
+        demoType,
         module: codeFile,
       };
     });

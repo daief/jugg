@@ -1,12 +1,10 @@
 /* eslint jsx-a11y/no-noninteractive-element-interactions: 0 */
 import React from 'react';
-import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import classNames from 'classnames';
 import { Icon, Tooltip } from 'antd';
 import ErrorBoundary from './ErrorBoundary';
-import BrowserFrame from '../BrowserFrame';
+import Vue from 'vue';
 
 export default class Demo extends React.Component {
   state = {
@@ -16,6 +14,25 @@ export default class Demo extends React.Component {
     copyTooltipVisible: false,
     showRiddleButton: false,
   };
+
+  constructor(props) {
+    super(props);
+  }
+
+  demoRef = null;
+
+  get RenderDemo() {
+    const { demo } = this.props;
+    if (demo.demoType === 'TSX') {
+      return demo.module.default || null;
+    }
+
+    if (demo.demoType === 'VUE') {
+      return <div ref={el => (this.demoRef = el)}></div>;
+    }
+
+    return null;
+  }
 
   shouldComponentUpdate(nextProps, nextState) {
     const { codeExpand, copied, copyTooltipVisible } = this.state;
@@ -35,6 +52,12 @@ export default class Demo extends React.Component {
     const { demo } = this.props;
     const { code } = demo;
     this.setState({ sourceCode: code, codeExpand: !this.HasDemo });
+
+    if (demo.demoType === 'VUE' && this.demoRef) {
+      new Vue({
+        render: h => h(demo.module.default),
+      }).$mount(this.demoRef);
+    }
   }
 
   handleCodeExpand = () => {
@@ -64,13 +87,10 @@ export default class Demo extends React.Component {
   };
 
   render() {
-    const { state } = this;
-    const { props } = this;
+    const { state, props } = this;
     const { metadata: meta, highlightedStyle, expand, demo } = props;
     const { copied } = state;
-    if (!this.liveDemo) {
-      this.liveDemo = demo.module.default || null;
-    }
+
     const codeExpand = state.codeExpand || expand;
     const codeBoxClass = classNames({
       'code-box': true,
@@ -91,7 +111,7 @@ export default class Demo extends React.Component {
           className="code-box-demo"
           style={this.HasDemo ? {} : { padding: '10px' }}
         >
-          <ErrorBoundary>{this.liveDemo}</ErrorBoundary>
+          <ErrorBoundary>{this.RenderDemo}</ErrorBoundary>
         </section>
         <section className="code-box-meta markdown">
           <div className="code-box-title">
