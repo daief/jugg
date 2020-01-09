@@ -3,6 +3,7 @@
 ## 0.2.1-alpha.2
 
 - feat: 插件可以扩展用户配置
+- refactor: `quiet` of `webpack-dev-server` always true
 
 ## 0.2.1-alpha.1 - 2020-01-02
 
