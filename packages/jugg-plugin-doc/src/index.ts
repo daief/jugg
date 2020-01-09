@@ -9,11 +9,12 @@ import { PluginAPI } from '@axew/jugg/types/PluginAPI';
 import { fork } from 'child_process';
 import * as path from 'path';
 import { IArgOpts, IOptions } from './interface';
-import { guardOptions } from './utils';
+import { findMarkdowns, generateDataSourceFile, guardOptions } from './utils';
 
 export default function(api: PluginAPI, arg2: IOptions = {}) {
   const options = guardOptions(arg2);
   const { jugg } = api;
+  const cwd = jugg.context;
 
   jugg.WebpackOptionsManager.addFilter((id, pre) => {
     switch (id) {
@@ -26,10 +27,10 @@ export default function(api: PluginAPI, arg2: IOptions = {}) {
     }
   });
 
-  api.chainJuggConfig((config: any) => {
-    const { tsCustomTransformers, define } = config;
-    tsCustomTransformers.before = tsCustomTransformers.before || [];
-    tsCustomTransformers.before.push([
+  api.chainJuggConfig(config => {
+    const { tsCustomTransformers, define, transpileDependencies } = config;
+    tsCustomTransformers!.before = tsCustomTransformers!.before || [];
+    tsCustomTransformers!.before!.push([
       'ts-import-plugin',
       { libraryName: 'antd', libraryDirectory: 'lib', style: true },
     ]);
@@ -37,12 +38,16 @@ export default function(api: PluginAPI, arg2: IOptions = {}) {
       ...config,
       outputDir: 'siteDist',
       tsCustomTransformers,
+      transpileDependencies:
+        typeof transpileDependencies === 'function'
+          ? p => transpileDependencies(p) || /jugg-plugin-doc/i.test(p)
+          : [...transpileDependencies, /jugg-plugin-doc/i],
       define: {
         ...define,
         THEME_CONFIG: {
           title: 'Document site title',
           description: 'Document site description',
-          ...define.THEME_CONFIG,
+          ...define!.THEME_CONFIG,
         },
       },
     };
@@ -64,6 +69,17 @@ export default function(api: PluginAPI, arg2: IOptions = {}) {
       },
     ],
     action: (args: IArgOpts) => {
+      const MDS_MODULE_NAME = path.resolve(__dirname, '../site/mds.tsx');
+      // generate first time
+      generateDataSourceFile({
+        source: findMarkdowns({
+          cwd,
+          source: options.source,
+        }),
+        cwd,
+        filename: MDS_MODULE_NAME,
+      });
+
       if (args.dev) {
         commands.dev(api, { noDevClients: false }).then(() => {
           const child = fork(
@@ -72,8 +88,11 @@ export default function(api: PluginAPI, arg2: IOptions = {}) {
           );
           child.send({
             type: 'INIT_WATCH',
-            // TODO 赋值 MDS_MODULE_NAME
-            data: { cwd: jugg.context, ...options, MDS_MODULE_NAME: '' },
+            data: {
+              ...options,
+              cwd,
+              MDS_MODULE_NAME,
+            },
           });
         });
       } else if (args.build) {
