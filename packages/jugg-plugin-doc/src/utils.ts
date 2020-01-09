@@ -67,7 +67,7 @@ export const pageMap = getPageMap();
 
 /**
  * 动态生成 mds 文件，使得项目里能够通过 require('site/mds') 引用到
- * 使用这种方式，是因为当前没能做到，在代码中根据 edocrc 中的配置引用到 md 文件
+ * 使用这种方式，是因为当前没能做到，在代码中根据配置项引用到 md 文件
  * @param
  *  - source: 解析后的 markdown 路径集合
  *  - cwd: 上下文

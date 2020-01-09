@@ -7,6 +7,8 @@ export default extendConfig({
       {
         source: {
           docs: ['README.md'],
+          jugg: ['packages/jugg/**/*.md'],
+          'jugg-plugin-doc': ['packages/jugg-plugin-doc/*.md'],
         },
       },
     ],
