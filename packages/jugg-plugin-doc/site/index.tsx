@@ -2,7 +2,7 @@
  * @Author: daief
  * @LastEditors: daief
  * @Date: 2019-10-18 15:00:59
- * @LastEditTime: 2020-01-03 11:05:44
+ * @LastEditTime: 2020-01-09 19:07:41
  * @Description:
  */
 import * as React from 'react';
@@ -30,22 +30,13 @@ const LayoutRoute = (props: any) => {
 };
 
 const AppRoutes = () => {
-  const { markdown } = useMdCtx()!;
-  const categories = Object.keys(markdown);
+  const { pageMap } = useMdCtx()!;
   return (
     <Switch>
       <LayoutRoute path="/" exact component={Home} />
-      <LayoutRoute path="/docs/:children" exact component={Content} />
-      {categories.map(_ =>
-        _ === 'docs' ? null : (
-          <LayoutRoute
-            path={`/${encodeURIComponent(_)}/:children`}
-            key={_}
-            exact
-            component={Content}
-          />
-        ),
-      )}
+      {[...pageMap.entries()].map(([key]) => (
+        <LayoutRoute path={key} key={key} exact component={Content} />
+      ))}
       <LayoutRoute path="*" exact component={NotFound} layout={false} />
     </Switch>
   );

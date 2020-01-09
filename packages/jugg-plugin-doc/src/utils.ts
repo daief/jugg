@@ -53,7 +53,8 @@ function getPageMap() {
           const { metadata } = md;
           const { route } = metadata;
           md.category = category;
-          return ['/' + encodeURIComponent(category) + '/' + encodeURIComponent(route || itemK), md];
+          const path = \`/\${category}/\${route || itemK}\`.toLowerCase().replace(/\.md$/i, '');
+          return [path, md];
         });
       }),
     ),
