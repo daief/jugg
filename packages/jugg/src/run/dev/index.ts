@@ -93,7 +93,7 @@ export async function excute(api: PluginAPI, argv: ArgOpts) {
     compress: true,
     clientLogLevel: 'none',
     hot: true,
-    quiet: !process.env.NO_WEBPACKBAR,
+    quiet: true,
     contentBase: JConfig.outputDir,
     headers: {
       'access-control-allow-origin': '*',
