@@ -113,8 +113,11 @@ export function generateDataSourceFile({
 }
 
 export function guardOptions(opts: IOptions): Required<IOptions> {
-  const { source } = opts;
+  const { source, ...rest } = opts;
   return {
+    title: 'Document site',
+    description: 'Some description',
+    ...rest,
     source: {
       ...source,
     },

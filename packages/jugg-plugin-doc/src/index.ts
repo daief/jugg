@@ -16,6 +16,14 @@ export default function(api: PluginAPI, arg2: IOptions = {}) {
   const { jugg } = api;
   const cwd = jugg.context;
 
+  api.jugg.onWatchConfigChange(key => {
+    if (key) {
+      jugg.Utils.logger.info(
+        `[${key}] changed. Restart the server to see the changes in effect.`,
+      );
+    }
+  });
+
   jugg.WebpackOptionsManager.addFilter((id, pre) => {
     switch (id) {
       case CHAIN_CONFIG_MAP.plugin.BASE_HTML_PLUGIN: {
@@ -45,8 +53,8 @@ export default function(api: PluginAPI, arg2: IOptions = {}) {
       define: {
         ...define,
         THEME_CONFIG: {
-          title: 'Document site title',
-          description: 'Document site description',
+          title: options.title,
+          description: options.description,
           ...define!.THEME_CONFIG,
         },
       },

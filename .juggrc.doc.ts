@@ -10,13 +10,9 @@ export default extendConfig({
           jugg: ['packages/jugg/**/*.md'],
           'jugg-plugin-doc': ['packages/jugg-plugin-doc/*.md'],
         },
+        title: 'Jugg',
+        description: 'A naive front-end scaffold.',
       },
     ],
   ],
-  define: {
-    THEME_CONFIG: {
-      title: 'Jugg',
-      description: 'A naive front-end scaffold.',
-    },
-  },
 });

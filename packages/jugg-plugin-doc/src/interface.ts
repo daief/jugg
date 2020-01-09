@@ -5,6 +5,8 @@ export interface IArgOpts {
 
 export interface IOptions {
   source?: Record<string, ISourceSchema>;
+  title?: string;
+  description?: string;
 }
 
 export type ISourceSchema = string | string[];
