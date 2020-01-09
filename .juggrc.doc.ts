@@ -15,7 +15,8 @@ export default extendConfig({
   ],
   define: {
     THEME_CONFIG: {
-      title: 'title',
+      title: 'Jugg',
+      description: 'A naive front-end scaffold.',
     },
   },
 });
