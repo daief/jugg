@@ -1,7 +1,7 @@
 import { extendConfig } from '@axew/jugg';
 
 export default extendConfig({
-  publicPath: './',
+  publicPath: process.env.NODE_ENV === 'development' ? '/' : './',
   plugins: [
     '@axew/jugg-plugin-vue',
     [
