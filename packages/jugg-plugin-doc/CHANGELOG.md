@@ -4,7 +4,8 @@
 
 ## 0.0.1-alpha.0
 
-- refactor: run React demo
-- refactor: run Vue demo
-- refactor: 优化路由
 - feat: 网站成功运行
+- feat: run React demo
+- feat: run Vue demo
+- feat: 优化路由
+- feat: 添加内置的 TS 配置

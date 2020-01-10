@@ -14,7 +14,18 @@ import { findMarkdowns, generateDataSourceFile, guardOptions } from './utils';
 export default function(api: PluginAPI, arg2: IOptions = {}) {
   const options = guardOptions(arg2);
   const { jugg } = api;
+  const { ConfigFileManager } = jugg;
   const cwd = jugg.context;
+
+  if (
+    !ConfigFileManager.Tsconfig ||
+    /\/tsconfig\.json$/i.test(ConfigFileManager.Tsconfig)
+  ) {
+    ConfigFileManager.Tsconfig = path.resolve(
+      __dirname,
+      '../site/tsconfig.doc.json',
+    );
+  }
 
   api.jugg.onWatchConfigChange(key => {
     if (key) {

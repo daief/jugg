@@ -6,8 +6,8 @@
   "author": "daief <1437931235@qq.com>",
   "license": "MIT",
   "scripts": {
-    "doc": "HARD_SOURCE=none JUGG_TS_PROJECT=tsconfig.doc.json jugg doc --dev --config=.juggrc.doc.ts",
-    "doc:build": "HARD_SOURCE=none JUGG_TS_PROJECT=tsconfig.doc.json jugg doc --build --config=.juggrc.doc.ts",
+    "doc": "HARD_SOURCE=none jugg doc --dev --config=.juggrc.doc.ts",
+    "doc:build": "HARD_SOURCE=none jugg doc --build --config=.juggrc.doc.ts",
     "cm": "git-cz"
   },
   "dependencies": {
