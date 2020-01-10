@@ -1,8 +1,23 @@
 # jugg-plugin-babel
 
-A set of babel config.
+A set of babel config. A plugin of jugg.
 
-# config
+babel 配置合集，作为一个 jugg 的插件而使用，为项目添加 babel 支持。
+
+# 使用
+
+在配置文件中添加插件。
+
+```ts
+// .juggrc.js
+import { extendConfig } from '@axew/jugg';
+
+export default extendConfig({
+  plugins: ['@axew/jugg-plugin-babel'],
+});
+```
+
+# 配置
 
 ```ts
 interface Option {
@@ -38,5 +53,4 @@ interface IJuggPreset {
     [k: string]: any;
   };
 }
-
 ```
