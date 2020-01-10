@@ -64,7 +64,8 @@ export async function excute(api: PluginAPI, argv: ArgOpts) {
     protocol,
     useDevServer.host,
     port + '',
-    JConfig.publicPath,
+    // TODO should be baseUrl
+    // JConfig.publicPath,
   );
 
   // if (argv.noDevClients === false) {

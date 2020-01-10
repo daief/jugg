@@ -6,11 +6,16 @@
  * https://github.com/facebookincubator/create-react-app/blob/master/LICENSE
  */
 
-import url from 'url';
 import chalk from 'chalk';
+import url from 'url';
 const address = require('address');
 
-export function prepareUrls(protocol: string, host: string, port: string, pathname = '/') {
+export function prepareUrls(
+  protocol: string,
+  host: string,
+  port: string,
+  pathname = '/',
+) {
   const formatUrl = (hostname: string) =>
     url.format({
       protocol,
@@ -39,7 +44,11 @@ export function prepareUrls(protocol: string, host: string, port: string, pathna
       if (lanUrlForConfig) {
         // Check if the address is a private ip
         // https://en.wikipedia.org/wiki/Private_network#Private_IPv4_address_spaces
-        if (/^10[.]|^172[.](1[6-9]|2[0-9]|3[0-1])[.]|^192[.]168[.]/.test(lanUrlForConfig)) {
+        if (
+          /^10[.]|^172[.](1[6-9]|2[0-9]|3[0-1])[.]|^192[.]168[.]/.test(
+            lanUrlForConfig,
+          )
+        ) {
           // Address is private, format it for later use
           lanUrlForTerminal = prettyPrintUrl(lanUrlForConfig);
         } else {
