@@ -5,6 +5,7 @@ import resolveCwd from 'resolve-cwd';
 import { Configuration } from 'webpack';
 import Config from 'webpack-chain';
 import merge from 'webpack-merge';
+import { ConfigFileManager } from './ConfigFileManager';
 import { CHAIN_CONFIG_MAP } from './env/chainCfgMap';
 import {
   CommandSchema,
@@ -36,6 +37,7 @@ export default class Jugg {
   juggConfigChainFns: JuggConfigChainFun[] = [];
 
   private webpackOptionsManager: WebpackOptionsManager;
+  private configFileManager: ConfigFileManager;
   private fsWatcher: FSWatcher = null;
   private eventBus: EventBus = null;
 
@@ -52,6 +54,7 @@ export default class Jugg {
     this.context = context;
     this.commander = program;
     this.webpackOptionsManager = new WebpackOptionsManager({ jugg: this });
+    this.configFileManager = new ConfigFileManager({ jugg: this });
 
     this.globalCommandOpts = this.resolveGlobalCommandOpts();
 
@@ -75,6 +78,10 @@ export default class Jugg {
 
   get WebpackOptionsManager() {
     return this.webpackOptionsManager;
+  }
+
+  get ConfigFileManager() {
+    return this.configFileManager;
   }
 
   get Utils() {
@@ -355,7 +362,7 @@ export default class Jugg {
     this.commander
       .option('-C, --config <path>', 'assign the config file')
       .option(
-        '-M, --mode <development|production>',
+        '-M, --mode [development|production]',
         'assign the process.env.NODE_ENV. default: development',
       );
     const { config, mode } = this.commander.parse(process.argv).opts();
