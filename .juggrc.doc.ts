@@ -1,4 +1,13 @@
 import { extendConfig } from '@axew/jugg';
+import * as fs from 'fs';
+import * as path from 'path';
+
+const packagesMds = fs
+  .readdirSync(path.resolve(__dirname, 'packages'))
+  .reduce<any>((result, pkg) => {
+    result[pkg] = [`packages/${pkg}/*.md`];
+    return result;
+  }, {});
 
 export default extendConfig({
   publicPath: process.env.NODE_ENV === 'development' ? '/' : './',
@@ -9,8 +18,7 @@ export default extendConfig({
       {
         source: {
           docs: ['README.md'],
-          jugg: ['packages/jugg/**/*.md'],
-          'jugg-plugin-doc': ['packages/jugg-plugin-doc/*.md'],
+          ...packagesMds,
         },
         title: 'Jugg',
         description: 'A naive front-end scaffold.',
