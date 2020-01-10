@@ -18,7 +18,7 @@
     "@axew/jugg": ">= 0.1.0",
     "typescript": "^3.7.0"
   },
-  "files": ["lib", "types"],
+  "files": ["lib", "types", "site"],
   "keywords": [
     "jugg",
     "jugg-plugin-doc",
