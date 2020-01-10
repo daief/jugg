@@ -1,3 +1,5 @@
+<!-- more -->
+
 # Jugg
 
 A front-end scaffold 🛠️ works with Webpack.
@@ -98,7 +100,34 @@ Options:
 
 Create a file named `.juggrc.js`, `.juggrc.ts`, `jugg.config.js`, etc. Export default a object.
 
-创建名为 `.juggrc.js`、`.juggrc.ts` 或 `jugg.config.js` 的文件，默认导出一个对象，配置对象的类型描述如下。
+创建名为 `.juggrc.js`、`.juggrc.ts` 或 `jugg.config.js` 的文件，默认导出一个对象。
+
+一份可行的配置可参考：[jugg/examples/ts-lib](https://github.com/daief/jugg/blob/master/examples/ts-lib/.juggrc.ts)。
+
+## 插件的使用
+
+配置格式与 babel 插件类似。
+
+```ts
+import { extendConfig } from '@axew/jugg';
+
+export default extendConfig({
+  plugins: [
+    // 普通地加载插件
+    '@axew/jugg-plugin-vue',
+    // 加载自定义插件，并传入配置
+    [
+      './plugins/foo.js',
+      {
+        name: '',
+        bool: false,
+      },
+    ],
+  ],
+});
+```
+
+## 配置对象的类型描述
 
 ```ts
 interface JuggConfig {
@@ -197,8 +226,6 @@ type JuggWebpack = webpack.Configuration | (
 
 type PluginCfgSchema = string | [string, { [k: string]: any }?];
 ```
-
-一份可行的配置可参考：[jugg/examples/ts-lib](https://github.com/daief/jugg/blob/master/examples/ts-lib/.juggrc.ts)。
 
 # env
 
