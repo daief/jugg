@@ -17,7 +17,7 @@ import {
   WebpackChainFun,
 } from './interface';
 import { PluginAPI } from './PluginAPI';
-import { isUserConfigChanged, readConfig } from './utils';
+import { isUserConfigChanged, printProjectInfo, readConfig } from './utils';
 import EventBus, { Opts } from './utils/EventBus';
 import { loadEnv } from './utils/loadEnv';
 import { logger } from './utils/logger';
@@ -107,6 +107,28 @@ export default class Jugg {
   }
 
   /**
+   * 返回插件列表
+   * @param isAll 是否返回全部插件，否则隐去内置的插件
+   */
+  getPlugins(isAll = true): Array<[string, any?]> {
+    const { plugins } = this.JConfig;
+
+    const builtIn: string[] = [
+      './run/dev',
+      './run/build',
+      './run/inspect',
+    ].map(p => resolve(__dirname, p));
+
+    const list = [...(isAll ? builtIn : []), ...plugins].map<[string, any]>(
+      p => {
+        const [moduleId, plOpt] = Array.isArray(p) ? p : [p, {}];
+        return [moduleId, plOpt];
+      },
+    );
+    return list;
+  }
+
+  /**
    * 初始化
    */
   init() {
@@ -122,6 +144,7 @@ export default class Jugg {
 
     this.loadPlugins();
     this.resolveJuggConfigs();
+    printProjectInfo(this);
     this.registerCommands();
   }
 
@@ -129,19 +152,7 @@ export default class Jugg {
    * 加载插件
    */
   loadPlugins() {
-    const { plugins } = this.JConfig;
-
-    const builtIn: string[] = [
-      './run/dev',
-      './run/build',
-      './run/inspect',
-    ].map(p => resolve(__dirname, p));
-
-    [...builtIn, ...(plugins || [])]
-      .map(p => {
-        const [moduleId, plOpt] = Array.isArray(p) ? p : [p, {}];
-        return [moduleId, plOpt];
-      })
+    this.getPlugins()
       .map((p: [string, any]) => {
         if (/^\./.test(p[0])) {
           // relative path plugin

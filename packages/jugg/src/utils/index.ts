@@ -107,3 +107,25 @@ export function isUserConfigChanged(jugg: Jugg): false | keyof JuggConfig {
 
   return result;
 }
+
+/**
+ * 打印项目的一些信息，在插件加载完毕、执行命令语句前执行
+ * @param jugg
+ */
+export function printProjectInfo(jugg: Jugg) {
+  const { ConfigFileManager } = jugg;
+
+  logger.info(`Context at: ${jugg.context}`, 'jugg');
+
+  if (ConfigFileManager.Tsconfig) {
+    logger.info(`Using tsconfig at: ${ConfigFileManager.Tsconfig}`, 'jugg');
+  }
+
+  logger.info(
+    `Plugins loaded: \n${jugg
+      .getPlugins(false)
+      .map(_ => _[0])
+      .join('\n')}`,
+    'jugg',
+  );
+}

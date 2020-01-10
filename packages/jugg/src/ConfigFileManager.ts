@@ -42,8 +42,6 @@ export class ConfigFileManager {
     // tsconfig 不存在，将值置空
     if (!fileExists(this.tsconfig)) {
       this.tsconfig = '';
-    } else {
-      Utils.logger.info(`[jugg] tsconfig at: ${this.tsconfig}`);
     }
   }
 }
