@@ -1,7 +1,6 @@
 {
   "name": "@axew/jugg-plugin-doc",
-  "version": "0.0.1-alpha.1",
-  "private": true,
+  "version": "0.0.1-alpha.0",
   "license": "MIT",
   "main": "./lib/index.js",
   "types": "./types",
@@ -24,7 +23,7 @@
     "jugg-plugin-doc",
     "typescript",
     "npm library",
-    "documents",
+    "documentation",
     "doc"
   ],
   "description": "Help to build document site.",
