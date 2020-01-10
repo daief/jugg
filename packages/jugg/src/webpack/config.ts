@@ -1,6 +1,5 @@
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
 import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
-import { existsSync, lstatSync } from 'fs';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCss from 'mini-css-extract-plugin';
 import webpack from 'webpack';
@@ -161,13 +160,10 @@ export default (jugg: Jugg): Config => {
 };
 
 function resolveTS(config: Config, jugg: Jugg) {
-  const { getAbsolutePath } = jugg.Utils;
-  // ts project
-  const TS_CONFIG_FILE = getAbsolutePath(
-    process.env.JUGG_TS_PROJECT || 'tsconfig.json',
-  );
+  const { ConfigFileManager } = jugg;
+
   // tsconfig not exist
-  if (!(existsSync(TS_CONFIG_FILE) && lstatSync(TS_CONFIG_FILE).isFile())) {
+  if (!ConfigFileManager.Tsconfig) {
     return;
   }
 

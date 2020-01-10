@@ -13,10 +13,8 @@ export const genUrlLoaderOptions = () => ({
 
 export const getTsOpts = (jugg: Jugg) => {
   const { tsCustomTransformers } = jugg.JConfig;
-  const { getAbsolutePath, resolvePlugin } = jugg.Utils;
-  const TS_CONFIG_FILE = getAbsolutePath(
-    process.env.JUGG_TS_PROJECT || 'tsconfig.json',
-  );
+  const { resolvePlugin } = jugg.Utils;
+
   const { before = [], after = [] } = tsCustomTransformers;
   const beforeTransformers = before.map(resolvePlugin);
   const afterTransformers = after.map(resolvePlugin);
@@ -24,7 +22,7 @@ export const getTsOpts = (jugg: Jugg) => {
   const tsOpts = {
     transpileOnly: true,
     happyPackMode: true,
-    configFile: TS_CONFIG_FILE,
+    configFile: jugg.ConfigFileManager.Tsconfig,
     getCustomTransformers: () => ({
       before: beforeTransformers,
       after: afterTransformers,

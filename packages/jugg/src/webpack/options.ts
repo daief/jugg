@@ -123,12 +123,9 @@ export const builtInOptions: IConfigStore = {
   [CHAIN_CONFIG_MAP.rule.JS_RULE]: getTsOpts,
   [CHAIN_CONFIG_MAP.rule.JSX_RULE]: getTsOpts,
   [CHAIN_CONFIG_MAP.plugin.FORK_TS_CHECKER_PLUGIN]: jugg => {
-    const TS_CONFIG_FILE = jugg.Utils.getAbsolutePath(
-      process.env.JUGG_TS_PROJECT || 'tsconfig.json',
-    );
     return [
       {
-        tsconfig: TS_CONFIG_FILE,
+        tsconfig: jugg.ConfigFileManager.Tsconfig,
         checkSyntacticErrors: true,
         formatter: 'codeframe',
       },
