@@ -11,12 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@master
+      uses: actions/checkout@v1
       
+    # https://github.com/JamesIves/github-pages-deploy-action    
     - name: Build and Deploy
-      uses: JamesIves/github-pages-deploy-action@master
+      uses: JamesIves/github-pages-deploy-action@releases/v3
       env:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         BRANCH: gh-pages
         FOLDER: siteDist
-        BUILD_SCRIPT: yarn && yarn workspace @axew/jugg build && yarn workspace @axew/jugg-plugin-doc build && yarn doc:build
