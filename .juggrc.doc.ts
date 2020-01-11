@@ -25,4 +25,5 @@ export default extendConfig({
       },
     ],
   ],
+  sourceMap: false,
 });
