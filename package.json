@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "doc": "HARD_SOURCE=none jugg doc --dev --config=.juggrc.doc.ts",
-    "doc:build": "HARD_SOURCE=none jugg doc --build --config=.juggrc.doc.ts --mode=production",
+    "doc:build": "HARD_SOURCE=none node_modules/.bin/jugg doc --build --config=.juggrc.doc.ts --mode=production",
     "cm": "git-cz"
   },
   "dependencies": {
