@@ -20,7 +20,9 @@ jobs:
     
     - run: yarn install
     
-    - run: yarn workspace @axew/jugg build && yarn workspace @axew/jugg-plugin-doc build
+    - run: yarn workspace @axew/jugg build 
+    - run: yarn workspace @axew/jugg-plugin-doc build
+    - run: yarn workspace @axew/jugg-plugin-vue build
     
     - run: yarn install --force
     
