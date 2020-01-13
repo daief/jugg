@@ -13,7 +13,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v1
     
-    - run: npm i yarn -g
+    # - run: npm i yarn -g
     
     - run: yarn && yarn workspace build @axew/jugg && yarn workspace build @axew/jugg-plugin-doc
       
