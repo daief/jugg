@@ -27,6 +27,8 @@ jobs:
     
     - run: yarn workspace @axew/jugg build && yarn workspace @axew/jugg-plugin-doc build
     
+    - run: yarn install --force
+    
     - run: yarn doc:build
       
     # https://github.com/JamesIves/github-pages-deploy-action    
