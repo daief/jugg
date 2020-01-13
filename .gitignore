@@ -135,6 +135,5 @@ dist
 lib
 types
 es
-# 暂时本地打包
-# siteDist
+siteDist
 packages/jugg-plugin-doc/site/mds.tsx
