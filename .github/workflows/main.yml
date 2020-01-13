@@ -15,7 +15,7 @@ jobs:
     
     # - run: npm i yarn -g
     
-    - run: yarn && yarn workspace build @axew/jugg && yarn workspace build @axew/jugg-plugin-doc
+    - run: yarn && yarn workspace @axew/jugg build && yarn workspace @axew/jugg-plugin-doc build
       
     # https://github.com/JamesIves/github-pages-deploy-action    
     - name: Build and Deploy
