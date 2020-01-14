@@ -67,10 +67,16 @@ cols: 1
 | layout   | 布局，配置文件中 `docs` 下的使用 `article`，其他使用 `demo`。`README`、`CHANGELOG` 自动使用 `article` | `article` \| `demo` | -       |
 | timeline | 时间轴布局，仅在 `article` 布局中生效，文件名为 `CHANGELOG` 时自动开启                                | boolean             | `false` |
 
-> layout：
+> layout 的区别：
 >
 > - `article`：不会展示代码块
 > - `demo`：会展示代码块
+>
+> 当不显示地设置 layout 时，layout 的逻辑：
+>
+> - 当页面处于一级菜单页，即路径为 `/docs/xxx` 时，认为是 `article`
+> - Markdown 名称为 README 时，认为是 `article`
+> - 其他情况认为是 `demo`
 
 ### 被 `<!-- more -->` 分隔的 `代码解析区域`
 
