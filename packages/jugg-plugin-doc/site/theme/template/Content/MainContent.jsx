@@ -29,7 +29,7 @@ function getOpenKeys(location) {
  */
 function useCheckIsArticleAndTimeline(md, pathname) {
   return useMemo(() => {
-    const pathResult = /docs\//.test(pathname);
+    const pathResult = /^\/docs\//.test(pathname);
     let isTimeline = false;
     if (!md) {
       return {
