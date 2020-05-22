@@ -1,6 +1,6 @@
 /*
  * @Author: daief
- * @LastEditors: daief
+ * @LastEditors  : daief
  * @Date: 2019-08-15 23:37:21
  * @Description:
  */
@@ -34,14 +34,12 @@ export interface IOptions {
   /**
    * 插件的 `tsCustomTransformers`
    */
-  tsCustomTransformers?: (
-    opts: {
-      /**
-       * 是否构建 ES Module
-       */
-      isEsModule: boolean;
-    },
-  ) => {
+  tsCustomTransformers?: (opts: {
+    /**
+     * 是否构建 ES Module
+     */
+    isEsModule: boolean;
+  }) => {
     before?: TYPES.PluginCfgSchema[];
     after?: TYPES.PluginCfgSchema[];
   };
@@ -172,6 +170,8 @@ export default (opts: IOptions, api: PluginAPI) => {
             ? {
                 before: [transformerFactory(), ...before.map(resolvePlugin)],
                 after: after.map(resolvePlugin),
+                // TODO
+                afterDeclarations: [transformerFactory()],
               }
             : {
                 before: [],
